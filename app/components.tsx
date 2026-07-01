@@ -171,6 +171,25 @@ export function HomeHero() {
   );
 }
 
+export function HeroSupportImage() {
+  return (
+    <section className="bg-[#f6f8fb] px-6 py-16">
+      <div className="mx-auto max-w-7xl">
+        <div className="overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_30px_70px_rgba(15,23,42,0.22)]">
+          <Image
+            alt="Monitor biomédico en quirófano"
+            className="aspect-[21/9] h-auto w-full object-cover"
+            height={945}
+            priority
+            src="/images/bbs-monitor-operating-room.png"
+            width={1680}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function VisualPanel({ label, title, tone = "clinical" }: VisualProps) {
   return (
     <div className={`visual-panel visual-${tone}`}>

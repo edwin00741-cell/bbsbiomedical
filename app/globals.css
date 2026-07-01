@@ -93,7 +93,6 @@ body {
 }
 
 .hero-bg {
-  background-image: url("/images/bbs-hero-microscope.png");
   background-position: center right;
   background-repeat: no-repeat;
   background-size: cover;

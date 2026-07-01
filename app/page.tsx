@@ -4,6 +4,7 @@ import {
   Footer,
   Header,
   HomeHero,
+  HeroSupportImage,
   IconCard,
   SectionHeading,
   VisualPanel,
@@ -15,6 +16,7 @@ export default function Home() {
     <main>
       <Header />
       <HomeHero />
+      <HeroSupportImage />
 
       <section className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.92fr_1fr] lg:items-center">
