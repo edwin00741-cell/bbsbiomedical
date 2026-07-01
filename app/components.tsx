@@ -14,6 +14,7 @@ import {
   Stethoscope,
   Wrench,
 } from "lucide-react";
+import { ContactForm } from "./contact-form";
 
 type HeroProps = {
   eyebrow: string;
@@ -299,7 +300,7 @@ export function CTA({
 }) {
   return (
     <section className="px-6 py-20" id="contacto">
-      <div className="mx-auto grid max-w-7xl gap-8 rounded-[8px] bg-slate-950 p-8 text-white md:grid-cols-[1fr_auto] md:items-end lg:p-16">
+      <div className="mx-auto grid max-w-7xl gap-10 rounded-[8px] bg-slate-950 p-8 text-white lg:grid-cols-[0.9fr_1.1fr] lg:p-16">
         <div>
           <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-300">
             Contacto
@@ -310,15 +311,16 @@ export function CTA({
           <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">
             {description}
           </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link className="btn-outline-dark" href="https://wa.me/507800246633">
+              <MessageCircle size={18} /> WhatsApp
+            </Link>
+            <Link className="btn-outline-dark" href="tel:+507800246633">
+              <Phone size={18} /> Llamar
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Link className="btn-light" href="mailto:info@bbs-solutions.com">
-            <Phone size={18} /> Solicitar cotización
-          </Link>
-          <Link className="btn-outline-dark" href="https://wa.me/507800246633">
-            <MessageCircle size={18} /> WhatsApp
-          </Link>
-        </div>
+        <ContactForm />
       </div>
     </section>
   );
