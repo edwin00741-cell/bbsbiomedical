@@ -92,6 +92,13 @@ body {
   background: #0f172a;
 }
 
+.hero-bg {
+  background-image: url("/images/bbs-hero-microscope.png");
+  background-position: center right;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .brand-mark {
   display: inline-flex;
   align-items: center;
@@ -130,8 +137,44 @@ body {
   letter-spacing: 0.15em;
 }
 
+.brand-mark-hero {
+  gap: 1.6rem;
+}
+
+.brand-mark-hero .brand-bbs {
+  color: #06246e;
+}
+
+.brand-mark-hero .brand-lines {
+  gap: 0.42rem;
+  padding-top: 0.4rem;
+}
+
+.brand-mark-hero .brand-biomedical {
+  font-size: clamp(1.45rem, 3vw, 3.12rem);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+.brand-mark-hero .brand-services {
+  color: #079bd4;
+  font-size: clamp(0.95rem, 1.8vw, 1.7rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
 @media (max-width: 520px) {
   .brand-header .brand-lines {
     display: none;
+  }
+
+  .brand-mark-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .brand-mark-hero .brand-lines {
+    gap: 0.32rem;
   }
 }

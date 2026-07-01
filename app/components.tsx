@@ -1,6 +1,18 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight, Check, MessageCircle, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  Check,
+  Dna,
+  HeartPulse,
+  MessageCircle,
+  Microscope,
+  Phone,
+  ShieldCheck,
+  Stethoscope,
+  Wrench,
+} from "lucide-react";
 
 type HeroProps = {
   eyebrow: string;
@@ -16,6 +28,13 @@ type VisualProps = {
   title: string;
   tone?: "light" | "dark" | "clinical";
 };
+
+const heroFeatures = [
+  { label: "Equipos biomédicos", icon: Microscope },
+  { label: "Servicio técnico especializado", icon: Wrench },
+  { label: "Calidad y confianza", icon: ShieldCheck },
+  { label: "Soluciones a tu medida", icon: BarChart3 },
+];
 
 export function Header() {
   const links = [
@@ -96,6 +115,55 @@ export function Hero({
           <Link className="btn-secondary" href="#servicios">
             {secondary}
           </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeHero() {
+  return (
+    <section
+      className="hero-bg relative isolate min-h-[720px] overflow-hidden"
+      style={{ backgroundImage: 'url("/images/bbs-hero-microscope.png")' }}
+    >
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.74)_36%,rgba(255,255,255,0.18)_63%,rgba(255,255,255,0)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(246,248,251,0.94)_100%)]" />
+      <div className="pointer-events-none absolute right-6 top-16 hidden gap-5 text-white/86 lg:grid">
+        {[HeartPulse, Stethoscope, Dna].map((Icon, index) => (
+          <div
+            className="flex h-20 w-20 items-center justify-center border border-white/50 bg-cyan-400/10 backdrop-blur-sm [clip-path:polygon(25%_5%,75%_5%,100%_50%,75%_95%,25%_95%,0_50%)]"
+            key={index}
+          >
+            <Icon size={34} strokeWidth={2.4} />
+          </div>
+        ))}
+      </div>
+
+      <div className="relative mx-auto grid min-h-[720px] max-w-7xl items-center px-6 py-16">
+        <div className="max-w-3xl">
+          <div className="mb-14">
+            <BrandMark size="hero" />
+          </div>
+          <h1 className="max-w-3xl text-4xl font-black uppercase leading-tight text-[#061b5f] sm:text-5xl lg:text-[3.35rem]">
+            Tecnología que conecta.
+            <span className="block text-cyan-600">Servicio que respalda.</span>
+          </h1>
+          <div className="mt-12 grid max-w-4xl grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4">
+            {heroFeatures.map(({ label, icon: Icon }) => (
+              <div
+                className="flex min-h-[128px] flex-col items-center justify-start border-cyan-600/35 text-center sm:border-r sm:last:border-r-0"
+                key={label}
+              >
+                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-cyan-500 text-[#06246e]">
+                  <Icon size={31} strokeWidth={1.8} />
+                </div>
+                <p className="mt-4 max-w-[9rem] text-sm font-black uppercase leading-snug text-[#061b5f]">
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -277,14 +345,20 @@ function BrandMark({
 }: {
   variant?: "dark" | "light";
   compact?: boolean;
-  size?: "md" | "lg";
+  size?: "md" | "lg" | "hero";
 }) {
   const textColor = variant === "light" ? "text-white" : "text-slate-950";
-  const subColor = variant === "light" ? "text-white/72" : "text-slate-600";
-  const bbsSize = size === "lg" ? "text-[2.1rem]" : "text-[1.55rem]";
+  const subColor = variant === "light" ? "text-white/72" : "text-[#06246e]";
+  const bbsSize =
+    size === "hero"
+      ? "text-[5.4rem] sm:text-[7.25rem] lg:text-[8.5rem]"
+      : size === "lg"
+        ? "text-[2.1rem]"
+        : "text-[1.55rem]";
+  const markClass = size === "hero" ? "brand-mark brand-mark-hero" : "brand-mark";
 
   return (
-    <div className={`brand-mark ${textColor}`}>
+    <div className={`${markClass} ${textColor}`}>
       <span className={`brand-bbs ${bbsSize}`}>BBS</span>
       {!compact ? (
         <span className="brand-lines" aria-hidden="true">

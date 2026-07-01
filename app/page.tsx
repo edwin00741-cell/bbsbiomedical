@@ -3,7 +3,7 @@ import {
   CheckList,
   Footer,
   Header,
-  Hero,
+  HomeHero,
   IconCard,
   SectionHeading,
   VisualPanel,
@@ -14,19 +14,7 @@ export default function Home() {
   return (
     <main>
       <Header />
-      <Hero
-        eyebrow="Excelencia biomédica"
-        title="Precisión, tecnología y confiabilidad para cada equipo médico."
-        description="Soluciones integrales en mantenimiento, calibración, protección radiológica y gestión regulatoria para instituciones de salud de alto nivel."
-      />
-      <section className="px-6 pb-24">
-        <div className="mx-auto max-w-7xl">
-          <VisualPanel
-            label="Biomedical solutions"
-            title="Supervisión técnica, trazabilidad clínica y respuesta operativa en una misma plataforma de servicio."
-          />
-        </div>
-      </section>
+      <HomeHero />
 
       <section className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.92fr_1fr] lg:items-center">
@@ -75,7 +63,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-slate-200 bg-white px-6 py-20" id="clientes">
+      <section
+        className="border-y border-slate-200 bg-white px-6 py-20"
+        id="clientes"
+      >
         <div className="mx-auto max-w-7xl text-center">
           <p className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">
             Confían en nuestra precisión
