@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="6192" height="3120" viewBox="0 0 6192 3120">
+  <!-- Nota importante: el SVG no está vectorizado. Es un SVG contenedor con la imagen PNG transparente adentro, porque pediste justamente no redibujarlo ni vectorizarlo, solo quitar el fondo. -->
+  <image href="bbs_icon_bbs_black_8x.png" width="6192" height="3120"/>
+</svg>

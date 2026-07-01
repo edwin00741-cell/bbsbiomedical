@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { ArrowRight, Check, MessageCircle, Phone } from "lucide-react";
 
@@ -29,8 +30,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 px-4 py-3">
       <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-200/80 bg-white/92 px-5 py-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur md:px-6">
-        <Link className="text-2xl font-black tracking-normal text-slate-950" href="/">
-          BBS
+        <Link className="block" href="/" aria-label="BBS Biomedical Solutions">
+          <Image
+            alt="BBS"
+            className="h-9 w-auto"
+            height={52}
+            src="/brand/bbs-primary-horizontal-black.svg"
+            width={203}
+          />
         </Link>
         <nav className="hidden items-center gap-8 text-base font-semibold text-slate-500 lg:flex">
           {links.map((link) => (
@@ -99,7 +106,13 @@ export function VisualPanel({ label, title, tone = "clinical" }: VisualProps) {
       <div className="relative flex h-full min-h-[360px] flex-col justify-between p-6 text-white">
         <div className="flex items-center justify-between text-xs font-black uppercase tracking-[0.16em] text-white/75">
           <span>{label}</span>
-          <span>BBS</span>
+          <Image
+            alt="BBS"
+            className="h-7 w-auto opacity-90"
+            height={40}
+            src="/brand/bbs-primary-horizontal-white.svg"
+            width={156}
+          />
         </div>
         <div>
           <div className="grid grid-cols-3 gap-3">
@@ -231,7 +244,13 @@ export function Footer() {
     <footer className="border-t border-slate-200 bg-white px-6 py-16">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
         <div>
-          <p className="text-4xl font-black text-slate-950">BBS</p>
+          <Image
+            alt="BBS"
+            className="h-12 w-auto"
+            height={64}
+            src="/brand/bbs-primary-horizontal-black.svg"
+            width={249}
+          />
           <p className="mt-4 text-sm leading-6 text-slate-600">
             Biomedical Business and Services. Rigor, precisión y vanguardia
             tecnológica al servicio de la salud.
