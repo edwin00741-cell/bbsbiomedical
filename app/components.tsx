@@ -3,16 +3,19 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
+  ArrowUp,
   BarChart3,
   Check,
   Dna,
   HeartPulse,
+  Menu,
   MessageCircle,
   Microscope,
   Phone,
   ShieldCheck,
   Stethoscope,
   Wrench,
+  X,
 } from "lucide-react";
 import { ContactForm } from "./contact-form";
 
@@ -48,7 +51,7 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 px-4 py-3">
+    <header className="sticky top-0 z-50 px-4 py-3" id="inicio">
       <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-200/80 bg-white/92 px-5 py-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur md:px-6">
         <Link
           className="brand-header block"
@@ -68,8 +71,9 @@ export function Header() {
             </Link>
           ))}
         </nav>
+        <input className="peer sr-only" id="mobile-menu" type="checkbox" />
         <Link
-          className="inline-flex min-w-fit items-center justify-center rounded-full bg-black px-4 py-2.5 text-sm font-black text-white transition hover:bg-slate-800 sm:px-6 md:px-7"
+          className="hidden min-w-fit items-center justify-center rounded-full bg-black px-4 py-2.5 text-sm font-black text-white transition hover:bg-slate-800 sm:inline-flex sm:px-6 md:px-7"
           href="#contacto"
           aria-label="Solicitar diagnóstico"
         >
@@ -80,6 +84,39 @@ export function Header() {
             Diagnóstico
           </span>
         </Link>
+        <label
+          aria-label="Abrir menu"
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-black text-white lg:hidden"
+          htmlFor="mobile-menu"
+        >
+          <Menu size={21} />
+        </label>
+        <div className="absolute left-4 right-4 top-[76px] hidden rounded-[8px] border border-slate-200 bg-white p-3 shadow-2xl peer-checked:block lg:hidden">
+          <label
+            aria-label="Cerrar menu"
+            className="mb-2 ml-auto flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-950"
+            htmlFor="mobile-menu"
+          >
+            <X size={18} />
+          </label>
+          <nav className="grid gap-1 text-base font-bold text-slate-700">
+            {links.map((link) => (
+              <Link
+                className="rounded-[8px] px-4 py-3 transition hover:bg-slate-100 hover:text-slate-950"
+                href={link.href}
+                key={link.href}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white"
+              href="#contacto"
+            >
+              Solicitar diagnostico
+            </Link>
+          </nav>
+        </div>
       </div>
     </header>
   );
@@ -125,10 +162,11 @@ export function Hero({
 
 export function HomeHero() {
   return (
-    <section
-      className="hero-bg relative isolate min-h-[720px] overflow-hidden"
-      style={{ backgroundImage: 'url("/images/bbs-hero-microscope.png")' }}
-    >
+    <section className="bg-[#f6f8fb] px-6 pb-8 pt-4">
+      <div
+        className="hero-bg relative isolate mx-auto min-h-[680px] max-w-7xl overflow-hidden rounded-[8px] shadow-[0_30px_90px_rgba(15,23,42,0.16)]"
+        style={{ backgroundImage: 'url("/images/bbs-hero-microscope.png")' }}
+      >
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.74)_36%,rgba(255,255,255,0.18)_63%,rgba(255,255,255,0)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(246,248,251,0.94)_100%)]" />
       <div className="pointer-events-none absolute right-6 top-16 hidden gap-5 text-white/86 lg:grid">
@@ -142,7 +180,7 @@ export function HomeHero() {
         ))}
       </div>
 
-      <div className="relative mx-auto grid min-h-[720px] max-w-7xl items-center px-6 py-16">
+      <div className="relative grid min-h-[680px] items-center px-6 py-16 sm:px-10 lg:px-14">
         <div className="max-w-3xl">
           <div className="mb-14">
             <BrandLogo size="hero" />
@@ -167,6 +205,7 @@ export function HomeHero() {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );
@@ -312,7 +351,12 @@ export function CTA({
             {description}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link className="btn-outline-dark" href="https://wa.me/507800246633">
+            <Link
+              className="btn-outline-dark"
+              href="https://wa.me/507800246633"
+              rel="noreferrer"
+              target="_blank"
+            >
               <MessageCircle size={18} /> WhatsApp
             </Link>
             <Link className="btn-outline-dark" href="tel:+507800246633">
@@ -327,9 +371,28 @@ export function CTA({
 }
 
 export function Footer() {
+  const serviceLinks = [
+    { label: "Servicio Tecnico", href: "/servicio-tecnico" },
+    { label: "Metrologia", href: "/metrologia" },
+    { label: "Proteccion Radiologica", href: "/proteccion-radiologica" },
+    { label: "Gestion Regulatoria", href: "/gestion-regulatoria" },
+  ];
+  const companyLinks = [
+    { label: "Sobre Nosotros", href: "/quienes-somos" },
+    { label: "Clientes", href: "/clientes" },
+    { label: "Portal Medico", href: "/portal-medico", external: true },
+    { label: "Soporte Tecnico", href: "/soporte-tecnico" },
+  ];
+  const legalLinks = [
+    { label: "Privacidad", href: "/privacidad" },
+    { label: "Terminos y condiciones", href: "/terminos-condiciones" },
+    { label: "Cookies", href: "/cookies" },
+  ];
+
   return (
     <footer className="border-t border-slate-200 bg-white px-6 py-16">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
+      <BackToTop />
+      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 xl:grid-cols-5">
         <div>
           <BrandLogo size="lg" />
           <p className="mt-4 text-sm leading-6 text-slate-600">
@@ -339,6 +402,7 @@ export function Footer() {
         </div>
         <FooterColumn title="Servicios" items={["Servicio Técnico", "Metrología", "Protección Radiológica", "Gestión Regulatoria"]} />
         <FooterColumn title="Empresa" items={["Sobre Nosotros", "Portal Médico", "Soporte Técnico", "Privacidad"]} />
+        <FooterColumn title="Legal" items={legalLinks} />
         <div>
           <p className="text-sm font-black uppercase tracking-[0.12em] text-slate-950">
             Contacto
@@ -357,6 +421,18 @@ export function Footer() {
         © 2024 BBS Biomedical Solutions. Todos los derechos reservados.
       </p>
     </footer>
+  );
+}
+
+export function BackToTop() {
+  return (
+    <Link
+      aria-label="Subir al inicio"
+      className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-[0_16px_40px_rgba(15,23,42,0.28)] transition hover:-translate-y-1 hover:bg-slate-800"
+      href="#inicio"
+    >
+      <ArrowUp size={20} strokeWidth={2.5} />
+    </Link>
   );
 }
 
@@ -404,18 +480,56 @@ function BrandLogo({
   );
 }
 
-function FooterColumn({ title, items }: { title: string; items: string[] }) {
+type FooterItem = string | { label: string; href: string; external?: boolean };
+
+function footerItemFromPosition(title: string, item: FooterItem, index: number) {
+  if (typeof item !== "string") {
+    return item;
+  }
+
+  const serviceHrefs = [
+    "/servicio-tecnico",
+    "/metrologia",
+    "/proteccion-radiologica",
+    "/gestion-regulatoria",
+  ];
+  const companyHrefs = [
+    "/quienes-somos",
+    "/portal-medico",
+    "/soporte-tecnico",
+    "/privacidad",
+  ];
+  const hrefs = title === "Servicios" ? serviceHrefs : companyHrefs;
+
+  return {
+    label: item,
+    href: hrefs[index] || "#",
+    external: title === "Empresa" && index === 1,
+  };
+}
+
+function FooterColumn({ title, items }: { title: string; items: FooterItem[] }) {
   return (
     <div>
       <p className="text-sm font-black uppercase tracking-[0.12em] text-slate-950">
         {title}
       </p>
       <div className="mt-5 grid gap-3 text-sm font-semibold text-slate-600">
-        {items.map((item) => (
-          <Link className="hover:text-slate-950" href="#" key={item}>
-            {item}
+        {items.map((item, index) => {
+          const link = footerItemFromPosition(title, item, index);
+
+          return (
+          <Link
+            className="hover:text-slate-950"
+            href={link.href}
+            key={`${title}-${link.href}`}
+            rel={link.external ? "noreferrer" : undefined}
+            target={link.external ? "_blank" : undefined}
+          >
+            {link.label}
           </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

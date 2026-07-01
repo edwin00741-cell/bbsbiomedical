@@ -38,7 +38,7 @@ export const services: Service[] = [
     title: "Metrología",
     description:
       "Calibración y verificación de equipos de medición médica bajo estándares internacionales y nacionales.",
-    href: "/#servicios",
+    href: "/metrologia",
     icon: Activity,
   },
   {
@@ -52,7 +52,7 @@ export const services: Service[] = [
     title: "Gestión Regulatoria",
     description:
       "Asesoría técnica para trámites ante autoridades de salud y cumplimiento de normativas locales.",
-    href: "/#servicios",
+    href: "/gestion-regulatoria",
     icon: ClipboardCheck,
   },
 ];
