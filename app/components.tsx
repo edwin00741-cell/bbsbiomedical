@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { ArrowRight, Check, MessageCircle, Phone } from "lucide-react";
 
@@ -30,14 +29,12 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 px-4 py-3">
       <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-200/80 bg-white/92 px-5 py-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur md:px-6">
-        <Link className="block" href="/" aria-label="BBS Biomedical Solutions">
-          <Image
-            alt="BBS"
-            className="h-9 w-auto"
-            height={52}
-            src="/brand/bbs-primary-horizontal-black.svg"
-            width={203}
-          />
+        <Link
+          className="brand-header block"
+          href="/"
+          aria-label="BBS Biomedical Solutions"
+        >
+          <BrandMark />
         </Link>
         <nav className="hidden items-center gap-8 text-base font-semibold text-slate-500 lg:flex">
           {links.map((link) => (
@@ -51,10 +48,16 @@ export function Header() {
           ))}
         </nav>
         <Link
-          className="inline-flex min-w-fit items-center justify-center rounded-full bg-black px-6 py-2.5 text-sm font-black text-white transition hover:bg-slate-800 md:px-7"
+          className="inline-flex min-w-fit items-center justify-center rounded-full bg-black px-4 py-2.5 text-sm font-black text-white transition hover:bg-slate-800 sm:px-6 md:px-7"
           href="#contacto"
+          aria-label="Solicitar diagnóstico"
         >
-          Solicitar diagnóstico
+          <span className="hidden sm:inline" aria-hidden="true">
+            Solicitar diagnóstico
+          </span>
+          <span className="sm:hidden" aria-hidden="true">
+            Diagnóstico
+          </span>
         </Link>
       </div>
     </header>
@@ -106,13 +109,7 @@ export function VisualPanel({ label, title, tone = "clinical" }: VisualProps) {
       <div className="relative flex h-full min-h-[360px] flex-col justify-between p-6 text-white">
         <div className="flex items-center justify-between text-xs font-black uppercase tracking-[0.16em] text-white/75">
           <span>{label}</span>
-          <Image
-            alt="BBS"
-            className="h-7 w-auto opacity-90"
-            height={40}
-            src="/brand/bbs-primary-horizontal-white.svg"
-            width={156}
-          />
+          <BrandMark variant="light" compact />
         </div>
         <div>
           <div className="grid grid-cols-3 gap-3">
@@ -244,13 +241,7 @@ export function Footer() {
     <footer className="border-t border-slate-200 bg-white px-6 py-16">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
         <div>
-          <Image
-            alt="BBS"
-            className="h-12 w-auto"
-            height={64}
-            src="/brand/bbs-primary-horizontal-black.svg"
-            width={249}
-          />
+          <BrandMark size="lg" />
           <p className="mt-4 text-sm leading-6 text-slate-600">
             Biomedical Business and Services. Rigor, precisión y vanguardia
             tecnológica al servicio de la salud.
@@ -276,6 +267,32 @@ export function Footer() {
         © 2024 BBS Biomedical Solutions. Todos los derechos reservados.
       </p>
     </footer>
+  );
+}
+
+function BrandMark({
+  variant = "dark",
+  compact = false,
+  size = "md",
+}: {
+  variant?: "dark" | "light";
+  compact?: boolean;
+  size?: "md" | "lg";
+}) {
+  const textColor = variant === "light" ? "text-white" : "text-slate-950";
+  const subColor = variant === "light" ? "text-white/72" : "text-slate-600";
+  const bbsSize = size === "lg" ? "text-[2.1rem]" : "text-[1.55rem]";
+
+  return (
+    <div className={`brand-mark ${textColor}`}>
+      <span className={`brand-bbs ${bbsSize}`}>BBS</span>
+      {!compact ? (
+        <span className="brand-lines" aria-hidden="true">
+          <span className={`brand-biomedical ${subColor}`}>BIOMEDICAL</span>
+          <span className={`brand-services ${subColor}`}>BUSINESS & SERVICES</span>
+        </span>
+      ) : null}
+    </div>
   );
 }
 
