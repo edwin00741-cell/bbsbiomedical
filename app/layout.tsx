@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BBS Services",
-  description: "Soluciones digitales, soporte operativo y servicios profesionales.",
+  title: "BBS Biomedical Solutions",
+  description:
+    "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud.",
 };
 
 export default function RootLayout({

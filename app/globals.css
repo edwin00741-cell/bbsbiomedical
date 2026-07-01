@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f7f2;
-  --foreground: #161616;
+  --background: #f6f8fb;
+  --foreground: #0f172a;
 }
 
 * {
@@ -21,6 +21,73 @@ body {
 }
 
 ::selection {
-  background: #d7f171;
-  color: #111111;
+  background: #a5f3fc;
+  color: #0f172a;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-light,
+.btn-outline-dark {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0 1.75rem;
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.btn-primary {
+  background: #0f172a;
+  color: white;
+}
+
+.btn-primary:hover,
+.btn-light:hover,
+.btn-outline-dark:hover {
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.btn-light {
+  background: white;
+  color: #0f172a;
+}
+
+.btn-outline-dark {
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: white;
+}
+
+.visual-panel {
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #0f172a;
+  box-shadow: 0 28px 90px rgba(15, 23, 42, 0.18);
+}
+
+.visual-light {
+  background: #e0f2fe;
+}
+
+.visual-dark {
+  background: #020617;
+}
+
+.visual-clinical {
+  background: #0f172a;
 }
