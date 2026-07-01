@@ -23,7 +23,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-R3CEHXMM3F";
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
   return (
@@ -53,22 +52,18 @@ export default function RootLayout({
             `}
           </Script>
         ) : null}
-        {gaId ? (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}');
-              `}
-            </Script>
-          </>
-        ) : null}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-R3CEHXMM3F"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-R3CEHXMM3F');
+          `}
+        </Script>
       </body>
     </html>
   );
