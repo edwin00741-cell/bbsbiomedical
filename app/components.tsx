@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
@@ -53,7 +54,7 @@ export function Header() {
           href="/"
           aria-label="BBS Biomedical Solutions"
         >
-          <BrandMark />
+          <BrandLogo />
         </Link>
         <nav className="hidden items-center gap-8 text-base font-semibold text-slate-500 lg:flex">
           {links.map((link) => (
@@ -143,7 +144,7 @@ export function HomeHero() {
       <div className="relative mx-auto grid min-h-[720px] max-w-7xl items-center px-6 py-16">
         <div className="max-w-3xl">
           <div className="mb-14">
-            <BrandMark size="hero" />
+            <BrandLogo size="hero" />
           </div>
           <h1 className="max-w-3xl text-4xl font-black uppercase leading-tight text-[#061b5f] sm:text-5xl lg:text-[3.35rem]">
             Tecnología que conecta.
@@ -177,7 +178,7 @@ export function VisualPanel({ label, title, tone = "clinical" }: VisualProps) {
       <div className="relative flex h-full min-h-[360px] flex-col justify-between p-6 text-white">
         <div className="flex items-center justify-between text-xs font-black uppercase tracking-[0.16em] text-white/75">
           <span>{label}</span>
-          <BrandMark variant="light" compact />
+          <BrandLogo variant="light" compact />
         </div>
         <div>
           <div className="grid grid-cols-3 gap-3">
@@ -309,7 +310,7 @@ export function Footer() {
     <footer className="border-t border-slate-200 bg-white px-6 py-16">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
         <div>
-          <BrandMark size="lg" />
+          <BrandLogo size="lg" />
           <p className="mt-4 text-sm leading-6 text-slate-600">
             Biomedical Business and Services. Rigor, precisión y vanguardia
             tecnológica al servicio de la salud.
@@ -338,35 +339,47 @@ export function Footer() {
   );
 }
 
-function BrandMark({
-  variant = "dark",
+function BrandLogo({
+  variant = "color",
   compact = false,
   size = "md",
 }: {
-  variant?: "dark" | "light";
+  variant?: "color" | "black" | "light";
   compact?: boolean;
   size?: "md" | "lg" | "hero";
 }) {
-  const textColor = variant === "light" ? "text-white" : "text-slate-950";
-  const subColor = variant === "light" ? "text-white/72" : "text-[#06246e]";
-  const bbsSize =
+  const src =
+    variant === "light"
+      ? compact
+        ? "/brand/bbs-symbol-white.png"
+        : "/brand/bbs-primary-horizontal-white.png"
+      : variant === "black"
+        ? compact
+          ? "/brand/bbs-icon-bbs-black.png"
+          : "/brand/bbs-primary-horizontal-black.png"
+        : compact
+          ? "/brand/bbs-symbol-color.png"
+          : "/brand/bbs-primary-horizontal-color.png";
+  const className =
     size === "hero"
-      ? "text-[5.4rem] sm:text-[7.25rem] lg:text-[8.5rem]"
+      ? "h-auto w-[min(58vw,560px)] max-w-full"
       : size === "lg"
-        ? "text-[2.1rem]"
-        : "text-[1.55rem]";
-  const markClass = size === "hero" ? "brand-mark brand-mark-hero" : "brand-mark";
+        ? "h-auto w-[210px] max-w-full"
+        : compact
+          ? "h-9 w-auto"
+          : "h-auto w-[160px] max-w-[42vw] sm:w-[190px]";
+  const width = compact ? 1802 : 3270;
+  const height = compact ? 1710 : 838;
 
   return (
-    <div className={`${markClass} ${textColor}`}>
-      <span className={`brand-bbs ${bbsSize}`}>BBS</span>
-      {!compact ? (
-        <span className="brand-lines" aria-hidden="true">
-          <span className={`brand-biomedical ${subColor}`}>BIOMEDICAL</span>
-          <span className={`brand-services ${subColor}`}>BUSINESS & SERVICES</span>
-        </span>
-      ) : null}
-    </div>
+    <Image
+      alt="BBS Biomedical Business & Services"
+      className={className}
+      height={height}
+      priority={size === "hero"}
+      src={src}
+      width={width}
+    />
   );
 }
 

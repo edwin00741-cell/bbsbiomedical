@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "@fontsource/space-grotesk/700.css";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/500.css";
 import "@fontsource/montserrat/600.css";
@@ -11,8 +10,8 @@ export const metadata: Metadata = {
   description:
     "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud.",
   icons: {
-    icon: "/brand/bbs-icon-black.svg",
-    apple: "/brand/bbs_symbol_color_8x.png",
+    icon: "/brand/bbs-symbol-color.png",
+    apple: "/brand/bbs-symbol-color.png",
   },
 };
 
