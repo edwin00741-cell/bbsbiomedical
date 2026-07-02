@@ -4,8 +4,8 @@ export default function TermsPage() {
   return (
     <SimplePage
       eyebrow="Condiciones de uso"
-      title="Terminos y Condiciones"
-      description="Texto generico de terminos para uso del sitio web. Debe ajustarse a la operacion real y validarse legalmente antes del lanzamiento final."
+      title="Términos y Condiciones"
+      description="Texto genérico de términos para uso del sitio web. Debe ajustarse a la operación real y validarse legalmente antes del lanzamiento final."
       sections={[
         {
           title: "Uso del sitio",
@@ -13,7 +13,7 @@ export default function TermsPage() {
         },
         {
           title: "Servicios",
-          body: "Los servicios descritos pueden variar segun disponibilidad, ubicacion, alcance tecnico, evaluacion inicial y condiciones especificas de cada equipo.",
+          body: "Los servicios descritos pueden variar según disponibilidad, ubicación, alcance técnico, evaluación inicial y condiciones específicas de cada equipo.",
         },
         {
           title: "Responsabilidad",

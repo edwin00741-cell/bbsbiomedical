@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+﻿import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   BadgeCheck,
@@ -64,7 +64,7 @@ export const clients = [
     logo: "/clients/hospital-del-nino.png",
   },
   {
-    name: "Ministerio de Salud Panama",
+    name: "Ministerio de Salud Panamá",
     logo: "/clients/minsa.png",
   },
   {
@@ -104,21 +104,21 @@ export const projects: Project[] = [
   {
     title: "Mant. preventivo y restauracion de microscopio Olympus - Cliente Privado",
     description:
-      "Restauracion, revision electrica y calibracion de optica para equipo Olympus.",
+      "Restauración, revisión eléctrica y calibración de óptica para equipo Olympus.",
     image: "/services/microscope-olympus-private.png",
     tag: "Cliente Privado",
   },
   {
     title: "Mantenimiento Preventivo y Correctivo Sillon Dental - Centro Vocacional de Chapala",
     description:
-      "Revision preventiva y correctiva de sistemas neumaticos, hidraulicos y lineas internas.",
+      "Revisión preventiva y correctiva de sistemas neumáticos, hidráulicos y líneas internas.",
     image: "/services/dental-chair-chapala.png",
     tag: "Centro Vocacional de Chapala",
   },
   {
     title: "Mantenimiento Preventivo y Correctivo Microscopios Lab. de Ciencias - Colegio Bilingue Biancheri",
     description:
-      "Soporte tecnico para microscopios de laboratorio educativo y diagnostico optico.",
+      "Soporte técnico para microscopios de laboratorio educativo y diagnóstico óptico.",
     image: "/services/microscope-lab-ciencias.png",
     tag: "Colegio Bilingue Biancheri",
   },
@@ -132,7 +132,7 @@ export const projects: Project[] = [
   {
     title: "Instalacion y puesta en marcha de Aire Acondicionado - Colegio Moises Castillo Ocana",
     description:
-      "Instalacion, verificacion y puesta en marcha de sistema de aire acondicionado.",
+      "Instalación, verificación y puesta en marcha de sistema de aire acondicionado.",
     image: "/services/air-conditioning-mcastillo.png",
     tag: "Colegio Moises Castillo Ocana",
   },

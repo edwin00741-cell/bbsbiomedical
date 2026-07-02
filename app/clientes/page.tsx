@@ -10,7 +10,7 @@ export default function ClientsPage() {
         compact
         eyebrow="Relaciones institucionales"
         title="Clientes"
-        description="Trabajamos con instituciones publicas, centros de salud, clinicas, laboratorios y organizaciones que dependen de equipos confiables."
+        description="Trabajamos con instituciones públicas, centros de salud, clínicas, laboratorios y organizaciones que dependen de equipos confiables."
         primary="Solicitar informacion"
         secondary="Ver servicios"
       />
@@ -41,7 +41,7 @@ export default function ClientsPage() {
       </section>
 
       <CTA
-        title="Tu institucion necesita respaldo tecnico?"
+        title="¿Tu institución necesita respaldo técnico?"
         description="Conversemos sobre el estado actual de sus equipos y el tipo de soporte que necesita."
       />
       <Footer />

@@ -22,7 +22,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.92fr_1fr] lg:items-center">
           <div className="relative min-h-[420px] overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_28px_90px_rgba(15,23,42,0.18)]">
             <Image
-              alt="Laboratorio biomedico con equipo de metrologia y experiencia clinica"
+              alt="Laboratorio biomédico con equipo de metrología y experiencia clínica"
               className="object-cover"
               fill
               priority
@@ -41,7 +41,7 @@ export default function Home() {
           </div>
 
           <div>
-            <SectionHeading title="Soluciones biomedicas con precision, seguridad y respaldo tecnico." />
+            <SectionHeading title="Soluciones biomédicas con precisión, seguridad y respaldo técnico." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
               BBS Biomedical Solutions nace del compromiso por elevar los
               estandares de calidad en el sector salud. Entendemos que detras de
@@ -58,7 +58,7 @@ export default function Home() {
                 items={[
                   "Cumplimiento Normativo Estricto",
                   "Tiempos de Respuesta Prioritarios",
-                  "Tecnologia de Medicion Certificada",
+                  "Tecnología de Medición Certificada",
                 ]}
               />
             </div>
@@ -70,7 +70,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Nuestros Servicios"
-            description="Desarrollamos soluciones tecnicas modulares adaptadas a las necesidades especificas de clinicas, hospitales y centros diagnosticos."
+            description="Desarrollamos soluciones técnicas modulares adaptadas a las necesidades específicas de clínicas, hospitales y centros diagnósticos."
           />
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {services.map((service) => (
@@ -86,7 +86,7 @@ export default function Home() {
       >
         <div className="mx-auto max-w-7xl text-center">
           <p className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">
-            Confian en nuestra precision
+            Confían en nuestra precisión
           </p>
           <div className="mt-10 grid items-center gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (
@@ -108,7 +108,7 @@ export default function Home() {
       </section>
 
       <CTA
-        title="Necesitas soporte tecnico para tus equipos medicos?"
+        title="¿Necesitas soporte técnico para tus equipos médicos?"
         description="Conversemos sobre el estado actual de sus equipos y como nuestro equipo puede ayudarle a mantener la operatividad clinica sin interrupciones."
       />
       <Footer />

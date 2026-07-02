@@ -4,10 +4,10 @@ export default function MedicalPortalPage() {
   return (
     <SimplePage
       eyebrow="Portal en preparacion"
-      title="Portal Medico"
-      description="Espacio proyectado para centralizar solicitudes, documentacion tecnica, reportes y seguimiento de servicios para clientes institucionales."
+      title="Portal Médico"
+      description="Espacio proyectado para centralizar solicitudes, documentación técnica, reportes y seguimiento de servicios para clientes institucionales."
       image="/images/bbs-monitor-operating-room.png"
-      imageAlt="Monitor biomedico en quirofano"
+      imageAlt="Monitor biomédico en quirófano"
       sections={[
         {
           title: "Acceso futuro",

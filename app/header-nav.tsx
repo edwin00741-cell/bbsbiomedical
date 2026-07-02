@@ -6,16 +6,16 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const navLinks = [
   { label: "Inicio", href: "/" },
-  { label: "Quienes Somos", href: "/quienes-somos" },
+  { label: "Quiénes Somos", href: "/quienes-somos" },
   { label: "Clientes", href: "/#clientes" },
   { label: "Contacto", href: "#contacto" },
 ];
 
 const serviceLinks = [
-  { label: "Servicio Tecnico", href: "/servicio-tecnico" },
-  { label: "Metrologia", href: "/metrologia" },
-  { label: "Proteccion Radiologica", href: "/proteccion-radiologica" },
-  { label: "Gestion Regulatoria", href: "/gestion-regulatoria" },
+  { label: "Servicio Técnico", href: "/servicio-tecnico" },
+  { label: "Metrología", href: "/metrologia" },
+  { label: "Protección Radiológica", href: "/proteccion-radiologica" },
+  { label: "Gestión Regulatoria", href: "/gestion-regulatoria" },
 ];
 
 export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
@@ -69,7 +69,7 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
             Inicio
           </Link>
           <Link className="transition hover:text-slate-950" href="/quienes-somos">
-            Quienes Somos
+            Quiénes Somos
           </Link>
           <div className="relative">
             <button
@@ -108,11 +108,11 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
         </nav>
 
         <Link
-          aria-label="Solicitar diagnostico"
+          aria-label="Solicitar diagnóstico"
           className="hidden min-w-fit items-center justify-center rounded-full bg-black px-4 py-2.5 text-sm font-black text-white transition hover:bg-slate-800 sm:inline-flex sm:px-6 md:px-7"
           href="#contacto"
         >
-          Solicitar diagnostico
+          Solicitar diagnóstico
         </Link>
 
         <button
@@ -187,7 +187,7 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
             href="#contacto"
             onClick={closeMenus}
           >
-            Solicitar diagnostico
+            Solicitar diagnóstico
           </Link>
         </nav>
       </div>

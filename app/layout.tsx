@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Script from "next/script";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/500.css";

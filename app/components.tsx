@@ -25,9 +25,9 @@ const contactEmail = "brodriguez@rysbioservices.com";
 const mapsHref =
   "https://www.google.com/maps/search/?api=1&query=Panama+Oeste+La+Chorrera+Ave+Libertadores+Calle+los+Libertadores+Planta+de+hielo";
 const businessAddress =
-  "Panama, Panama Oeste, La Chorrera, Ave. Libertadores, Calle los Libertadores, al lado de la Planta de hielo, Edificio 1, Local 1.";
+  "Panamá, Panamá Oeste, La Chorrera, Ave. Libertadores, Calle los Libertadores, al lado de la Planta de hielo, Edificio 1, Local 1.";
 const businessHours =
-  "Lunes a viernes, 8:00 a.m. a 5:00 p.m. Sabados, 9:00 a.m. a 12:00 md.";
+  "Lunes a viernes, 8:00 a.m. a 5:00 p.m. Sábados, 9:00 a.m. a 12:00 md.";
 
 type HeroProps = {
   eyebrow: string;
@@ -45,8 +45,8 @@ type VisualProps = {
 };
 
 const heroFeatures = [
-  { label: "Equipos biomÃ©dicos", icon: Microscope },
-  { label: "Servicio tÃ©cnico especializado", icon: Wrench },
+  { label: "Equipos biomédicos", icon: Microscope },
+  { label: "Servicio técnico especializado", icon: Wrench },
   { label: "Calidad y confianza", icon: ShieldCheck },
   { label: "Soluciones a tu medida", icon: BarChart3 },
 ];
@@ -59,7 +59,7 @@ export function Hero({
   eyebrow,
   title,
   description,
-  primary = "Solicitar diagnÃ³stico tÃ©cnico",
+  primary = "Solicitar diagnóstico técnico",
   secondary = "Ver servicios",
   compact = false,
 }: HeroProps) {
@@ -119,7 +119,7 @@ export function HomeHero() {
             <BrandLogo size="hero" />
           </div>
           <h1 className="max-w-3xl text-4xl font-black uppercase leading-tight text-[#061b5f] sm:text-5xl lg:text-[3.35rem]">
-            TecnologÃ­a que conecta.
+            Tecnología que conecta.
             <span className="block text-cyan-600">Servicio que respalda.</span>
           </h1>
           <div className="mt-12 grid max-w-4xl grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4">
@@ -150,7 +150,7 @@ export function HeroSupportImage() {
       <div className="mx-auto max-w-7xl">
         <div className="overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_30px_70px_rgba(15,23,42,0.22)]">
           <Image
-            alt="Monitor biomÃ©dico en quirÃ³fano"
+            alt="Monitor biomédico en quirófano"
             className="aspect-[21/9] h-auto w-full object-cover"
             height={945}
             priority
@@ -239,7 +239,7 @@ export function IconCard({
       <p className="mt-4 text-base leading-7 text-slate-600">{description}</p>
       {href ? (
         <span className="mt-7 inline-flex items-center gap-2 text-sm font-black text-cyan-700">
-          Saber mÃ¡s <ArrowRight size={16} />
+          Saber más <ArrowRight size={16} />
         </span>
       ) : null}
     </article>
@@ -313,59 +313,70 @@ export function CTA({
 
 function BusinessMap() {
   return (
-    <div className="mt-8 overflow-hidden rounded-[8px] border border-white/12 bg-white/8">
-      <div className="relative min-h-[220px] bg-[#061b5f]">
-        <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:36px_36px]" />
-        <div className="absolute left-8 right-8 top-1/2 h-1 -translate-y-1/2 rounded-full bg-cyan-300/80" />
-        <div className="absolute bottom-8 left-12 h-1 w-3/5 rotate-[-14deg] rounded-full bg-white/55" />
-        <div className="absolute right-10 top-10 h-1 w-2/5 rotate-[24deg] rounded-full bg-cyan-100/55" />
-        <div className="absolute left-[54%] top-[44%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-2xl">
-            <Image
-              alt="BBS"
-              className="h-10 w-10 object-contain"
-              height={40}
-              src="/brand/bbs-symbol-color.png"
-              width={40}
-            />
+    <div className="mt-8 overflow-hidden rounded-[8px] border border-white/12 bg-white text-slate-950 shadow-2xl">
+      <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="relative min-h-[230px] bg-[#f6f8fb]">
+          <div className="absolute inset-0 [background-image:linear-gradient(rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.06)_1px,transparent_1px)] [background-size:34px_34px]" />
+          <div className="absolute left-8 top-10 h-24 w-40 rounded-[28px] border-2 border-cyan-500/45" />
+          <div className="absolute bottom-10 right-8 h-24 w-44 rounded-[28px] border-2 border-[#061b5f]/40" />
+          <div className="absolute left-5 right-5 top-1/2 h-1 -translate-y-1/2 rounded-full bg-slate-300" />
+          <div className="absolute left-1/3 top-1/2 h-1 w-1/3 -translate-y-1/2 rounded-full bg-cyan-500" />
+          <div className="absolute left-[58%] top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-xl ring-4 ring-cyan-500/20">
+              <Image
+                alt="BBS"
+                className="h-9 w-9 object-contain"
+                height={36}
+                src="/brand/bbs-symbol-color.png"
+                width={36}
+              />
+            </div>
+            <MapPin className="-mt-2 text-cyan-600" fill="currentColor" size={30} />
           </div>
-          <MapPin className="-mt-2 text-cyan-300" fill="currentColor" size={34} />
         </div>
-        <div className="absolute bottom-4 left-4 right-4 rounded-[8px] bg-white/92 p-4 text-slate-950 shadow-xl backdrop-blur">
+        <div className="p-5">
           <p className="text-xs font-black uppercase tracking-[0.14em] text-cyan-700">
-            Ubicacion
+            Ubicación
           </p>
-          <p className="mt-1 text-sm font-bold leading-5">{businessAddress}</p>
-          <Link
-            className="mt-3 inline-flex text-sm font-black text-cyan-700 hover:text-slate-950"
-            href={mapsHref}
-            rel="noreferrer"
-            target="_blank"
-          >
-            Abrir ruta
-          </Link>
+          <p className="mt-2 text-sm font-bold leading-6">{businessAddress}</p>
+          <p className="mt-3 text-sm leading-6 text-slate-600">{businessHours}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              className="inline-flex min-h-10 items-center justify-center rounded-full bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-cyan-700"
+              href={mapsHref}
+              rel="noreferrer"
+              target="_blank"
+            >
+              Abrir ruta
+            </Link>
+            <Link
+              className="inline-flex min-h-10 items-center justify-center rounded-full border border-slate-200 px-4 text-sm font-black text-slate-800 transition hover:border-cyan-500 hover:text-cyan-700"
+              href={phoneHref}
+            >
+              Llamar
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
 export function Footer() {
   const serviceLinks = [
-    { label: "Servicio Tecnico", href: "/servicio-tecnico" },
-    { label: "Metrologia", href: "/metrologia" },
-    { label: "Proteccion Radiologica", href: "/proteccion-radiologica" },
-    { label: "Gestion Regulatoria", href: "/gestion-regulatoria" },
+    { label: "Servicio Técnico", href: "/servicio-tecnico" },
+    { label: "Metrología", href: "/metrologia" },
+    { label: "Protección Radiológica", href: "/proteccion-radiologica" },
+    { label: "Gestión Regulatoria", href: "/gestion-regulatoria" },
   ];
   const companyLinks = [
     { label: "Sobre Nosotros", href: "/quienes-somos" },
     { label: "Clientes", href: "/clientes" },
-    { label: "Portal Medico", href: "/portal-medico", external: true },
-    { label: "Soporte Tecnico", href: "/soporte-tecnico" },
+    { label: "Portal Médico", href: "/portal-medico", external: true },
+    { label: "Soporte Técnico", href: "/soporte-tecnico" },
   ];
   const legalLinks = [
     { label: "Privacidad", href: "/privacidad" },
-    { label: "Terminos y condiciones", href: "/terminos-condiciones" },
+    { label: "Términos y condiciones", href: "/terminos-condiciones" },
     { label: "Cookies", href: "/cookies" },
   ];
 
@@ -376,12 +387,11 @@ export function Footer() {
         <div>
           <BrandLogo size="lg" />
           <p className="mt-4 text-sm leading-6 text-slate-600">
-            Biomedical Business and Services. Rigor, precisiÃ³n y vanguardia
-            tecnolÃ³gica al servicio de la salud.
+            Biomedical Business and Services. Rigor, precisión y vanguardia tecnológica al servicio de la salud.
           </p>
         </div>
-        <FooterColumn title="Servicios" items={["Servicio TÃ©cnico", "MetrologÃ­a", "ProtecciÃ³n RadiolÃ³gica", "GestiÃ³n Regulatoria"]} />
-        <FooterColumn title="Empresa" items={["Sobre Nosotros", "Portal MÃ©dico", "Soporte TÃ©cnico", "Privacidad"]} />
+        <FooterColumn title="Servicios" items={["Servicio Técnico", "Metrología", "Protección Radiológica", "Gestión Regulatoria"]} />
+        <FooterColumn title="Empresa" items={["Sobre Nosotros", "Portal Médico", "Soporte Técnico", "Privacidad"]} />
         <FooterColumn title="Legal" items={legalLinks} />
         <div>
           <p className="text-sm font-black uppercase tracking-[0.12em] text-slate-950">
@@ -399,7 +409,8 @@ export function Footer() {
             <br />
             <Link href={`mailto:${contactEmail}`}>{contactEmail}</Link>
           </p>
-        </div>      </div>
+        </div>
+      </div>
       <p className="mx-auto mt-12 max-w-7xl border-t border-slate-200 pt-6 text-center text-sm text-slate-500">
         © 2026 BBS Biomedical Solutions. Todos los derechos reservados. Sitio desarrollado por{" "}
         <Link
