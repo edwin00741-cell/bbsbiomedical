@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   CTA,
   Footer,
@@ -65,8 +66,20 @@ export default function TechnicalServicePage() {
                 }`}
                 key={project.title}
               >
-                <div className="flex aspect-[16/9] items-end bg-[linear-gradient(135deg,#0f172a,#0e7490_55%,#d9f99d)] p-6 text-white">
-                  <p className="text-sm font-black uppercase tracking-[0.14em] text-white/80">
+                <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
+                  <Image
+                    alt={project.title}
+                    className="object-cover"
+                    fill
+                    sizes={
+                      index === 0
+                        ? "(min-width: 1024px) 62vw, 100vw"
+                        : "(min-width: 1024px) 31vw, 100vw"
+                    }
+                    src={project.image}
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0)_45%,rgba(2,6,23,0.68)_100%)]" />
+                  <p className="absolute bottom-5 left-5 right-5 text-sm font-black uppercase tracking-[0.14em] text-white/88">
                     {project.tag || "BBS technical"}
                   </p>
                 </div>

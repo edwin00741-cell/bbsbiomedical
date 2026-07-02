@@ -21,22 +21,19 @@ export default function ClientsPage() {
             title="Instituciones que han confiado en BBS"
             description="Logos de clientes y aliados atendidos por nuestro equipo. Las historias de caso e imagenes de proyecto se incorporaran en una siguiente fase."
           />
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid items-center gap-x-14 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (
               <article
-                className="flex min-h-[170px] flex-col items-center justify-center rounded-[8px] border border-slate-200 bg-slate-50 p-6 text-center shadow-sm"
+                className="flex min-h-[120px] items-center justify-center text-center"
                 key={client.name}
               >
                 <Image
                   alt={client.name}
-                  className="max-h-24 w-auto max-w-full object-contain"
+                  className="max-h-24 w-auto max-w-full object-contain opacity-85 grayscale transition hover:opacity-100 hover:grayscale-0"
                   height={140}
                   src={client.logo}
                   width={280}
                 />
-                <h2 className="mt-5 text-base font-black text-slate-800">
-                  {client.name}
-                </h2>
               </article>
             ))}
           </div>

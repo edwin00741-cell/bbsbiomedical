@@ -88,15 +88,15 @@ export default function Home() {
           <p className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">
             Confian en nuestra precision
           </p>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-10 grid items-center gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (
               <div
-                className="flex min-h-[132px] items-center justify-center rounded-[8px] border border-slate-200 bg-white px-5 py-6 shadow-sm"
+                className="flex min-h-[104px] items-center justify-center px-2"
                 key={client.name}
               >
                 <Image
                   alt={client.name}
-                  className="max-h-20 w-auto max-w-full object-contain"
+                  className="max-h-20 w-auto max-w-full object-contain opacity-85 grayscale transition hover:opacity-100 hover:grayscale-0"
                   height={120}
                   src={client.logo}
                   width={240}

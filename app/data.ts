@@ -23,6 +23,7 @@ export type Service = {
 export type Project = {
   title: string;
   description: string;
+  image: string;
   tag?: string;
 };
 
@@ -94,31 +95,46 @@ export const clients = [
 
 export const projects: Project[] = [
   {
-    title: "Hospital Del Niño: Red de Microscopía",
+    title: "Mantenimiento Preventivo microscopios - Hospital Del Nino Dr. Jose Renan Esquivel",
     description:
-      "Mantenimiento preventivo integral de 45 unidades de microscopía de alta resolución para el departamento de hematología.",
-    tag: "Institucional",
+      "Mantenimiento preventivo integral de equipos de microscopia de alta resolucion para operacion clinica continua.",
+    image: "/services/microscope-hospital-nino.png",
+    tag: "Hospital Del Nino",
   },
   {
-    title: "Clínica Privada",
+    title: "Mant. preventivo y restauracion de microscopio Olympus - Cliente Privado",
     description:
-      "Calibración de óptica y sistemas digitales en equipos Olympus de última generación.",
-    tag: "Olympus specialized",
+      "Restauracion, revision electrica y calibracion de optica para equipo Olympus.",
+    image: "/services/microscope-olympus-private.png",
+    tag: "Cliente Privado",
   },
   {
-    title: "Sillón Dental Ergonómico",
+    title: "Mantenimiento Preventivo y Correctivo Sillon Dental - Centro Vocacional de Chapala",
     description:
-      "Instalación y configuración de sistemas neumáticos e hidráulicos en centros odontológicos.",
+      "Revision preventiva y correctiva de sistemas neumaticos, hidraulicos y lineas internas.",
+    image: "/services/dental-chair-chapala.png",
+    tag: "Centro Vocacional de Chapala",
   },
   {
-    title: "Lab. de Ciencias",
+    title: "Mantenimiento Preventivo y Correctivo Microscopios Lab. de Ciencias - Colegio Bilingue Biancheri",
     description:
-      "Soporte técnico avanzado para equipos de análisis centrífugo y espectroscopía.",
+      "Soporte tecnico para microscopios de laboratorio educativo y diagnostico optico.",
+    image: "/services/microscope-lab-ciencias.png",
+    tag: "Colegio Bilingue Biancheri",
   },
   {
-    title: "Sistemas de Anestesia",
+    title: "Mantenimiento Preventivo Equipo de anestesia de Oxido Nitroso - Clinica Dental Armonia",
     description:
-      "Aseguramiento de flujo y ventilación en quirófanos de alta complejidad.",
+      "Verificacion de flujo, presion y seguridad operativa en equipo de anestesia odontologica.",
+    image: "/services/anesthesia-nitrous-armonia.png",
+    tag: "Clinica Dental Armonia",
+  },
+  {
+    title: "Instalacion y puesta en marcha de Aire Acondicionado - Colegio Moises Castillo Ocana",
+    description:
+      "Instalacion, verificacion y puesta en marcha de sistema de aire acondicionado.",
+    image: "/services/air-conditioning-mcastillo.png",
+    tag: "Colegio Moises Castillo Ocana",
   },
 ];
 
