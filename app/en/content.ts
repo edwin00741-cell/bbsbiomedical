@@ -4,6 +4,7 @@
   description: string;
   sections: { title: string; body: string }[];
   image?: string;
+  imageAlt?: string;
 };
 export const englishServices = [
   {

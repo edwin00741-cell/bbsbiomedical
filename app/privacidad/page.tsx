@@ -5,7 +5,7 @@ export default function PrivacyPage() {
     <SimplePage
       eyebrow="Politica legal"
       title="Politica de Privacidad"
-      description="Texto base sobre tratamiento de datos para el sitio web de BBS Biomedical. Debe ser revisado por asesoria legal antes de publicacion final."
+      description="Texto base sobre tratamiento de datos para el sitio web de Biomedical Business and Services. Debe ser revisado por asesoría legal antes de publicación final."
       sections={[
         {
           title: "Datos recopilados",
@@ -17,7 +17,7 @@ export default function PrivacyPage() {
         },
         {
           title: "Analitica",
-          body: "El sitio puede usar herramientas de medicion como Google Analytics para entender rendimiento, trafico y comportamiento agregado de navegacion.",
+          body: "El sitio puede usar herramientas de medición como Google Analytics para entender rendimiento, trafico y comportamiento agregado de navegacion.",
         },
       ]}
       ctaTitle="Solicita información sobre privacidad"

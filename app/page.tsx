@@ -31,7 +31,7 @@ export default function Home() {
             />
             <div className="absolute left-6 top-6 rounded-[8px] bg-white/88 px-4 py-3 shadow-lg backdrop-blur">
               <Image
-                alt="BBS Biomedical Business & Services"
+                alt="Biomedical Business and Services"
                 className="h-auto w-[150px]"
                 height={838}
                 src="/brand/bbs-primary-horizontal-color.png"

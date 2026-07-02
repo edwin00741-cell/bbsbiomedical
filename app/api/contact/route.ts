@@ -12,7 +12,8 @@ const resendApiKey = process.env.RESEND_API_KEY;
 const contactToEmail =
   process.env.CONTACT_TO_EMAIL || "brodriguez@rysbioservices.com";
 const resendFromEmail =
-  process.env.RESEND_FROM_EMAIL || "BBS Biomedical <onboarding@resend.dev>";
+  process.env.RESEND_FROM_EMAIL ||
+  "Biomedical Business and Services <onboarding@resend.dev>";
 
 export async function POST(request: Request) {
   const payload = (await request.json()) as ContactPayload;

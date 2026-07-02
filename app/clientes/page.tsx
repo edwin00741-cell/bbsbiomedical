@@ -8,7 +8,7 @@ export default function ClientsPage() {
       <Header />
       <Hero
         compact
-        eyebrow="Relaciones instituciónales"
+        eyebrow="Relaciones institucionales"
         title="Clientes"
         description="Trabajamos con instituciones públicas, centros de salud, clínicas, laboratorios y organizaciones que dependen de equipos confiables."
         primary="Solicitar información"
@@ -19,7 +19,7 @@ export default function ClientsPage() {
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Instituciones que han confiado en BBS"
-            description="Logos de clientes y aliados atendidos por nuestro equipo. Las historias de caso e imagenes de proyecto se incorporaran en una siguiente fase."
+            description="Logos de clientes y aliados atendidos por nuestro equipo. Las historias de caso e imágenes de proyecto se incorporarán en una siguiente fase."
           />
           <div className="mt-12 grid items-center gap-x-14 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (

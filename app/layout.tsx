@@ -10,7 +10,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bbsbiomedical.com"),
-  title: "BBS | Biomedical Business and Services",
+  title: "Biomedical Business and services",
   description:
     "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
   alternates: {
@@ -21,8 +21,12 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/brand/bbs-symbol-color.png",
-    apple: "/brand/bbs-symbol-color.png",
+    icon: [
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+      { url: "/brand/bbs-symbol-color.png", type: "image/png" },
+    ],
+    shortcut: "/icon.png",
+    apple: "/apple-icon.png",
   },
 };
 

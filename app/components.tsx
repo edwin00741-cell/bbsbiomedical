@@ -50,12 +50,20 @@ type VisualProps = {
   tone?: "light" | "dark" | "clinical";
 };
 
-const heroFeatures = [
-  { label: "Equipos biomédicos", icon: Microscope },
-  { label: "Servicio técnico especializado", icon: Wrench },
-  { label: "Calidad y confianza", icon: ShieldCheck },
-  { label: "Soluciones a tu medida", icon: BarChart3 },
-];
+const heroFeatures = {
+  es: [
+    { label: "Equipos biomédicos", icon: Microscope },
+    { label: "Servicio técnico especializado", icon: Wrench },
+    { label: "Calidad y confianza", icon: ShieldCheck },
+    { label: "Soluciones a tu medida", icon: BarChart3 },
+  ],
+  en: [
+    { label: "Biomedical equipment", icon: Microscope },
+    { label: "Specialized technical service", icon: Wrench },
+    { label: "Quality and trust", icon: ShieldCheck },
+    { label: "Tailored solutions", icon: BarChart3 },
+  ],
+};
 
 export function Header({ locale = "es" }: { locale?: Locale }) {
   return <HeaderNav brandLogo={<BrandLogo />} locale={locale} />;
@@ -101,7 +109,8 @@ export function Hero({
   );
 }
 
-export function HomeHero() {
+export function HomeHero({ locale = "es" }: { locale?: Locale }) {
+  const isEnglish = locale === "en";
   return (
     <section className="bg-[#f6f8fb]">
       <div
@@ -127,11 +136,13 @@ export function HomeHero() {
             <BrandLogo size="hero" />
           </div>
           <h1 className="max-w-3xl text-4xl font-black uppercase leading-tight text-[#061b5f] sm:text-5xl lg:text-[3.35rem]">
-            Tecnología que conecta.
-            <span className="block text-cyan-600">Servicio que respalda.</span>
+            {isEnglish ? "Technology that connects." : "Tecnología que conecta."}
+            <span className="block text-cyan-600">
+              {isEnglish ? "Service that supports." : "Servicio que respalda."}
+            </span>
           </h1>
           <div className="mt-12 grid max-w-4xl grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4">
-            {heroFeatures.map(({ label, icon: Icon }) => (
+            {heroFeatures[locale].map(({ label, icon: Icon }) => (
               <div
                 className="flex min-h-[128px] flex-col items-center justify-start border-cyan-600/35 text-center sm:border-r sm:last:border-r-0"
                 key={label}
@@ -465,10 +476,10 @@ export function BackToTop() {
   return (
     <Link
       aria-label="Subir al inicio"
-      className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-[0_16px_40px_rgba(15,23,42,0.28)] transition hover:-translate-y-1 hover:bg-slate-800"
+      className="fixed bottom-5 right-5 z-[70] flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-slate-950 text-white shadow-[0_18px_55px_rgba(15,23,42,0.38)] ring-4 ring-cyan-400/18 transition hover:-translate-y-1 hover:bg-cyan-700"
       href="#inicio"
     >
-      <ArrowUp size={20} strokeWidth={2.5} />
+      <ArrowUp size={23} strokeWidth={2.8} />
     </Link>
   );
 }
@@ -507,7 +518,7 @@ function BrandLogo({
 
   return (
     <Image
-      alt="BBS Biomedical Business & Services"
+      alt="Biomedical Business and Services"
       className={className}
       height={height}
       priority={size === "hero"}

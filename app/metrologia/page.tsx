@@ -3,7 +3,7 @@
 export default function MetrologyPage() {
   return (
     <SimplePage
-      eyebrow="Calibracion y trazabilidad"
+      eyebrow="Calibración y trazabilidad"
       title="Metrología Biomédica"
       description="Servicios de verificación, calibración y control metrológico para equipos médicos críticos, con documentación clara y trazabilidad técnica."
       image="/services/microscope-lab-ciencias.png"
@@ -11,15 +11,15 @@ export default function MetrologyPage() {
       sections={[
         {
           title: "Alcance del servicio",
-          body: "Realizamos evaluaciones periodicas para confirmar que los equipos de medicion mantengan parametros confiables en entornos clinicos y de laboratorio.",
+          body: "Realizamos evaluaciones periódicas para confirmar que los equipos de medición mantengan parámetros confiables en entornos clínicos y de laboratorio.",
         },
         {
-          title: "Documentacion",
+          title: "Documentación",
           body: "Cada intervención puede incluir reportes, registros de calibración y recomendaciones técnicas para auditorías internas o procesos regulatorios.",
         },
         {
-          title: "Placeholder de imagenes",
-          body: "Las imagenes definitivas de laboratorio, instrumentos y equipos seran reemplazadas cuando se cierre el banco visual del proyecto.",
+          title: "Placeholder de imágenes",
+          body: "Las imágenes definitivas de laboratorio, instrumentos y equipos serán reemplazadas cuando se cierre el banco visual del proyecto.",
         },
       ]}
     />

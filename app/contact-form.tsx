@@ -100,11 +100,11 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
         />
       </label>
       <button
-        className="inline-flex min-h-12 w-fit items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-black text-slate-950 transition hover:-translate-y-0.5 hover:bg-cyan-100 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[8px] bg-cyan-400 px-6 text-sm font-black text-slate-950 shadow-[0_14px_32px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit"
         disabled={status === "loading"}
         type="submit"
       >
-        <Send size={18} />
+        <Send size={17} />
         {status === "loading"
           ? isEnglish
             ? "Sending..."

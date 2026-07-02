@@ -5,7 +5,7 @@ export default function CookiesPage() {
     <SimplePage
       eyebrow="Preferencias digitales"
       title="Politica de Cookies"
-      description="Texto base sobre uso de cookies y tecnologias similares para medicion, seguridad y mejora del sitio web."
+      description="Texto base sobre uso de cookies y tecnologias similares para medición, seguridad y mejora del sitio web."
       sections={[
         {
           title: "Cookies necesarias",

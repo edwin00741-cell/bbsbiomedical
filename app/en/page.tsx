@@ -5,7 +5,7 @@ import {
   CTA,
   Footer,
   Header,
-  Hero,
+  HomeHero,
   HeroSupportImage,
   SectionHeading,
 } from "../components";
@@ -18,16 +18,7 @@ export default function EnglishHome() {
   return (
     <main>
       <Header locale="en" />
-      <Hero
-        compact
-        eyebrow="Biomedical technical partner in Panama"
-        title="Biomedical Business and Services"
-        description="Biomedical equipment service, metrology, radiological protection and regulatory support for healthcare institutions in Panama."
-        primary="Request service"
-        secondary="View services"
-        primaryHref="#contact"
-        secondaryHref="/en#services"
-      />
+      <HomeHero locale="en" />
       <HeroSupportImage />
 
       <section className="bg-white px-6 py-24">
@@ -43,7 +34,7 @@ export default function EnglishHome() {
             />
             <div className="absolute left-6 top-6 rounded-[8px] bg-white/88 px-4 py-3 shadow-lg backdrop-blur">
               <Image
-                alt="BBS Biomedical Business and Services"
+                alt="Biomedical Business and Services"
                 className="h-auto w-[150px]"
                 height={838}
                 src="/brand/bbs-primary-horizontal-color.png"

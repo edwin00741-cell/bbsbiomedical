@@ -49,7 +49,6 @@ export function HeaderNav({
   const isEnglish = locale === "en";
   const navLinks = navByLocale[locale];
   const serviceLinks = servicesByLocale[locale];
-  const homeHref = isEnglish ? "/en" : "/";
   const contactHref = isEnglish ? "#contact" : "#contacto";
   const languageHref = isEnglish ? "/" : "/en";
 
@@ -86,9 +85,9 @@ export function HeaderNav({
     <header className="sticky top-0 z-50 px-4 py-3" id="inicio" ref={navRef}>
       <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-200/80 bg-white/92 px-5 py-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur md:px-6">
         <Link
-          aria-label="BBS Biomedical Business and Services"
+          aria-label="Biomedical Business and Services"
           className="brand-header block"
-          href={homeHref}
+          href="#inicio"
           onClick={closeMenus}
         >
           {brandLogo}
