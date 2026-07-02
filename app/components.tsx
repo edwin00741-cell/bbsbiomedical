@@ -162,9 +162,9 @@ export function Hero({
 
 export function HomeHero() {
   return (
-    <section className="bg-[#f6f8fb] px-6 pb-8 pt-4">
+    <section className="bg-[#f6f8fb]">
       <div
-        className="hero-bg relative isolate mx-auto min-h-[680px] max-w-7xl overflow-hidden rounded-[8px] shadow-[0_30px_90px_rgba(15,23,42,0.16)]"
+        className="hero-bg relative isolate min-h-[680px] overflow-hidden"
         style={{ backgroundImage: 'url("/images/bbs-hero-microscope.png")' }}
       >
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.74)_36%,rgba(255,255,255,0.18)_63%,rgba(255,255,255,0)_100%)]" />
@@ -180,7 +180,7 @@ export function HomeHero() {
         ))}
       </div>
 
-      <div className="relative grid min-h-[680px] items-center px-6 py-16 sm:px-10 lg:px-14">
+        <div className="relative mx-auto grid min-h-[680px] max-w-7xl items-center px-6 py-16 sm:px-10 lg:px-14">
         <div className="max-w-3xl">
           <div className="mb-14">
             <BrandLogo size="hero" />
