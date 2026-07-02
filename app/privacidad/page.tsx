@@ -1,4 +1,4 @@
-import { SimplePage } from "../simple-page";
+﻿import { SimplePage } from "../simple-page";
 
 export default function PrivacyPage() {
   return (
@@ -12,15 +12,15 @@ export default function PrivacyPage() {
           body: "Podemos recibir nombre, correo, telefono, empresa y detalles de la solicitud enviada voluntariamente por formularios de contacto.",
         },
         {
-          title: "Uso de la informacion",
-          body: "La informacion se utiliza para responder solicitudes, coordinar servicios, mejorar procesos internos y mantener comunicacion comercial razonable.",
+          title: "Uso de la información",
+          body: "La información se utiliza para responder solicitudes, coordinar servicios, mejorar procesos internos y mantener comunicación comercial razonable.",
         },
         {
           title: "Analitica",
           body: "El sitio puede usar herramientas de medicion como Google Analytics para entender rendimiento, trafico y comportamiento agregado de navegacion.",
         },
       ]}
-      ctaTitle="Solicita informacion sobre privacidad"
+      ctaTitle="Solicita información sobre privacidad"
       ctaDescription="Si necesitas aclarar el tratamiento de datos, contacta al equipo de BBS mediante el formulario."
     />
   );

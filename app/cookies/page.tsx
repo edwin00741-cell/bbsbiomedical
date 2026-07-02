@@ -1,4 +1,4 @@
-import { SimplePage } from "../simple-page";
+﻿import { SimplePage } from "../simple-page";
 
 export default function CookiesPage() {
   return (

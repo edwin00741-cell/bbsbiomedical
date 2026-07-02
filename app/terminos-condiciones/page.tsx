@@ -1,4 +1,4 @@
-import { SimplePage } from "../simple-page";
+﻿import { SimplePage } from "../simple-page";
 
 export default function TermsPage() {
   return (
@@ -17,7 +17,7 @@ export default function TermsPage() {
         },
         {
           title: "Responsabilidad",
-          body: "BBS procurara mantener informacion clara y actualizada, pero el usuario debe solicitar confirmacion directa para decisiones operativas o comerciales.",
+          body: "BBS procurara mantener información clara y actualizada, pero el usuario debe solicitar confirmación directa para decisiones operativas o comerciales.",
         },
       ]}
     />

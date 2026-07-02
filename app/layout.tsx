@@ -9,9 +9,17 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BBS Biomedical Solutions",
+  metadataBase: new URL("https://bbsbiomedical.com"),
+  title: "BBS | Biomedical Business and Services",
   description:
-    "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud.",
+    "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
+  alternates: {
+    canonical: "/",
+    languages: {
+      es: "/",
+      en: "/en",
+    },
+  },
   icons: {
     icon: "/brand/bbs-symbol-color.png",
     apple: "/brand/bbs-symbol-color.png",
@@ -24,6 +32,45 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    name: "Biomedical Business and Services",
+    alternateName: "BBS",
+    url: "https://bbsbiomedical.com",
+    email: "brodriguez@rysbioservices.com",
+    telephone: ["+50762023206", "+50766312007"],
+    image: "https://bbsbiomedical.com/brand/bbs-primary-horizontal-color.png",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress:
+        "Ave. Libertadores, Calle los Libertadores, al lado de la Planta de hielo, Edificio 1, Local 1",
+      addressLocality: "La Chorrera",
+      addressRegion: "Panamá Oeste",
+      addressCountry: "PA",
+    },
+    areaServed: ["Panamá", "Panamá Oeste", "La Chorrera"],
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "08:00",
+        closes: "17:00",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: "Saturday",
+        opens: "09:00",
+        closes: "12:00",
+      },
+    ],
+    makesOffer: [
+      "Servicio técnico biomédico",
+      "Metrología biomédica",
+      "Protección radiológica",
+      "Gestión regulatoria",
+    ],
+  };
 
   return (
     <html lang="es">
@@ -39,6 +86,13 @@ export default function RootLayout({
           </noscript>
         ) : null}
         {children}
+        <Script
+          id="bbs-local-business-schema"
+          strategy="beforeInteractive"
+          type="application/ld+json"
+        >
+          {JSON.stringify(localBusinessSchema)}
+        </Script>
         <Analytics />
         <SpeedInsights />
         {gtmId ? (

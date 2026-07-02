@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import { CTA, Footer, Header, Hero, SectionHeading } from "./components";
 
 type InfoSection = {
@@ -24,8 +24,8 @@ export function SimplePage({
   sections,
   image,
   imageAlt = title,
-  ctaTitle = "Conversemos sobre la solucion que necesita.",
-  ctaDescription = "Complete el formulario y nuestro equipo coordinara una respuesta clara para su institucion.",
+  ctaTitle = "Conversemos sobre la solución que necesita.",
+  ctaDescription = "Complete el formulario y nuestro equipo coordinará una respuesta clara para su institución.",
 }: SimplePageProps) {
   return (
     <main>
@@ -35,7 +35,7 @@ export function SimplePage({
         eyebrow={eyebrow}
         title={title}
         description={description}
-        primary="Solicitar informacion"
+        primary="Solicitar información"
         secondary="Ver servicios"
       />
       <section className="bg-white px-6 py-20">
@@ -57,7 +57,7 @@ export function SimplePage({
             </p>
           </div>
           <div>
-            <SectionHeading title="Informacion general" description={description} />
+            <SectionHeading title="Información general" description={description} />
             <div className="mt-10 grid gap-5">
               {sections.map((section) => (
                 <article

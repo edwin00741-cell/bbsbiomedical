@@ -1,27 +1,57 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Globe2, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-const navLinks = [
-  { label: "Inicio", href: "/" },
-  { label: "Quiénes Somos", href: "/quienes-somos" },
-  { label: "Clientes", href: "/#clientes" },
-  { label: "Contacto", href: "#contacto" },
-];
+type Locale = "es" | "en";
 
-const serviceLinks = [
-  { label: "Servicio Técnico", href: "/servicio-tecnico" },
-  { label: "Metrología", href: "/metrologia" },
-  { label: "Protección Radiológica", href: "/proteccion-radiologica" },
-  { label: "Gestión Regulatoria", href: "/gestion-regulatoria" },
-];
+const navByLocale = {
+  es: [
+    { label: "Inicio", href: "/" },
+    { label: "Quiénes Somos", href: "/quienes-somos" },
+    { label: "Clientes", href: "/#clientes" },
+    { label: "Contacto", href: "#contacto" },
+  ],
+  en: [
+    { label: "Home", href: "/en" },
+    { label: "About", href: "/en/about" },
+    { label: "Clients", href: "/en#clients" },
+    { label: "Contact", href: "#contact" },
+  ],
+};
 
-export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
+const servicesByLocale = {
+  es: [
+    { label: "Servicio Técnico", href: "/servicio-tecnico" },
+    { label: "Metrología", href: "/metrologia" },
+    { label: "Protección Radiológica", href: "/proteccion-radiologica" },
+    { label: "Gestión Regulatoria", href: "/gestion-regulatoria" },
+  ],
+  en: [
+    { label: "Technical Service", href: "/en/technical-service" },
+    { label: "Metrology", href: "/en/metrology" },
+    { label: "Radiological Protection", href: "/en/radiological-protection" },
+    { label: "Regulatory Management", href: "/en/regulatory-management" },
+  ],
+};
+
+export function HeaderNav({
+  brandLogo,
+  locale = "es",
+}: {
+  brandLogo: ReactNode;
+  locale?: Locale;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const isEnglish = locale === "en";
+  const navLinks = navByLocale[locale];
+  const serviceLinks = servicesByLocale[locale];
+  const homeHref = isEnglish ? "/en" : "/";
+  const contactHref = isEnglish ? "#contact" : "#contacto";
+  const languageHref = isEnglish ? "/" : "/en";
 
   useEffect(() => {
     function closeOnOutsideClick(event: PointerEvent) {
@@ -56,21 +86,24 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
     <header className="sticky top-0 z-50 px-4 py-3" id="inicio" ref={navRef}>
       <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-200/80 bg-white/92 px-5 py-3 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur md:px-6">
         <Link
-          aria-label="BBS Biomedical Solutions"
+          aria-label="BBS Biomedical Business and Services"
           className="brand-header block"
-          href="/"
+          href={homeHref}
           onClick={closeMenus}
         >
           {brandLogo}
         </Link>
 
         <nav className="hidden items-center gap-8 text-base font-semibold text-slate-500 lg:flex">
-          <Link className="transition hover:text-slate-950" href="/">
-            Inicio
-          </Link>
-          <Link className="transition hover:text-slate-950" href="/quienes-somos">
-            Quiénes Somos
-          </Link>
+          {navLinks.slice(0, 2).map((link) => (
+            <Link
+              className="transition hover:text-slate-950"
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
           <div className="relative">
             <button
               aria-expanded={servicesOpen}
@@ -78,7 +111,7 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
               onClick={() => setServicesOpen((open) => !open)}
               type="button"
             >
-              Servicios <ChevronDown size={16} />
+              {isEnglish ? "Services" : "Servicios"} <ChevronDown size={16} />
             </button>
             <div
               className={`absolute left-1/2 top-9 w-72 -translate-x-1/2 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-2xl transition ${
@@ -99,25 +132,35 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
               ))}
             </div>
           </div>
-          <Link className="transition hover:text-slate-950" href="/#clientes">
-            Clientes
-          </Link>
-          <Link className="transition hover:text-slate-950" href="#contacto">
-            Contacto
+          {navLinks.slice(2).map((link) => (
+            <Link
+              className="transition hover:text-slate-950"
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-black text-slate-700 transition hover:border-cyan-300 hover:text-cyan-700"
+            href={languageHref}
+          >
+            <Globe2 size={15} />
+            {isEnglish ? "ES" : "EN"}
           </Link>
         </nav>
 
         <Link
-          aria-label="Solicitar diagnóstico"
+          aria-label={isEnglish ? "Request technical service" : "Solicitar diagnóstico"}
           className="hidden min-w-fit items-center justify-center rounded-full bg-black px-4 py-2.5 text-sm font-black text-white transition hover:bg-slate-800 sm:inline-flex sm:px-6 md:px-7"
-          href="#contacto"
+          href={contactHref}
         >
-          Solicitar diagnóstico
+          {isEnglish ? "Request service" : "Solicitar diagnóstico"}
         </Link>
 
         <button
           aria-expanded={menuOpen}
-          aria-label={menuOpen ? "Cerrar menu" : "Abrir menu"}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
           className="flex h-11 w-11 items-center justify-center rounded-full bg-black text-white lg:hidden"
           onClick={() => setMenuOpen((open) => !open)}
           type="button"
@@ -150,7 +193,7 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
             onClick={() => setServicesOpen((open) => !open)}
             type="button"
           >
-            Servicios
+            {isEnglish ? "Services" : "Servicios"}
             <ChevronDown
               className={`transition ${servicesOpen ? "rotate-180" : ""}`}
               size={17}
@@ -184,10 +227,18 @@ export function HeaderNav({ brandLogo }: { brandLogo: ReactNode }) {
           ))}
           <Link
             className="mt-2 inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white"
-            href="#contacto"
+            href={contactHref}
             onClick={closeMenus}
           >
-            Solicitar diagnóstico
+            {isEnglish ? "Request service" : "Solicitar diagnóstico"}
+          </Link>
+          <Link
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-black text-slate-700"
+            href={languageHref}
+            onClick={closeMenus}
+          >
+            <Globe2 size={16} />
+            {isEnglish ? "Español" : "English"}
           </Link>
         </nav>
       </div>

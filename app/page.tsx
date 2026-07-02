@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import {
   CTA,
   CheckList,
@@ -43,15 +43,15 @@ export default function Home() {
           <div>
             <SectionHeading title="Soluciones biomédicas con precisión, seguridad y respaldo técnico." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              BBS Biomedical Solutions nace del compromiso por elevar los
-              estandares de calidad en el sector salud. Entendemos que detras de
-              cada equipo medico hay una vida que depende de su correcto
+              Biomedical Business and Services nace del compromiso por elevar los
+              estándares de calidad en el sector salud. Entendemos que detrás de
+              cada equipo médico hay una vida que depende de su correcto
               funcionamiento.
             </p>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Nuestro equipo de ingenieros especializados combina rigor
-              normativo con ejecucion tecnica impecable para optimizar la vida
-              util de cada activo.
+              normativo con ejecución técnica impecable para optimizar la vida
+              útil de cada activo.
             </p>
             <div className="mt-8">
               <CheckList
@@ -70,7 +70,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Nuestros Servicios"
-            description="Desarrollamos soluciones técnicas modulares adaptadas a las necesidades específicas de clínicas, hospitales y centros diagnósticos."
+            description="Desarrollamos soluciónes técnicas modulares adaptadas a las necesidades específicas de clínicas, hospitales y centros diagnósticos."
           />
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {services.map((service) => (
@@ -109,7 +109,7 @@ export default function Home() {
 
       <CTA
         title="¿Necesitas soporte técnico para tus equipos médicos?"
-        description="Conversemos sobre el estado actual de sus equipos y como nuestro equipo puede ayudarle a mantener la operatividad clinica sin interrupciones."
+        description="Conversemos sobre el estado actual de sus equipos y cómo nuestro equipo puede ayudarle a mantener la operatividad clínica sin interrupciones."
       />
       <Footer />
     </main>

@@ -1,4 +1,4 @@
-import { SimplePage } from "../simple-page";
+﻿import { SimplePage } from "../simple-page";
 
 export default function SupportPage() {
   return (
@@ -11,7 +11,7 @@ export default function SupportPage() {
       sections={[
         {
           title: "Solicitudes",
-          body: "El equipo puede recibir informacion del equipo, marca, modelo, falla reportada y urgencia para priorizar la respuesta.",
+          body: "El equipo puede recibir información del equipo, marca, modelo, falla reportada y urgencia para priorizar la respuesta.",
         },
         {
           title: "Seguimiento",

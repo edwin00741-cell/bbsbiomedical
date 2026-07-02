@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import { CTA, Footer, Header, Hero, SectionHeading } from "../components";
 import { clients } from "../data";
 
@@ -8,10 +8,10 @@ export default function ClientsPage() {
       <Header />
       <Hero
         compact
-        eyebrow="Relaciones institucionales"
+        eyebrow="Relaciones instituciónales"
         title="Clientes"
         description="Trabajamos con instituciones públicas, centros de salud, clínicas, laboratorios y organizaciones que dependen de equipos confiables."
-        primary="Solicitar informacion"
+        primary="Solicitar información"
         secondary="Ver servicios"
       />
 

@@ -1,11 +1,11 @@
-import { SimplePage } from "../simple-page";
+﻿import { SimplePage } from "../simple-page";
 
 export default function MedicalPortalPage() {
   return (
     <SimplePage
-      eyebrow="Portal en preparacion"
+      eyebrow="Portal en preparación"
       title="Portal Médico"
-      description="Espacio proyectado para centralizar solicitudes, documentación técnica, reportes y seguimiento de servicios para clientes institucionales."
+      description="Espacio proyectado para centralizar solicitudes, documentación técnica, reportes y seguimiento de servicios para clientes instituciónales."
       image="/images/bbs-monitor-operating-room.png"
       imageAlt="Monitor biomédico en quirófano"
       sections={[

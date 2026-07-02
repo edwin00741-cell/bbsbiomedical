@@ -1,4 +1,4 @@
-import { SimplePage } from "../simple-page";
+﻿import { SimplePage } from "../simple-page";
 
 export default function RegulatoryPage() {
   return (
@@ -15,7 +15,7 @@ export default function RegulatoryPage() {
         },
         {
           title: "Acompanamiento",
-          body: "Apoyamos a instituciones de salud en la preparacion de documentos, cronogramas de regularizacion y seguimiento de observaciones.",
+          body: "Apoyamos a instituciones de salud en la preparación de documentos, cronogramas de regularización y seguimiento de observaciones.",
         },
         {
           title: "Contenido generico",

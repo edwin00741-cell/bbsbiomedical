@@ -10,7 +10,7 @@ export default function AboutPage() {
         compact
         eyebrow="Excelencia biomédica"
         title="¿Quiénes somos?"
-        description="Lideramos la transformación del sector salud mediante soluciones tecnológicas avanzadas, rigor científico y una visión humana de la biotecnología aplicada."
+        description="Lideramos la transformación del sector salud mediante soluciónes tecnológicas avanzadas, rigor científico y una visión humana de la biotecnología aplicada."
         primary="Comenzar ahora"
         secondary="Ver casos de éxito"
       />
@@ -19,7 +19,7 @@ export default function AboutPage() {
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.78fr_1fr] lg:items-center">
           <div className="relative min-h-[620px] overflow-hidden rounded-[8px] bg-slate-100 shadow-[0_28px_90px_rgba(15,23,42,0.16)]">
             <Image
-              alt="Bryan Rodriguez, fundador de BBS Biomedical Solutions"
+              alt="Bryan Rodriguez, fundador de Biomedical Business and Services"
               className="object-cover object-center"
               fill
               priority
@@ -41,10 +41,10 @@ export default function AboutPage() {
               Bryan Rodríguez
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              Fundador y Director Ejecutivo de BBS Biomedical Solutions. Con una
+              Fundador y Director Ejecutivo de Biomedical Business and Services. Con una
               trayectoria marcada por la innovación clínica y el compromiso con
               la precisión diagnóstica, Bryan ha consolidado a BBS como un
-              referente en soluciones integrales para el sector salud.
+              referente en soluciónes integrales para el sector salud.
             </p>
             <blockquote className="mt-8 border-l-4 border-cyan-500 pl-6 text-xl font-bold leading-8 text-slate-800">
               “Nuestra misión no es solo implementar tecnología; es garantizar
@@ -65,7 +65,7 @@ export default function AboutPage() {
             <article className="rounded-[8px] bg-white p-8 shadow-sm">
               <h3 className="text-3xl font-black">Misión</h3>
               <p className="mt-5 text-lg leading-8 text-slate-600">
-                Proveer soluciones biomédicas de vanguardia que eleven el
+                Proveer soluciónes biomédicas de vanguardia que eleven el
                 estándar de precisión clínica, facilitando herramientas de
                 diagnóstico de alta fidelidad.
               </p>

@@ -97,7 +97,7 @@ export const projects: Project[] = [
   {
     title: "Mantenimiento Preventivo microscopios - Hospital Del Nino Dr. Jose Renan Esquivel",
     description:
-      "Mantenimiento preventivo integral de equipos de microscopia de alta resolucion para operacion clinica continua.",
+      "Mantenimiento preventivo integral de equipos de microscopia de alta resolución para operación clínica continua.",
     image: "/services/microscope-hospital-nino.png",
     tag: "Hospital Del Nino",
   },
