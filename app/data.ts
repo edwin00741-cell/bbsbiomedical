@@ -58,11 +58,38 @@ export const services: Service[] = [
 ];
 
 export const clients = [
-  "Hospital Del Niño",
-  "Clínica Armonía",
-  "Lab Diagnostik",
-  "MedCenter",
-  "HealthPlus",
+  {
+    name: "Hospital del Nino",
+    logo: "/clients/hospital-del-nino.png",
+  },
+  {
+    name: "Ministerio de Salud Panama",
+    logo: "/clients/minsa.png",
+  },
+  {
+    name: "Ministerio de Educacion",
+    logo: "/clients/ministerio-educacion.jpg",
+  },
+  {
+    name: "Smithsonian",
+    logo: "/clients/smithsonian.png",
+  },
+  {
+    name: "Clinica Armonia",
+    logo: "/clients/armonia.png",
+  },
+  {
+    name: "Clinica Princess",
+    logo: "/clients/clinica-princess.png",
+  },
+  {
+    name: "Centro Vocacional de Chapala",
+    logo: "/clients/centro-vocacional-chapala.png",
+  },
+  {
+    name: "Alpha Media",
+    logo: "/clients/alpha-media.jpg",
+  },
 ];
 
 export const projects: Project[] = [

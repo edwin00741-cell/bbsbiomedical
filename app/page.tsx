@@ -91,10 +91,16 @@ export default function Home() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {clients.map((client) => (
               <div
-                className="rounded-[8px] border border-slate-200 bg-slate-50 px-5 py-6 text-xl font-black text-slate-700"
-                key={client}
+                className="flex min-h-[132px] items-center justify-center rounded-[8px] border border-slate-200 bg-white px-5 py-6 shadow-sm"
+                key={client.name}
               >
-                {client}
+                <Image
+                  alt={client.name}
+                  className="max-h-20 w-auto max-w-full object-contain"
+                  height={120}
+                  src={client.logo}
+                  width={240}
+                />
               </div>
             ))}
           </div>
