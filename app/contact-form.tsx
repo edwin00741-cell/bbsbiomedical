@@ -54,7 +54,7 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
   }
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit}>
+    <form className="grid max-w-2xl content-start gap-5 self-start" onSubmit={handleSubmit}>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2 text-sm font-bold text-white">
           {isEnglish ? "Name" : "Nombre"}
@@ -100,7 +100,7 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
         />
       </label>
       <button
-        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[8px] bg-cyan-400 px-6 text-sm font-black text-slate-950 shadow-[0_14px_32px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit"
+        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-black text-slate-950 shadow-[0_14px_32px_rgba(255,255,255,0.14)] transition hover:-translate-y-0.5 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit"
         disabled={status === "loading"}
         type="submit"
       >

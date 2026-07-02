@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronDown, Globe2, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type Locale = "es" | "en";
@@ -36,6 +37,36 @@ const servicesByLocale = {
   ],
 };
 
+const spanishToEnglishPath: Record<string, string> = {
+  "/": "/en",
+  "/quienes-somos": "/en/about",
+  "/servicio-tecnico": "/en/technical-service",
+  "/metrologia": "/en/metrology",
+  "/proteccion-radiologica": "/en/radiological-protection",
+  "/gestion-regulatoria": "/en/regulatory-management",
+  "/clientes": "/en/clients",
+  "/portal-medico": "/en/medical-portal",
+  "/soporte-tecnico": "/en/technical-support",
+  "/privacidad": "/en/privacy",
+  "/terminos-condiciones": "/en/terms",
+  "/cookies": "/en/cookies",
+};
+
+const englishToSpanishPath = Object.fromEntries(
+  Object.entries(spanishToEnglishPath).map(([es, en]) => [en, es]),
+) as Record<string, string>;
+
+const spanishToEnglishHash: Record<string, string> = {
+  "#contacto": "#contact",
+  "#servicios": "#services",
+  "#clientes": "#clients",
+  "#inicio": "#inicio",
+};
+
+const englishToSpanishHash = Object.fromEntries(
+  Object.entries(spanishToEnglishHash).map(([es, en]) => [en, es]),
+) as Record<string, string>;
+
 export function HeaderNav({
   brandLogo,
   locale = "es",
@@ -45,12 +76,18 @@ export function HeaderNav({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [currentHash, setCurrentHash] = useState("");
   const navRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
   const isEnglish = locale === "en";
   const navLinks = navByLocale[locale];
   const serviceLinks = servicesByLocale[locale];
   const contactHref = isEnglish ? "#contact" : "#contacto";
-  const languageHref = isEnglish ? "/" : "/en";
+  const pathMap = isEnglish ? englishToSpanishPath : spanishToEnglishPath;
+  const hashMap = isEnglish ? englishToSpanishHash : spanishToEnglishHash;
+  const languageHref = `${pathMap[pathname] || (isEnglish ? "/" : "/en")}${
+    hashMap[currentHash] || currentHash
+  }`;
 
   useEffect(() => {
     function closeOnOutsideClick(event: PointerEvent) {
@@ -76,9 +113,61 @@ export function HeaderNav({
     };
   }, []);
 
+  useEffect(() => {
+    function syncHash() {
+      setCurrentHash(window.location.hash);
+    }
+
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, [pathname]);
+
   function closeMenus() {
     setMenuOpen(false);
     setServicesOpen(false);
+  }
+
+  function getVisibleHash() {
+    const sectionIds = isEnglish
+      ? ["services", "clients", "contact"]
+      : ["servicios", "clientes", "contacto"];
+    const anchorY = window.innerHeight * 0.35;
+    let bestHash = window.location.hash;
+    let bestScore = Number.POSITIVE_INFINITY;
+
+    sectionIds.forEach((id) => {
+      const element = document.getElementById(id);
+
+      if (!element) {
+        return;
+      }
+
+      const rect = element.getBoundingClientRect();
+
+      if (rect.bottom > 0 && rect.top < window.innerHeight) {
+        const score = Math.abs(rect.top - anchorY);
+
+        if (score < bestScore) {
+          bestHash = `#${id}`;
+          bestScore = score;
+        }
+      }
+    });
+
+    return bestHash;
+  }
+
+  function handleLanguageClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
+    const visibleHash = getVisibleHash();
+    const targetPath = pathMap[pathname] || (isEnglish ? "/" : "/en");
+    const targetHash = hashMap[visibleHash] || visibleHash;
+
+    closeMenus();
+    window.location.assign(`${targetPath}${targetHash}`);
   }
 
   return (
@@ -143,6 +232,7 @@ export function HeaderNav({
           <Link
             className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-black text-slate-700 transition hover:border-cyan-300 hover:text-cyan-700"
             href={languageHref}
+            onClick={handleLanguageClick}
           >
             <Globe2 size={15} />
             {isEnglish ? "ES" : "EN"}
@@ -234,7 +324,7 @@ export function HeaderNav({
           <Link
             className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-black text-slate-700"
             href={languageHref}
-            onClick={closeMenus}
+            onClick={handleLanguageClick}
           >
             <Globe2 size={16} />
             {isEnglish ? "Español" : "English"}

@@ -3,7 +3,6 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  ArrowUp,
   BarChart3,
   Check,
   Dna,
@@ -294,7 +293,7 @@ export function CTA({
   const isEnglish = locale === "en";
   return (
     <section className="px-6 py-20" id={isEnglish ? "contact" : "contacto"}>
-      <div className="mx-auto grid max-w-7xl gap-10 rounded-[8px] bg-slate-950 p-8 text-white lg:grid-cols-[0.9fr_1.1fr] lg:p-16">
+      <div className="mx-auto grid max-w-7xl items-start gap-10 rounded-[8px] bg-slate-950 p-8 text-white lg:grid-cols-[0.9fr_1.1fr] lg:p-16">
         <div>
           <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-300">
             {isEnglish ? "Contact" : "Contacto"}
@@ -425,7 +424,6 @@ export function Footer({ locale = "es" }: { locale?: Locale }) {
 
   return (
     <footer className="border-t border-slate-200 bg-white px-6 py-16">
-      <BackToTop />
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 xl:grid-cols-5">
         <div>
           <BrandLogo size="lg" />
@@ -469,18 +467,6 @@ export function Footer({ locale = "es" }: { locale?: Locale }) {
         .
       </p>
     </footer>
-  );
-}
-
-export function BackToTop() {
-  return (
-    <Link
-      aria-label="Subir al inicio"
-      className="fixed bottom-5 right-5 z-[70] flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-slate-950 text-white shadow-[0_18px_55px_rgba(15,23,42,0.38)] ring-4 ring-cyan-400/18 transition hover:-translate-y-1 hover:bg-cyan-700"
-      href="#inicio"
-    >
-      <ArrowUp size={23} strokeWidth={2.8} />
-    </Link>
   );
 }
 
