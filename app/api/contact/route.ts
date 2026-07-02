@@ -9,7 +9,8 @@ type ContactPayload = {
 };
 
 const resendApiKey = process.env.RESEND_API_KEY;
-const contactToEmail = process.env.CONTACT_TO_EMAIL;
+const contactToEmail =
+  process.env.CONTACT_TO_EMAIL || "brodriguez@rysbioservices.com";
 const resendFromEmail =
   process.env.RESEND_FROM_EMAIL || "BBS Biomedical <onboarding@resend.dev>";
 

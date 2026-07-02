@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { CTA, Footer, Header, Hero, SectionHeading } from "./components";
 
 type InfoSection = {
@@ -10,6 +11,8 @@ type SimplePageProps = {
   title: string;
   description: string;
   sections: InfoSection[];
+  image?: string;
+  imageAlt?: string;
   ctaTitle?: string;
   ctaDescription?: string;
 };
@@ -19,6 +22,8 @@ export function SimplePage({
   title,
   description,
   sections,
+  image,
+  imageAlt = title,
   ctaTitle = "Conversemos sobre la solucion que necesita.",
   ctaDescription = "Complete el formulario y nuestro equipo coordinara una respuesta clara para su institucion.",
 }: SimplePageProps) {
@@ -36,9 +41,19 @@ export function SimplePage({
       <section className="bg-white px-6 py-20">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div className="sticky top-28 hidden rounded-[8px] border border-slate-200 bg-slate-50 p-8 lg:block">
-            <div className="aspect-[4/3] rounded-[8px] bg-[linear-gradient(135deg,#dbeafe,#f8fafc_48%,#67e8f9)]" />
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[8px] bg-slate-200">
+              {image ? (
+                <Image
+                  alt={imageAlt}
+                  className="object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 34vw, 100vw"
+                  src={image}
+                />
+              ) : null}
+            </div>
             <p className="mt-5 text-sm font-black uppercase tracking-[0.14em] text-cyan-700">
-              Imagen placeholder
+              BBS Biomedical
             </p>
           </div>
           <div>

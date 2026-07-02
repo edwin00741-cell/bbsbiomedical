@@ -71,7 +71,7 @@ export function ContactForm() {
         <input
           className="h-12 rounded-[8px] border border-white/15 bg-white/10 px-4 text-white outline-none transition placeholder:text-white/45 focus:border-cyan-300"
           name="phone"
-          placeholder="+507 6000-0000"
+          placeholder="+507 6202-3206"
           type="tel"
         />
       </label>

@@ -6,6 +6,8 @@ export default function SupportPage() {
       eyebrow="Atencion operativa"
       title="Soporte Tecnico"
       description="Canal de soporte para solicitudes, revisiones iniciales, coordinacion de visitas y seguimiento de casos tecnicos."
+      image="/services/microscope-olympus-private.png"
+      imageAlt="Tecnico revisando equipo biomedico"
       sections={[
         {
           title: "Solicitudes",

@@ -6,6 +6,8 @@ export default function MedicalPortalPage() {
       eyebrow="Portal en preparacion"
       title="Portal Medico"
       description="Espacio proyectado para centralizar solicitudes, documentacion tecnica, reportes y seguimiento de servicios para clientes institucionales."
+      image="/images/bbs-monitor-operating-room.png"
+      imageAlt="Monitor biomedico en quirofano"
       sections={[
         {
           title: "Acceso futuro",

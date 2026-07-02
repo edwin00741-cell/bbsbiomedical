@@ -6,6 +6,8 @@ export default function RegulatoryPage() {
       eyebrow="Cumplimiento tecnico"
       title="Gestion Regulatoria"
       description="Acompanamiento para procesos documentales, licencias, requisitos tecnicos y cumplimiento aplicable a servicios y equipos biomedicos."
+      image="/images/bbs-biomedical-solutions-lab.png"
+      imageAlt="Laboratorio biomedico con documentacion tecnica"
       sections={[
         {
           title: "Diagnostico documental",

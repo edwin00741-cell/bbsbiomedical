@@ -6,6 +6,8 @@ export default function MetrologyPage() {
       eyebrow="Calibracion y trazabilidad"
       title="Metrologia Biomedica"
       description="Servicios de verificacion, calibracion y control metrologico para equipos medicos criticos, con documentacion clara y trazabilidad tecnica."
+      image="/services/microscope-lab-ciencias.png"
+      imageAlt="Microscopio en proceso de calibracion metrologica"
       sections={[
         {
           title: "Alcance del servicio",
