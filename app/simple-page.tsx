@@ -31,7 +31,7 @@ export function SimplePage({
   ctaDescription = "Complete el formulario y nuestro equipo coordinará una respuesta clara para su institución.",
   locale = "es",
   overviewTitle = locale === "en" ? "General information" : "Información general",
-  sideLabel = "Biomedical Business and Services",
+  sideLabel = "Biomedical Business and Service",
 }: SimplePageProps) {
   const isEnglish = locale === "en";
   return (
@@ -61,7 +61,7 @@ export function SimplePage({
                 />
               ) : (
                 <Image
-                  alt="Biomedical Business and Services"
+                  alt="Biomedical Business and Service"
                   className="object-contain p-12"
                   fill
                   sizes="(min-width: 1024px) 34vw, 100vw"

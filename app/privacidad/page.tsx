@@ -5,7 +5,7 @@ export default function PrivacyPage() {
     <SimplePage
       eyebrow="Politica legal"
       title="Politica de Privacidad"
-      description="Texto base sobre tratamiento de datos para el sitio web de Biomedical Business and Services. Debe ser revisado por asesoría legal antes de publicación final."
+      description="Texto base sobre tratamiento de datos para el sitio web de Biomedical Business and Service. Debe ser revisado por asesoría legal antes de publicación final."
       sections={[
         {
           title: "Datos recopilados",

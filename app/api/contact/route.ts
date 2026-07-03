@@ -13,7 +13,7 @@ const contactToEmail =
   process.env.CONTACT_TO_EMAIL || "brodriguez@rysbioservices.com";
 const resendFromEmail =
   process.env.RESEND_FROM_EMAIL ||
-  "Biomedical Business and Services <onboarding@resend.dev>";
+  "Biomedical Business and Service <onboarding@resend.dev>";
 
 export async function POST(request: Request) {
   const payload = (await request.json()) as ContactPayload;

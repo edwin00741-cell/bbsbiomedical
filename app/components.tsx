@@ -359,8 +359,8 @@ function BusinessMap({ locale = "es" }: { locale?: Locale }) {
           src={mapsEmbedHref}
           title={
             isEnglish
-              ? "Biomedical Business and Services location"
-              : "Ubicación de Biomedical Business and Services"
+              ? "Biomedical Business and Service location"
+              : "Ubicación de Biomedical Business and Service"
           }
         />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.2),rgba(255,255,255,0)_42%,rgba(15,23,42,0.12))]" />
@@ -444,8 +444,8 @@ export function Footer({ locale = "es" }: { locale?: Locale }) {
           <BrandLogo size="lg" />
           <p className="mt-4 text-sm leading-6 text-slate-600">
             {isEnglish
-              ? "Biomedical Business and Services. Precision, rigor and technology in service of healthcare."
-              : "Biomedical Business and Services. Rigor, precisión y vanguardia tecnológica al servicio de la salud."}
+              ? "Biomedical Business and Service. Precision, rigor and technology in service of healthcare."
+              : "Biomedical Business and Service. Rigor, precisión y vanguardia tecnológica al servicio de la salud."}
           </p>
         </div>
         <FooterColumn title={isEnglish ? "Services" : "Servicios"} items={serviceLinks} />
@@ -470,7 +470,7 @@ export function Footer({ locale = "es" }: { locale?: Locale }) {
         </div>
       </div>
       <p className="mx-auto mt-12 max-w-7xl border-t border-slate-200 pt-6 text-center text-sm text-slate-500">
-        © 2026 Biomedical Business and Services. {isEnglish ? "All rights reserved. Website developed by" : "Todos los derechos reservados. Sitio desarrollado por"}{" "}
+        © 2026 Biomedical Business and Service. {isEnglish ? "All rights reserved. Website developed by" : "Todos los derechos reservados. Sitio desarrollado por"}{" "}
         <Link
           className="font-bold text-slate-800 hover:text-cyan-700"
           href="https://www.harmonyagency.lat/"
@@ -519,7 +519,7 @@ function BrandLogo({
 
   return (
     <Image
-      alt="Biomedical Business and Services"
+      alt="Biomedical Business and Service"
       className={className}
       height={height}
       priority={size === "hero"}

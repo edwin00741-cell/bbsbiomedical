@@ -35,7 +35,7 @@ export default function EnglishHome() {
             />
             <div className="absolute left-6 top-6 rounded-[8px] bg-white/88 px-4 py-3 shadow-lg backdrop-blur">
               <Image
-                alt="Biomedical Business and Services"
+                alt="Biomedical Business and Service"
                 className="h-auto w-[150px]"
                 height={838}
                 src="/brand/bbs-primary-horizontal-color.png"
@@ -47,7 +47,7 @@ export default function EnglishHome() {
           <div>
             <SectionHeading title="Precision biomedical service for clinical continuity." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              Biomedical Business and Services helps healthcare organizations
+              Biomedical Business and Service helps healthcare organizations
               protect the performance, safety and reliability of their medical
               equipment.
             </p>

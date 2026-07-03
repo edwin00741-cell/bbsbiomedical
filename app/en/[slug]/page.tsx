@@ -70,7 +70,7 @@ export default async function EnglishSimplePage({
       locale="en"
       overviewTitle="General information"
       sections={page.sections}
-      sideLabel="Biomedical Business and Services"
+      sideLabel="Biomedical Business and Service"
       title={page.title}
     />
   );
@@ -199,7 +199,7 @@ function EnglishAboutPage() {
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.78fr_1fr] lg:items-center">
           <div className="relative min-h-[620px] overflow-hidden rounded-[8px] bg-slate-100 shadow-[0_28px_90px_rgba(15,23,42,0.16)]">
             <Image
-              alt="Bryan Rodriguez, founder of Biomedical Business and Services"
+              alt="Bryan Rodriguez, founder of Biomedical Business and Service"
               className="object-cover object-center"
               fill
               priority
@@ -221,7 +221,7 @@ function EnglishAboutPage() {
               Bryan Rodriguez
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              Founder and Executive Director of Biomedical Business and Services.
+              Founder and Executive Director of Biomedical Business and Service.
               With a path shaped by clinical innovation and commitment to
               diagnostic precision, Bryan has positioned BBS as a reference for
               integrated healthcare technical support.

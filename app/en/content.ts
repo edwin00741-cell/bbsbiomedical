@@ -38,13 +38,13 @@ export const englishServices = [
 export const englishPages: Record<string, EnglishPage> = {
   about: {
     eyebrow: "Biomedical excellence",
-    title: "About Biomedical Business and Services",
+    title: "About Biomedical Business and Service",
     description:
       "We support healthcare institutions with precise biomedical service, technical rigor and a human understanding of clinical operations.",
     sections: [
       {
         title: "Who we are",
-        body: "Biomedical Business and Services is a Panama-based technical partner for healthcare providers that need dependable biomedical equipment support, metrology, radiological protection and regulatory guidance.",
+        body: "Biomedical Business and Service is a Panama-based technical partner for healthcare providers that need dependable biomedical equipment support, metrology, radiological protection and regulatory guidance.",
       },
       {
         title: "Leadership",
@@ -204,7 +204,7 @@ export const englishPages: Record<string, EnglishPage> = {
     eyebrow: "Legal policy",
     title: "Privacy Policy",
     description:
-      "Base text about data handling for the Biomedical Business and Services website. It should be reviewed by legal counsel before final publication.",
+      "Base text about data handling for the Biomedical Business and Service website. It should be reviewed by legal counsel before final publication.",
     sections: [
       {
         title: "Collected data",

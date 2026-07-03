@@ -31,7 +31,7 @@ export default function Home() {
             />
             <div className="absolute left-6 top-6 rounded-[8px] bg-white/88 px-4 py-3 shadow-lg backdrop-blur">
               <Image
-                alt="Biomedical Business and Services"
+                alt="Biomedical Business and Service"
                 className="h-auto w-[150px]"
                 height={838}
                 src="/brand/bbs-primary-horizontal-color.png"
@@ -43,7 +43,7 @@ export default function Home() {
           <div>
             <SectionHeading title="Soluciones biomédicas con precisión, seguridad y respaldo técnico." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              Biomedical Business and Services nace del compromiso por elevar los
+              Biomedical Business and Service nace del compromiso por elevar los
               estándares de calidad en el sector salud. Entendemos que detrás de
               cada equipo médico hay una vida que depende de su correcto
               funcionamiento.

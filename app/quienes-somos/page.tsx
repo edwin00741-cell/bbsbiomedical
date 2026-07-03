@@ -19,7 +19,7 @@ export default function AboutPage() {
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.78fr_1fr] lg:items-center">
           <div className="relative min-h-[620px] overflow-hidden rounded-[8px] bg-slate-100 shadow-[0_28px_90px_rgba(15,23,42,0.16)]">
             <Image
-              alt="Bryan Rodriguez, fundador de Biomedical Business and Services"
+              alt="Bryan Rodriguez, fundador de Biomedical Business and Service"
               className="object-cover object-center"
               fill
               priority
@@ -41,7 +41,7 @@ export default function AboutPage() {
               Bryan Rodríguez
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              Fundador y Director Ejecutivo de Biomedical Business and Services. Con una
+              Fundador y Director Ejecutivo de Biomedical Business and Service. Con una
               trayectoria marcada por la innovación clínica y el compromiso con
               la precisión diagnóstica, Bryan ha consolidado a BBS como un
               referente en soluciónes integrales para el sector salud.
