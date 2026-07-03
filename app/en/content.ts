@@ -5,6 +5,8 @@
   sections: { title: string; body: string }[];
   image?: string;
   imageAlt?: string;
+  ctaTitle?: string;
+  ctaDescription?: string;
 };
 export const englishServices = [
   {
@@ -77,22 +79,22 @@ export const englishPages: Record<string, EnglishPage> = {
     image: "/services/microscope-olympus-private.png",
   },
   metrology: {
-    eyebrow: "Services",
-    title: "Metrology",
+    eyebrow: "Calibration and traceability",
+    title: "Biomedical Metrology",
     description:
-      "Calibration and verification processes that strengthen confidence in clinical measurements.",
+      "Verification, calibration and metrological control services for critical medical equipment, with clear documentation and technical traceability.",
     sections: [
       {
-        title: "Measurement verification",
-        body: "We review critical parameters and document measurement behavior for equipment used in clinical and diagnostic environments.",
+        title: "Service scope",
+        body: "We perform periodic evaluations to confirm that measurement equipment maintains reliable parameters in clinical and laboratory environments.",
       },
       {
-        title: "Traceability mindset",
-        body: "Metrology work is organized to support audit readiness, operational confidence and safer clinical decisions.",
+        title: "Documentation",
+        body: "Each intervention may include reports, calibration records and technical recommendations for internal audits or regulatory processes.",
       },
       {
-        title: "Actionable reports",
-        body: "Reports are written to be useful for biomedical, administrative and clinical teams.",
+        title: "Image placeholder",
+        body: "The final laboratory, instrument and equipment images will be replaced when the project's visual library is completed.",
       },
     ],
     image: "/services/microscope-lab-ciencias.png",
@@ -119,22 +121,22 @@ export const englishPages: Record<string, EnglishPage> = {
     image: "/services/anesthesia-nitrous-armonia.png",
   },
   "regulatory-management": {
-    eyebrow: "Services",
+    eyebrow: "Technical compliance",
     title: "Regulatory Management",
     description:
-      "Technical guidance for permits, requirements and documentation connected to biomedical services and equipment.",
+      "Support for documentation processes, licenses, technical requirements and compliance applicable to biomedical services and equipment.",
     sections: [
       {
-        title: "Documentation review",
-        body: "We help identify missing technical documents, organize records and align files with institutional requirements.",
+        title: "Document diagnosis",
+        body: "We review the status of files, records, technical evidence and required items needed to organize the compliance process.",
       },
       {
-        title: "Process support",
-        body: "Our team supports clients with practical guidance during equipment-related administrative and regulatory processes.",
+        title: "Support",
+        body: "We help healthcare institutions prepare documents, regularization timelines and follow-up responses to observations.",
       },
       {
-        title: "Operational clarity",
-        body: "The objective is to reduce uncertainty and give healthcare teams a clearer path to compliance.",
+        title: "Generic content",
+        body: "This text works as an initial base and should be adjusted when the team defines the final regulatory scope for BBS.",
       },
     ],
     image: "/images/bbs-biomedical-solutions-lab.png",
@@ -157,70 +159,107 @@ export const englishPages: Record<string, EnglishPage> = {
     image: "/images/bbs-monitor-operating-room.png",
   },
   "medical-portal": {
-    eyebrow: "Portal",
+    eyebrow: "Portal in preparation",
     title: "Medical Portal",
     description:
       "A future client space for service requests, technical documentation, reports and service tracking.",
     sections: [
       {
-        title: "Coming soon",
-        body: "This area is planned as a centralized portal for institutional clients.",
+        title: "Future access",
+        body: "The portal may include client profiles, equipment history, downloadable reports and case traceability.",
+      },
+      {
+        title: "Current status",
+        body: "For now this page works as an informational placeholder while the portal architecture is defined.",
+      },
+      {
+        title: "Next phase",
+        body: "Once the operational flow is finalized, login, roles and tracking dashboards can be connected.",
       },
     ],
+    image: "/images/bbs-monitor-operating-room.png",
   },
   "technical-support": {
-    eyebrow: "Support",
+    eyebrow: "Operational attention",
     title: "Technical Support",
     description:
-      "Request support for biomedical equipment and coordinate a technical evaluation with BBS.",
+      "Support channel for requests, initial reviews, visit coordination and technical case follow-up.",
     sections: [
       {
-        title: "Support requests",
-        body: "Use the contact form to describe the equipment, current condition, urgency and institution details.",
+        title: "Requests",
+        body: "The team can receive equipment information, brand, model, reported failure and urgency to prioritize the response.",
+      },
+      {
+        title: "Follow-up",
+        body: "Each case can be documented with technical observations, photographic evidence, recommendations and progress status.",
+      },
+      {
+        title: "Attention",
+        body: "While the final channels are defined, the contact form will work as the main point for new requests.",
       },
     ],
+    image: "/services/microscope-olympus-private.png",
   },
   privacy: {
-    eyebrow: "Legal",
+    eyebrow: "Legal policy",
     title: "Privacy Policy",
     description:
-      "Base privacy information for website contact and communication processes.",
+      "Base text about data handling for the Biomedical Business and Services website. It should be reviewed by legal counsel before final publication.",
     sections: [
       {
-        title: "Information received",
+        title: "Collected data",
         body: "We may receive name, email, phone number, organization and details voluntarily submitted through contact forms.",
       },
       {
         title: "Use of information",
-        body: "Information is used to respond to requests, coordinate service and maintain reasonable business communication.",
+        body: "Information is used to respond to requests, coordinate services, improve internal processes and maintain reasonable business communication.",
+      },
+      {
+        title: "Analytics",
+        body: "The site may use measurement tools such as Google Analytics to understand performance, traffic and aggregated navigation behavior.",
       },
     ],
+    ctaTitle: "Request privacy information",
+    ctaDescription:
+      "If you need clarification about data handling, contact the BBS team through the form.",
   },
   terms: {
-    eyebrow: "Legal",
+    eyebrow: "Terms of use",
     title: "Terms and Conditions",
     description:
-      "General terms for browsing this website and requesting information about BBS services.",
+      "Generic terms text for website use. It should be adjusted to the real operation and legally validated before final launch.",
     sections: [
       {
-        title: "Service scope",
-        body: "Information on this website is general and does not replace a formal technical evaluation or commercial agreement.",
+        title: "Website use",
+        body: "Published content is informational and does not constitute a final contractual proposal until a formal quotation or agreement exists.",
       },
       {
-        title: "Availability",
-        body: "Services may vary depending on location, equipment condition, technical scope and scheduling.",
+        title: "Services",
+        body: "The described services may vary according to availability, location, technical scope, initial evaluation and the specific conditions of each piece of equipment.",
+      },
+      {
+        title: "Responsibility",
+        body: "BBS will seek to keep information clear and updated, but users should request direct confirmation before making operational or commercial decisions.",
       },
     ],
   },
   cookies: {
-    eyebrow: "Legal",
+    eyebrow: "Digital preferences",
     title: "Cookie Policy",
     description:
-      "This website may use analytics and performance technologies to understand visits and improve the experience.",
+      "Base text about the use of cookies and similar technologies for measurement, security and website improvement.",
     sections: [
       {
+        title: "Necessary cookies",
+        body: "Some cookies or equivalent technologies may be necessary for the site to work correctly and maintain basic security.",
+      },
+      {
         title: "Analytics",
-        body: "Analytics tools can help measure traffic, page performance and user interaction in an aggregated way.",
+        body: "We may use analytics tools to understand visits, viewed pages, performance and content effectiveness.",
+      },
+      {
+        title: "Management",
+        body: "Users can manage cookies from their browser settings. A consent banner may be added in a later phase.",
       },
     ],
   },

@@ -266,12 +266,27 @@ export function IconCard({
   return href ? <Link href={href}>{body}</Link> : body;
 }
 
-export function CheckList({ items }: { items: string[] }) {
+export function CheckList({
+  items,
+  tone = "light",
+}: {
+  items: string[];
+  tone?: "light" | "dark";
+}) {
   return (
     <div className="grid gap-4">
       {items.map((item) => (
-        <div className="flex items-center gap-3 text-base font-bold text-slate-800" key={item}>
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-100 text-cyan-800">
+        <div
+          className={`flex items-center gap-3 text-base font-bold ${
+            tone === "dark" ? "text-white" : "text-slate-800"
+          }`}
+          key={item}
+        >
+          <span
+            className={`flex h-6 w-6 items-center justify-center rounded-full ${
+              tone === "dark" ? "bg-white/12 text-cyan-200" : "bg-cyan-100 text-cyan-800"
+            }`}
+          >
             <Check size={15} strokeWidth={3} />
           </span>
           {item}

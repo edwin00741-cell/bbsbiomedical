@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Activity, ClipboardCheck, Radiation, Wrench } from "lucide-react";
 import {
   CTA,
+  CheckList,
   Footer,
   Header,
   HomeHero,
@@ -54,6 +55,15 @@ export default function EnglishHome() {
               Our team combines technical discipline, documentation and service
               responsiveness so each asset can continue supporting patient care.
             </p>
+            <div className="mt-8">
+              <CheckList
+                items={[
+                  "Strict regulatory compliance",
+                  "Priority response times",
+                  "Certified measurement technology",
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>

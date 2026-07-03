@@ -81,7 +81,7 @@ export default function AboutPage() {
             <article className="rounded-[8px] bg-slate-950 p-8 text-white shadow-sm">
               <h3 className="text-3xl font-black">Nuestros Valores</h3>
               <div className="mt-7">
-                <CheckList items={values} />
+                <CheckList items={values} tone="dark" />
               </div>
             </article>
           </div>
