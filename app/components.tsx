@@ -5,13 +5,16 @@ import {
   ArrowRight,
   BarChart3,
   Check,
+  Clock3,
   Dna,
+  ExternalLink,
   HeartPulse,
   MapPin,
   Microscope,
   Phone,
   ShieldCheck,
   Stethoscope,
+  Users,
   Wrench,
 } from "lucide-react";
 import { ContactForm } from "./contact-form";
@@ -419,13 +422,21 @@ export function CTA({
   const isEnglish = locale === "en";
   return (
     <RevealSection className="px-6 py-20" id={isEnglish ? "contact" : "contacto"}>
-      <div className="mx-auto grid max-w-7xl items-start gap-10 rounded-[8px] bg-slate-950 p-6 text-white sm:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-14">
+      <div className="mx-auto grid max-w-7xl items-start gap-10 overflow-hidden rounded-[8px] bg-[#020b18] p-6 text-white shadow-[0_32px_90px_rgba(2,6,23,0.28)] sm:p-8 lg:grid-cols-[0.78fr_1.08fr] lg:p-10">
         <div>
           <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-300">
-            {isEnglish ? "Contact" : "Contacto"}
+            {isEnglish ? "Technical support" : "Soporte técnico"}
           </p>
-          <h2 className="mt-4 max-w-3xl text-4xl font-black leading-tight">
-            {title}
+          <div className="mt-3 h-px w-40 bg-cyan-400/50" />
+          <h2 className="mt-5 max-w-3xl text-4xl font-black leading-tight sm:text-5xl">
+            {title.includes("atención técnica") ? (
+              <>
+                ¿Su equipamiento necesita{" "}
+                <span className="text-cyan-400">atención técnica especializada?</span>
+              </>
+            ) : (
+              title
+            )}
           </h2>
           <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">
             {description}
@@ -452,7 +463,10 @@ export function CTA({
           </div>
           <BusinessMap locale={locale} />
         </div>
-        <ContactForm locale={locale} />
+        <div className="grid gap-5">
+          <ContactForm locale={locale} />
+          <ContactHighlights locale={locale} />
+        </div>
       </div>
     </RevealSection>
   );
@@ -461,10 +475,10 @@ export function CTA({
 function BusinessMap({ locale = "es" }: { locale?: Locale }) {
   const isEnglish = locale === "en";
   return (
-    <div className="mt-8 overflow-hidden rounded-[8px] border border-white/12 bg-white text-slate-950 shadow-2xl">
-      <div className="relative min-h-[280px] overflow-hidden bg-slate-100">
+    <div className="mt-8 overflow-hidden rounded-[8px] border border-white/10 bg-white/5 text-white shadow-2xl">
+      <div className="relative min-h-[280px] overflow-hidden bg-slate-950">
         <iframe
-          className="absolute inset-0 h-full w-full border-0 opacity-80 saturate-[0.8]"
+          className="absolute inset-0 h-full w-full border-0 opacity-45 saturate-[0.35] invert"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           src={mapsEmbedHref}
@@ -474,7 +488,7 @@ function BusinessMap({ locale = "es" }: { locale?: Locale }) {
               : "Ubicación de Biomedical Business and Service"
           }
         />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.2),rgba(255,255,255,0)_42%,rgba(15,23,42,0.12))]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,11,24,0.1),rgba(2,11,24,0.74))]" />
         <div className="pointer-events-none absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-2xl ring-4 ring-cyan-500/25">
               <Image
@@ -488,30 +502,89 @@ function BusinessMap({ locale = "es" }: { locale?: Locale }) {
           <MapPin className="-mt-2 text-cyan-600 drop-shadow" fill="currentColor" size={32} />
         </div>
       </div>
-      <div className="p-5">
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-cyan-700">
-            {isEnglish ? "Location" : "Ubicación"}
-          </p>
-          <p className="mt-2 text-sm font-bold leading-6">{businessAddress}</p>
-          <p className="mt-3 text-sm leading-6 text-slate-600">{businessHours}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+      <div className="grid gap-5 p-6">
+          <div className="flex gap-4">
+            <MapPin className="mt-1 shrink-0 text-cyan-400" size={28} />
+            <div>
+              <p className="font-black text-white">
+                {isEnglish ? "La Chorrera, Panama Oeste" : "La Chorrera, Panamá Oeste"}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">{businessAddress}</p>
+            </div>
+          </div>
+          <div className="flex gap-4 border-t border-white/10 pt-5">
+            <Clock3 className="mt-1 shrink-0 text-cyan-400" size={27} />
+            <div>
+              <p className="font-black text-white">
+                {isEnglish ? "Business hours" : "Horario de atención"}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">{businessHours}</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 border-t border-white/10 pt-5">
             <Link
-              className="inline-flex min-h-10 items-center justify-center rounded-full bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-cyan-700"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[8px] border border-cyan-400/60 px-5 text-sm font-black text-cyan-100 transition hover:bg-cyan-400/10"
               href={mapsHref}
               rel="noreferrer"
               target="_blank"
             >
+              <ExternalLink size={16} />
               {isEnglish ? "Open route" : "Abrir ruta"}
-            </Link>
-            <Link
-              className="inline-flex min-h-10 items-center justify-center rounded-full border border-slate-200 px-4 text-sm font-black text-slate-800 transition hover:border-cyan-500 hover:text-cyan-700"
-              href={phoneHref}
-            >
-              {isEnglish ? "Call" : "Llamar"}
             </Link>
           </div>
       </div>
     </div>
+  );
+}
+
+function ContactHighlights({ locale = "es" }: { locale?: Locale }) {
+  const isEnglish = locale === "en";
+  const highlights = isEnglish
+    ? [
+        { title: "Fast response", body: "Normally within one business day.", icon: Clock3 },
+        { title: "Certified technicians", body: "Specialized staff in active training.", icon: ShieldCheck },
+        { title: "Serviced equipment", body: "Major brands in the market.", icon: Wrench },
+        { title: "Local coverage", body: "Panama Oeste and nearby areas.", icon: MapPin },
+      ]
+    : [
+        { title: "Respuesta rápida", body: "Respondemos normalmente en menos de 1 día hábil.", icon: Clock3 },
+        { title: "Técnicos certificados", body: "Personal especializado y en constante capacitación.", icon: ShieldCheck },
+        { title: "Equipos atendidos", body: "Trabajamos con las principales marcas del mercado.", icon: Wrench },
+        { title: "Cobertura local", body: "Atención en Panamá Oeste y áreas aledañas.", icon: MapPin },
+      ];
+
+  return (
+    <>
+      <Stagger className="grid gap-3 rounded-[8px] border border-white/10 bg-white/5 p-5 md:grid-cols-4" delay={0.08}>
+        {highlights.map(({ title, body, icon: Icon }) => (
+          <StaggerItem className="border-white/10 text-center md:border-r md:last:border-r-0" key={title}>
+            <Icon className="mx-auto text-cyan-400" size={31} strokeWidth={2} />
+            <p className="mt-4 text-sm font-black text-white">{title}</p>
+            <p className="mt-2 text-xs leading-5 text-slate-300">{body}</p>
+          </StaggerItem>
+        ))}
+      </Stagger>
+      <div className="grid gap-4 rounded-[8px] border border-white/10 bg-white/5 p-5 text-sm text-slate-300 md:grid-cols-[1fr_1.2fr_0.7fr]">
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="text-cyan-400" size={28} />
+          <p className="font-black text-white">
+            {isEnglish ? "Reliability that protects your operation" : "Confianza que garantiza el rendimiento de su operación"}
+          </p>
+        </div>
+        <p className="border-white/10 md:border-l md:pl-5">
+          {isEnglish
+            ? "More than 10 years delivering technical solutions with quality and efficiency."
+            : "Más de 10 años brindando soluciones técnicas con enfoque en calidad y eficiencia."}
+        </p>
+        <div className="flex items-center gap-3 border-white/10 md:border-l md:pl-5">
+          <Users className="text-cyan-400" size={27} />
+          <p>
+            <span className="block font-black text-white">+200</span>
+            {isEnglish ? "clients trust us" : "clientes confían en nosotros"}
+          </p>
+        </div>
+      </div>
+    </>
   );
 }
 export function Footer({ locale = "es" }: { locale?: Locale }) {

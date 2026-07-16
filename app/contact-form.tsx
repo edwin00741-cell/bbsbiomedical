@@ -1,7 +1,16 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { CheckCircle2, Send } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronDown,
+  Lock,
+  Mail,
+  MessageCircle,
+  Phone,
+  Send,
+  User,
+} from "lucide-react";
 
 type Status = "idle" | "loading" | "success" | "error";
 type Locale = "es" | "en";
@@ -11,7 +20,7 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
   const [message, setMessage] = useState("");
   const isEnglish = locale === "en";
   const fieldClass =
-    "h-12 rounded-[8px] border border-slate-200 bg-white px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/12";
+    "h-14 rounded-[8px] border border-slate-200 bg-white px-12 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/12";
   const labelClass = "grid gap-2 text-sm font-black text-slate-900";
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -58,7 +67,7 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
 
   return (
     <form
-      className="relative grid max-w-2xl content-start gap-5 self-start overflow-hidden rounded-[8px] border border-cyan-200/40 bg-white p-6 text-slate-950 shadow-[0_26px_70px_rgba(8,47,73,0.22)] sm:p-8"
+      className="relative grid max-w-3xl content-start gap-5 self-start overflow-hidden rounded-[8px] border border-slate-200 bg-white p-6 text-slate-950 shadow-[0_26px_70px_rgba(8,47,73,0.28)] sm:p-9"
       onSubmit={handleSubmit}
     >
       <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cyan-200/55 blur-3xl" />
@@ -81,40 +90,50 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
       <div className="relative grid gap-4 sm:grid-cols-2">
         <label className={labelClass}>
           {isEnglish ? "Name" : "Nombre"}
+          <span className="relative">
+          <User className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
           <input
-            className={fieldClass}
+            className={`${fieldClass} w-full`}
             name="name"
             placeholder={isEnglish ? "Your name" : "Tu nombre"}
             required
             type="text"
           />
+          </span>
         </label>
         <label className={labelClass}>
           Email
+          <span className="relative">
+          <Mail className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
           <input
-            className={fieldClass}
+            className={`${fieldClass} w-full`}
             name="email"
             placeholder={isEnglish ? "email@company.com" : "correo@empresa.com"}
             required
             type="email"
           />
+          </span>
         </label>
       </div>
 
       <div className="relative grid gap-4 sm:grid-cols-2">
         <label className={labelClass}>
           {isEnglish ? "Phone" : "Teléfono"}
+          <span className="relative">
+          <Phone className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
           <input
-            className={fieldClass}
+            className={`${fieldClass} w-full`}
             name="phone"
             placeholder="+507 6202-3206"
             type="tel"
           />
+          </span>
         </label>
         <label className={labelClass}>
-          {isEnglish ? "Service" : "Servicio"}
+          {isEnglish ? "Service type" : "Tipo de servicio"}
+          <span className="relative">
           <select
-            className={`${fieldClass} appearance-none`}
+            className={`${fieldClass} w-full appearance-none pr-12`}
             defaultValue=""
             name="service"
           >
@@ -127,21 +146,26 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
             <option>{isEnglish ? "Regulatory management" : "Gestión regulatoria"}</option>
             <option>{isEnglish ? "Other request" : "Otra solicitud"}</option>
           </select>
+          <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-600" size={20} />
+          </span>
         </label>
       </div>
 
       <label className={`${labelClass} relative`}>
         {isEnglish ? "Message" : "Mensaje"}
+        <span className="relative">
+        <MessageCircle className="pointer-events-none absolute left-4 top-5 text-slate-500" size={20} />
         <textarea
-          className="min-h-32 rounded-[8px] border border-slate-200 bg-white px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/12"
+          className="min-h-32 w-full rounded-[8px] border border-slate-200 bg-white px-12 py-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/12"
           name="message"
           placeholder={
             isEnglish
-              ? "Tell us which equipment or service you need reviewed."
-              : "Cuéntanos qué equipo o servicio necesitas revisar."
+              ? "Indicate equipment, brand, model and problem."
+              : "Indique el equipo, marca, modelo y problema presentado."
           }
           required
         />
+        </span>
       </label>
 
       <div className="relative flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center">
@@ -170,6 +194,12 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
           </p>
         ) : null}
       </div>
+      <p className="relative inline-flex items-center gap-2 text-xs font-bold text-slate-500">
+        <Lock size={14} />
+        {isEnglish
+          ? "By submitting this request, our team may contact you by phone or email."
+          : "Al enviar esta solicitud, nuestro equipo podrá contactarle por teléfono o correo."}
+      </p>
     </form>
   );
 }
