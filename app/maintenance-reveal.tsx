@@ -58,7 +58,7 @@ export function MaintenanceReveal({
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={Math.round(position)}
-      className="relative min-h-[320px] cursor-ew-resize touch-none overflow-hidden bg-slate-200 select-none sm:min-h-[420px] lg:min-h-[500px]"
+      className="relative aspect-[16/10] w-full cursor-ew-resize touch-none overflow-hidden rounded-[8px] border border-white/10 bg-slate-200 shadow-[0_28px_70px_rgba(0,0,0,0.28)] select-none"
       onPointerDown={(event) => {
         setIsDragging(true);
         updatePosition(event.clientX);

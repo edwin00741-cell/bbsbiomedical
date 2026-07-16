@@ -236,9 +236,45 @@ export function RepairProcessSection({ locale = "es" }: { locale?: Locale }) {
   const steps = repairSteps[locale];
 
   return (
-    <RevealSection className="bg-white px-6 py-24">
-      <div className="mx-auto max-w-7xl">
-        <Reveal className="relative overflow-hidden" y={-18}>
+    <RevealSection className="bg-slate-950 px-6 py-24 text-white">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center">
+        <div className="lg:col-span-5">
+          <Reveal>
+            <p className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-cyan-200">
+              {isEnglish ? "Compare" : "Comparar"}
+            </p>
+            <h2 className="mt-6 max-w-xl text-4xl font-black leading-tight text-white">
+              {isEnglish
+                ? "See the difference after a controlled maintenance process."
+                : "Mira la diferencia después de un mantenimiento controlado."}
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
+              {isEnglish
+                ? "Drag the slider to compare the initial state with the equipment after technical service, cleaning and validation."
+                : "Arrastra el control para comparar el estado inicial con el equipo después del servicio técnico, limpieza y validación."}
+            </p>
+          </Reveal>
+
+          <Stagger className="mt-8 grid gap-3" delay={0.12}>
+            {steps.map(({ title, body, icon: Icon }) => (
+              <StaggerItem key={title}>
+                <div className="rounded-[8px] border border-white/10 bg-white/8 p-5">
+                  <div className="flex items-start gap-4">
+                    <span className="mt-1 text-cyan-300">
+                      <Icon size={22} strokeWidth={2.2} />
+                    </span>
+                    <div>
+                      <h3 className="text-base font-black text-white">{title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-300">{body}</p>
+                    </div>
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+
+        <Reveal className="lg:col-span-7" y={18}>
           <MaintenanceReveal
             afterLabel={isEnglish ? "After service" : "Después"}
             ariaLabel={
@@ -249,56 +285,7 @@ export function RepairProcessSection({ locale = "es" }: { locale?: Locale }) {
             beforeLabel={isEnglish ? "Before service" : "Antes"}
             imageSrc="/images/bbs-before-after-maintenance.png"
           />
-          <div className="absolute bottom-6 left-6 rounded-[8px] bg-white/90 px-4 py-3 shadow-xl backdrop-blur">
-            <BrandLogo compact />
-          </div>
         </Reveal>
-
-        <div className="grid gap-10 py-12 lg:grid-cols-12 lg:py-16">
-          <Reveal className="lg:col-span-4">
-            <p className="text-sm font-black uppercase tracking-[0.16em] text-cyan-700">
-              {isEnglish ? "Repair workflow" : "Proceso de reparación"}
-            </p>
-            <p className="mt-5 max-w-sm text-lg leading-8 text-slate-600">
-              {isEnglish
-                ? "A controlled process designed to recover reliability without improvisation."
-                : "Un método controlado para recuperar confiabilidad sin improvisaciones."}
-            </p>
-          </Reveal>
-
-          <div className="lg:col-span-8">
-            <Reveal>
-              <h2 className="max-w-3xl text-4xl font-black leading-tight text-slate-950">
-                {isEnglish
-                  ? "How we repair biomedical equipment safely and with technical evidence."
-                  : "Cómo realizamos reparaciones biomédicas con seguridad y evidencia técnica."}
-              </h2>
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-                {isEnglish
-                  ? "Every intervention follows a clear sequence: assessment, corrective work, functional testing and documented delivery for clinical teams."
-                  : "Cada intervención sigue una secuencia clara: evaluación, trabajo correctivo, pruebas funcionales y entrega documentada para el equipo clínico."}
-              </p>
-            </Reveal>
-
-            <Stagger className="mt-10 grid gap-4 md:grid-cols-3" delay={0.12}>
-              {steps.map(({ title, body, icon: Icon }) => (
-                <StaggerItem key={title}>
-                  <div className="h-full rounded-[8px] border border-slate-200 bg-slate-50 p-5">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-cyan-100 text-cyan-800">
-                      <Icon size={22} strokeWidth={2.2} />
-                    </div>
-                    <h3 className="mt-5 text-xl font-black text-slate-950">
-                      {title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-slate-600">
-                      {body}
-                    </p>
-                  </div>
-                </StaggerItem>
-              ))}
-            </Stagger>
-          </div>
-        </div>
       </div>
     </RevealSection>
   );
