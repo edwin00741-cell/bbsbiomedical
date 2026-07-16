@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { ContactForm } from "./contact-form";
 import { HeaderNav } from "./header-nav";
+import { MaintenanceReveal } from "./maintenance-reveal";
 import {
   MotionCard,
   Reveal,
@@ -237,19 +238,17 @@ export function RepairProcessSection({ locale = "es" }: { locale?: Locale }) {
   return (
     <RevealSection className="bg-white px-6 py-24">
       <div className="mx-auto max-w-7xl">
-        <Reveal className="relative min-h-[320px] overflow-hidden bg-slate-200 sm:min-h-[420px] lg:min-h-[500px]" y={-18}>
-          <Image
-            alt={
+        <Reveal className="relative overflow-hidden" y={-18}>
+          <MaintenanceReveal
+            afterLabel={isEnglish ? "After service" : "Después"}
+            ariaLabel={
               isEnglish
-                ? "Technician repairing biomedical equipment"
-                : "Técnico reparando equipo biomédico"
+                ? "Before and after biomedical equipment maintenance"
+                : "Comparación antes y después del mantenimiento biomédico"
             }
-            className="object-cover"
-            fill
-            sizes="100vw"
-            src="/images/bbs-repair-process.png"
+            beforeLabel={isEnglish ? "Before service" : "Antes"}
+            imageSrc="/images/bbs-before-after-maintenance.png"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.03),rgba(15,23,42,0.34))]" />
           <div className="absolute bottom-6 left-6 rounded-[8px] bg-white/90 px-4 py-3 shadow-xl backdrop-blur">
             <BrandLogo compact />
           </div>
