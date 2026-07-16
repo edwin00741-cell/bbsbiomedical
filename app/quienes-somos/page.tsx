@@ -1,6 +1,7 @@
 ﻿import Image from "next/image";
 import { CTA, CheckList, Footer, Header, Hero, SectionHeading } from "../components";
 import { values } from "../data";
+import { MotionCard, Reveal, RevealSection, Stagger, StaggerItem } from "../motion-primitives";
 
 export default function AboutPage() {
   return (
@@ -15,9 +16,9 @@ export default function AboutPage() {
         secondary="Ver casos de éxito"
       />
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.78fr_1fr] lg:items-center">
-          <div className="relative min-h-[620px] overflow-hidden rounded-[8px] bg-slate-100 shadow-[0_28px_90px_rgba(15,23,42,0.16)]">
+          <Reveal className="relative min-h-[620px] overflow-hidden rounded-[8px] bg-slate-100 shadow-[0_28px_90px_rgba(15,23,42,0.16)]">
             <Image
               alt="Bryan Rodriguez, fundador de Biomedical Business and Service"
               className="object-cover object-center"
@@ -32,8 +33,8 @@ export default function AboutPage() {
               </p>
               <p className="text-lg font-black text-slate-950">Bryan Rodriguez</p>
             </div>
-          </div>
-          <div>
+          </Reveal>
+          <Reveal>
             <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-700">
               Liderazgo visionario
             </p>
@@ -51,42 +52,48 @@ export default function AboutPage() {
               que cada diagnóstico sea el pilar de una decisión de vida
               acertada. La precisión es nuestra lengua materna.”
             </blockquote>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-24">
+      <RevealSection className="px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Nuestra Identidad"
             description="Los pilares que sostienen cada proceso, desarrollo y diagnóstico realizado en nuestras instalaciones."
           />
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            <article className="rounded-[8px] bg-white p-8 shadow-sm">
+          <Stagger className="mt-12 grid gap-6 lg:grid-cols-3">
+            <StaggerItem>
+            <MotionCard className="rounded-[8px] bg-white p-8 shadow-sm">
               <h3 className="text-3xl font-black">Misión</h3>
               <p className="mt-5 text-lg leading-8 text-slate-600">
                 Proveer soluciónes biomédicas de vanguardia que eleven el
                 estándar de precisión clínica, facilitando herramientas de
                 diagnóstico de alta fidelidad.
               </p>
-            </article>
-            <article className="rounded-[8px] bg-white p-8 shadow-sm">
+            </MotionCard>
+            </StaggerItem>
+            <StaggerItem>
+            <MotionCard className="rounded-[8px] bg-white p-8 shadow-sm">
               <h3 className="text-3xl font-black">Visión</h3>
               <p className="mt-5 text-lg leading-8 text-slate-600">
                 Consolidarnos como el aliado tecnológico más confiable en el
                 sector biomédico, transformando el futuro de la medicina
                 preventiva.
               </p>
-            </article>
-            <article className="rounded-[8px] bg-slate-950 p-8 text-white shadow-sm">
+            </MotionCard>
+            </StaggerItem>
+            <StaggerItem>
+            <MotionCard className="rounded-[8px] bg-slate-950 p-8 text-white shadow-sm">
               <h3 className="text-3xl font-black">Nuestros Valores</h3>
               <div className="mt-7">
                 <CheckList items={values} tone="dark" />
               </div>
-            </article>
-          </div>
+            </MotionCard>
+            </StaggerItem>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         title="¿Listo para transformar su práctica clínica?"

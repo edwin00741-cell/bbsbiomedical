@@ -1,6 +1,7 @@
 ﻿import Image from "next/image";
 import { CTA, Footer, Header, Hero, SectionHeading } from "../components";
 import { clients } from "../data";
+import { RevealSection, Stagger, StaggerItem } from "../motion-primitives";
 
 export default function ClientsPage() {
   return (
@@ -15,15 +16,15 @@ export default function ClientsPage() {
         secondary="Ver servicios"
       />
 
-      <section className="bg-white px-6 py-20">
+      <RevealSection className="bg-white px-6 py-20">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Instituciones que han confiado en BBS"
             description="Logos de clientes y aliados atendidos por nuestro equipo. Las historias de caso e imágenes de proyecto se incorporarán en una siguiente fase."
           />
-          <div className="mt-12 grid items-center gap-x-14 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="mt-12 grid items-center gap-x-14 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (
-              <article
+              <StaggerItem
                 className="flex min-h-[120px] items-center justify-center text-center"
                 key={client.name}
               >
@@ -34,11 +35,11 @@ export default function ClientsPage() {
                   src={client.logo}
                   width={280}
                 />
-              </article>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         title="¿Tu institución necesita respaldo técnico?"

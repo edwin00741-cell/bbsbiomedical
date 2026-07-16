@@ -159,7 +159,7 @@ export function Hero({
 export function HomeHero({ locale = "es" }: { locale?: Locale }) {
   const isEnglish = locale === "en";
   return (
-    <section className="bg-[#f6f8fb]">
+    <RevealSection className="bg-[#f6f8fb]">
       <div
         className="hero-bg relative isolate min-h-[680px] overflow-hidden"
         style={{ backgroundImage: 'url("/images/bbs-hero-microscope.png")' }}
@@ -208,7 +208,7 @@ export function HomeHero({ locale = "es" }: { locale?: Locale }) {
         </div>
       </div>
       </div>
-    </section>
+    </RevealSection>
   );
 }
 

@@ -12,6 +12,7 @@ import {
   SectionHeading,
 } from "../components";
 import { clients } from "../data";
+import { MotionCard, Reveal, RevealSection, Stagger, StaggerItem } from "../motion-primitives";
 import { englishServices } from "./content";
 
 const icons = [Wrench, Activity, Radiation, ClipboardCheck];
@@ -24,9 +25,9 @@ export default function EnglishHome() {
       <HeroSupportImage />
       <RepairProcessSection locale="en" />
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.92fr_1fr] lg:items-center">
-          <div className="relative min-h-[420px] overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_28px_90px_rgba(15,23,42,0.18)]">
+          <Reveal className="relative min-h-[420px] overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_28px_90px_rgba(15,23,42,0.18)]">
             <Image
               alt="Biomedical laboratory with clinical equipment"
               className="object-cover"
@@ -44,9 +45,9 @@ export default function EnglishHome() {
                 width={3270}
               />
             </div>
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal>
             <SectionHeading title="Precision biomedical service for clinical continuity." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
               Biomedical Business and Service helps healthcare organizations
@@ -66,49 +67,49 @@ export default function EnglishHome() {
                 ]}
               />
             </div>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-24" id="services">
+      <RevealSection className="px-6 py-24" id="services">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Services"
             description="Modular technical services for clinics, hospitals, laboratories and diagnostic centers."
           />
-          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {englishServices.map((service, index) => {
               const Icon = icons[index];
               return (
-                <Link
-                  className="h-full rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
-                  href={service.href}
-                  key={service.title}
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-700">
-                    <Icon size={24} strokeWidth={2.2} />
-                  </div>
-                  <h2 className="mt-7 text-2xl font-black text-slate-950">
-                    {service.title}
-                  </h2>
-                  <p className="mt-4 text-base leading-7 text-slate-600">
-                    {service.description}
-                  </p>
-                </Link>
+                <StaggerItem key={service.title}>
+                  <Link href={service.href}>
+                    <MotionCard className="h-full rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm transition hover:shadow-xl">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-700">
+                        <Icon size={24} strokeWidth={2.2} />
+                      </div>
+                      <h2 className="mt-7 text-2xl font-black text-slate-950">
+                        {service.title}
+                      </h2>
+                      <p className="mt-4 text-base leading-7 text-slate-600">
+                        {service.description}
+                      </p>
+                    </MotionCard>
+                  </Link>
+                </StaggerItem>
               );
             })}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="border-y border-slate-200 bg-white px-6 py-20" id="clients">
+      <RevealSection className="border-y border-slate-200 bg-white px-6 py-20" id="clients">
         <div className="mx-auto max-w-7xl text-center">
           <p className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">
             Trusted by healthcare and institutional teams
           </p>
-          <div className="mt-10 grid items-center gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="mt-10 grid items-center gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (
-              <div
+              <StaggerItem
                 className="flex min-h-[104px] items-center justify-center px-2"
                 key={client.name}
               >
@@ -119,11 +120,11 @@ export default function EnglishHome() {
                   src={client.logo}
                   width={240}
                 />
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         locale="en"

@@ -9,6 +9,7 @@ import {
   VisualPanel,
 } from "../components";
 import { capabilities, projects } from "../data";
+import { MotionCard, Reveal, RevealSection, Stagger, StaggerItem } from "../motion-primitives";
 
 export default function TechnicalServicePage() {
   return (
@@ -22,9 +23,9 @@ export default function TechnicalServicePage() {
         secondary="Consultar tarifas"
       />
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-          <div>
+          <Reveal>
             <SectionHeading title="Mantenimiento con rigor editorial." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
               No solo reparamos equipos; garantizamos la continuidad operativa
@@ -32,40 +33,45 @@ export default function TechnicalServicePage() {
               Nuestro protocolo se basa en estándares internacionales de calidad,
               asegurando que cada intervención sea documentada con precisión.
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <Stagger className="mt-8 grid gap-4 sm:grid-cols-2">
+              <StaggerItem>
               <div className="rounded-[8px] bg-slate-950 p-7 text-white">
                 <p className="text-5xl font-black">500+</p>
                 <p className="mt-2 text-sm font-black uppercase text-cyan-300">
                   Intervenciones anuales
                 </p>
               </div>
+              </StaggerItem>
+              <StaggerItem>
               <div className="rounded-[8px] bg-cyan-50 p-7 text-slate-950">
                 <p className="text-5xl font-black">99.8%</p>
                 <p className="mt-2 text-sm font-black uppercase text-cyan-700">
                   Up-time garantizado
                 </p>
               </div>
-            </div>
-          </div>
+              </StaggerItem>
+            </Stagger>
+          </Reveal>
           <VisualPanel label="Service lab" title="Diagnóstico, calibración y soporte con trazabilidad completa." />
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-24" id="servicios">
+      <RevealSection className="px-6 py-24" id="servicios">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             eyebrow="Portfolio técnico"
             title="Trabajos Realizados"
             description="Una muestra de nuestra capacidad técnica en entornos hospitalarios y de laboratorio de primer nivel."
           />
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          <Stagger className="mt-12 grid gap-6 lg:grid-cols-3">
             {projects.map((project, index) => (
-              <article
+              <StaggerItem
                 className={`overflow-hidden rounded-[8px] border border-slate-200 bg-white shadow-sm ${
                   index === 0 ? "lg:col-span-2" : ""
                 }`}
                 key={project.title}
               >
+                <MotionCard className="h-full overflow-hidden">
                 <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
                   <Image
                     alt={project.title}
@@ -91,13 +97,14 @@ export default function TechnicalServicePage() {
                     {project.description}
                   </p>
                 </div>
-              </article>
+                </MotionCard>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1fr]">
           <SectionHeading title="Nuestra Capacidad de Respuesta" />
           <div className="grid gap-5">
@@ -106,7 +113,7 @@ export default function TechnicalServicePage() {
             ))}
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         title="¿Su equipamiento necesita atención técnica especializada?"

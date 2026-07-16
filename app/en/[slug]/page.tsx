@@ -19,6 +19,7 @@ import {
   radiationScope,
   values,
 } from "../../data";
+import { MotionCard, Reveal, RevealSection, Stagger, StaggerItem } from "../../motion-primitives";
 import { SimplePage } from "../../simple-page";
 import { englishPages } from "../content";
 
@@ -195,9 +196,9 @@ function EnglishAboutPage() {
         secondaryHref="/en/clients"
       />
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.78fr_1fr] lg:items-center">
-          <div className="relative min-h-[620px] overflow-hidden rounded-[8px] bg-slate-100 shadow-[0_28px_90px_rgba(15,23,42,0.16)]">
+          <Reveal className="relative min-h-[620px] overflow-hidden rounded-[8px] bg-slate-100 shadow-[0_28px_90px_rgba(15,23,42,0.16)]">
             <Image
               alt="Bryan Rodriguez, founder of Biomedical Business and Service"
               className="object-cover object-center"
@@ -212,8 +213,8 @@ function EnglishAboutPage() {
               </p>
               <p className="text-lg font-black text-slate-950">Bryan Rodriguez</p>
             </div>
-          </div>
-          <div>
+          </Reveal>
+          <Reveal>
             <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-700">
               Visionary leadership
             </p>
@@ -231,40 +232,46 @@ function EnglishAboutPage() {
               every diagnosis becomes the foundation for a sound life decision.
               Precision is our native language."
             </blockquote>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-24">
+      <RevealSection className="px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Our Identity"
             description="The pillars that support every process, development and technical diagnosis performed by our team."
           />
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            <article className="rounded-[8px] bg-white p-8 shadow-sm">
+          <Stagger className="mt-12 grid gap-6 lg:grid-cols-3">
+            <StaggerItem>
+            <MotionCard className="rounded-[8px] bg-white p-8 shadow-sm">
               <h3 className="text-3xl font-black">Mission</h3>
               <p className="mt-5 text-lg leading-8 text-slate-600">
                 Provide advanced biomedical solutions that raise the standard of
                 clinical precision through high-reliability technical support.
               </p>
-            </article>
-            <article className="rounded-[8px] bg-white p-8 shadow-sm">
+            </MotionCard>
+            </StaggerItem>
+            <StaggerItem>
+            <MotionCard className="rounded-[8px] bg-white p-8 shadow-sm">
               <h3 className="text-3xl font-black">Vision</h3>
               <p className="mt-5 text-lg leading-8 text-slate-600">
                 Become the most trusted technology partner in the biomedical
                 sector, supporting the future of preventive medicine.
               </p>
-            </article>
-            <article className="rounded-[8px] bg-slate-950 p-8 text-white shadow-sm">
+            </MotionCard>
+            </StaggerItem>
+            <StaggerItem>
+            <MotionCard className="rounded-[8px] bg-slate-950 p-8 text-white shadow-sm">
               <h3 className="text-3xl font-black">Our Values</h3>
               <div className="mt-7">
                 <CheckList items={translatedValues} tone="dark" />
               </div>
-            </article>
-          </div>
+            </MotionCard>
+            </StaggerItem>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         locale="en"
@@ -290,9 +297,9 @@ function EnglishTechnicalServicePage() {
         secondaryHref="#contact"
       />
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-          <div>
+          <Reveal>
             <SectionHeading title="Maintenance with documented rigor." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
               We do more than repair equipment; we protect operational
@@ -300,43 +307,48 @@ function EnglishTechnicalServicePage() {
               Our protocol follows quality standards so each intervention is
               documented with precision.
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <Stagger className="mt-8 grid gap-4 sm:grid-cols-2">
+              <StaggerItem>
               <div className="rounded-[8px] bg-slate-950 p-7 text-white">
                 <p className="text-5xl font-black">500+</p>
                 <p className="mt-2 text-sm font-black uppercase text-cyan-300">
                   Annual interventions
                 </p>
               </div>
+              </StaggerItem>
+              <StaggerItem>
               <div className="rounded-[8px] bg-cyan-50 p-7 text-slate-950">
                 <p className="text-5xl font-black">99.8%</p>
                 <p className="mt-2 text-sm font-black uppercase text-cyan-700">
                   Guaranteed uptime
                 </p>
               </div>
-            </div>
-          </div>
+              </StaggerItem>
+            </Stagger>
+          </Reveal>
           <VisualPanel
             label="Service lab"
             title="Diagnostics, calibration and support with complete traceability."
           />
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-24" id="services">
+      <RevealSection className="px-6 py-24" id="services">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             eyebrow="Technical portfolio"
             title="Completed Work"
             description="A sample of our technical capability in hospital and laboratory environments."
           />
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          <Stagger className="mt-12 grid gap-6 lg:grid-cols-3">
             {projects.map((project, index) => (
-              <article
+              <StaggerItem
                 className={`overflow-hidden rounded-[8px] border border-slate-200 bg-white shadow-sm ${
                   index === 0 ? "lg:col-span-2" : ""
                 }`}
                 key={project.title}
               >
+                <MotionCard className="h-full overflow-hidden">
                 <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
                   <Image
                     alt={translatedProjects[index]?.title || project.title}
@@ -362,13 +374,14 @@ function EnglishTechnicalServicePage() {
                     {translatedProjects[index]?.description || project.description}
                   </p>
                 </div>
-              </article>
+                </MotionCard>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1fr]">
           <SectionHeading title="Our Response Capability" />
           <div className="grid gap-5">
@@ -384,7 +397,7 @@ function EnglishTechnicalServicePage() {
             ))}
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         locale="en"
@@ -410,9 +423,9 @@ function EnglishRadiologicalProtectionPage() {
         secondaryHref="#alara"
       />
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-          <div>
+          <Reveal>
             <SectionHeading title="Class C Responsible Officer Service" />
             <p className="mt-6 text-lg leading-8 text-slate-600">
               We have certified professionals who can act as Class C Radiation
@@ -420,31 +433,31 @@ function EnglishRadiologicalProtectionPage() {
               operational safety in facilities using radioactive sources or
               ionizing radiation generating equipment.
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <Stagger className="mt-8 grid gap-4 sm:grid-cols-2">
               {[
                 "License management",
                 "Dosimetry monitoring",
                 "Risk evaluation",
                 "Technical audit",
               ].map((item) => (
-                <div
+                <StaggerItem
                   className="rounded-[8px] border border-slate-200 p-5 font-black text-slate-800"
                   key={item}
                 >
                   {item}
-                </div>
+                </StaggerItem>
               ))}
-            </div>
-          </div>
+            </Stagger>
+          </Reveal>
           <VisualPanel
             label="ALARA"
             title="Control, measurement and technical documentation for radiological environments."
             tone="dark"
           />
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-24" id="services">
+      <RevealSection className="px-6 py-24" id="services">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Technical Service Scope"
@@ -463,11 +476,11 @@ function EnglishRadiologicalProtectionPage() {
             ))}
           </div>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="bg-slate-950 px-6 py-24 text-white" id="alara">
+      <RevealSection className="bg-slate-950 px-6 py-24 text-white" id="alara">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1fr] lg:items-center">
-          <div>
+          <Reveal>
             <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-300">
               Control and management
             </p>
@@ -479,12 +492,12 @@ function EnglishRadiologicalProtectionPage() {
               keep radiation doses as low as reasonably possible, balancing
               diagnostic quality with maximum safety.
             </p>
-          </div>
-          <div className="grid gap-4">
+          </Reveal>
+          <Stagger className="grid gap-4">
             {alaraSteps.map((step, index) => (
-              <article
+              <StaggerItem key={step.title}>
+              <MotionCard
                 className="rounded-[8px] border border-white/10 bg-white/8 p-6"
-                key={step.title}
               >
                 <p className="text-sm font-black text-cyan-300">0{index + 1}</p>
                 <h3 className="mt-2 text-2xl font-black">
@@ -493,29 +506,30 @@ function EnglishRadiologicalProtectionPage() {
                 <p className="mt-3 text-slate-300">
                   {translatedAlaraSteps[index]?.description || step.description}
                 </p>
-              </article>
+              </MotionCard>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-20">
+      <RevealSection className="px-6 py-20">
         <div className="mx-auto max-w-7xl text-center">
           <p className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">
             Applicable sectors
           </p>
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
+          <Stagger className="mt-9 flex flex-wrap justify-center gap-3">
             {translatedSectors.map((sector) => (
-              <span
+              <StaggerItem
                 className="rounded-full bg-white px-5 py-3 text-sm font-black text-slate-700 ring-1 ring-slate-200"
                 key={sector}
               >
                 {sector}
-              </span>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         locale="en"
@@ -542,15 +556,15 @@ function EnglishClientsPage() {
         secondaryHref="/en#services"
       />
 
-      <section className="bg-white px-6 py-20">
+      <RevealSection className="bg-white px-6 py-20">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Institutions that have trusted BBS"
             description="Logos of clients and allies served by our team. Case stories and project images can be incorporated in a later phase."
           />
-          <div className="mt-12 grid items-center gap-x-14 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="mt-12 grid items-center gap-x-14 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (
-              <article
+              <StaggerItem
                 className="flex min-h-[120px] items-center justify-center text-center"
                 key={client.name}
               >
@@ -561,11 +575,11 @@ function EnglishClientsPage() {
                   src={client.logo}
                   width={280}
                 />
-              </article>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         locale="en"

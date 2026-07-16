@@ -11,6 +11,7 @@ import {
   SectionHeading,
 } from "./components";
 import { clients, services } from "./data";
+import { Reveal, RevealSection, Stagger, StaggerItem } from "./motion-primitives";
 
 export default function Home() {
   return (
@@ -20,9 +21,9 @@ export default function Home() {
       <HeroSupportImage />
       <RepairProcessSection />
 
-      <section className="bg-white px-6 py-24">
+      <RevealSection className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.92fr_1fr] lg:items-center">
-          <div className="relative min-h-[420px] overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_28px_90px_rgba(15,23,42,0.18)]">
+          <Reveal className="relative min-h-[420px] overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_28px_90px_rgba(15,23,42,0.18)]">
             <Image
               alt="Laboratorio biomédico con equipo de metrología y experiencia clínica"
               className="object-cover"
@@ -40,9 +41,9 @@ export default function Home() {
                 width={3270}
               />
             </div>
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal>
             <SectionHeading title="Soluciones biomédicas con precisión, seguridad y respaldo técnico." />
             <p className="mt-6 text-lg leading-8 text-slate-600">
               Biomedical Business and Service nace del compromiso por elevar los
@@ -64,25 +65,27 @@ export default function Home() {
                 ]}
               />
             </div>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </RevealSection>
 
-      <section className="px-6 py-24" id="servicios">
+      <RevealSection className="px-6 py-24" id="servicios">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Nuestros Servicios"
             description="Desarrollamos soluciones técnicas modulares adaptadas a las necesidades específicas de clínicas, hospitales y centros diagnósticos."
           />
-          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <Stagger className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {services.map((service) => (
-              <IconCard key={service.title} {...service} />
+              <StaggerItem key={service.title}>
+                <IconCard {...service} />
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
-      <section
+      <RevealSection
         className="border-y border-slate-200 bg-white px-6 py-20"
         id="clientes"
       >
@@ -90,9 +93,9 @@ export default function Home() {
           <p className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">
             Confían en nuestra precisión
           </p>
-          <div className="mt-10 grid items-center gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="mt-10 grid items-center gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {clients.map((client) => (
-              <div
+              <StaggerItem
                 className="flex min-h-[104px] items-center justify-center px-2"
                 key={client.name}
               >
@@ -103,11 +106,11 @@ export default function Home() {
                   src={client.logo}
                   width={240}
                 />
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
-      </section>
+      </RevealSection>
 
       <CTA
         title="¿Necesitas soporte técnico para tus equipos médicos?"
