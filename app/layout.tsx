@@ -82,7 +82,7 @@ export default function RootLayout({
       addressRegion: "Panamá Oeste",
       addressCountry: "PA",
     },
-    areaServed: ["Panamá", "Panamá Oeste", "La Chorrera"],
+    areaServed: ["Panamá", "Panamá Oeste", "La Chorrera", "Worldwide"],
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",

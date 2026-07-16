@@ -15,6 +15,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { ContactForm } from "./contact-form";
+import { GlobalReachMap } from "./global-reach-map";
 import { HeaderNav } from "./header-nav";
 import { MaintenanceReveal } from "./maintenance-reveal";
 import {
@@ -548,6 +549,8 @@ export function Footer({ locale = "es" }: { locale?: Locale }) {
   ];
 
   return (
+    <>
+    <GlobalReachMap locale={locale} />
     <footer className="border-t border-slate-200 bg-white px-6 py-16">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 xl:grid-cols-5">
         <div>
@@ -592,6 +595,7 @@ export function Footer({ locale = "es" }: { locale?: Locale }) {
         .
       </p>
     </footer>
+    </>
   );
 }
 

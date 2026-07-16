@@ -13,6 +13,7 @@
     "@fontsource/montserrat": "^5.2.8",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
+    "dotted-map": "^3.1.0",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.23.0",
     "next": "latest",
