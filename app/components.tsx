@@ -419,7 +419,7 @@ export function CTA({
   const isEnglish = locale === "en";
   return (
     <RevealSection className="px-6 py-20" id={isEnglish ? "contact" : "contacto"}>
-      <div className="mx-auto grid max-w-7xl items-start gap-10 rounded-[8px] bg-slate-950 p-8 text-white lg:grid-cols-[0.9fr_1.1fr] lg:p-16">
+      <div className="mx-auto grid max-w-7xl items-start gap-10 rounded-[8px] bg-slate-950 p-6 text-white sm:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-14">
         <div>
           <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-300">
             {isEnglish ? "Contact" : "Contacto"}

@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { CheckCircle2, Send } from "lucide-react";
 
 type Status = "idle" | "loading" | "success" | "error";
 type Locale = "es" | "en";
@@ -10,6 +10,9 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const isEnglish = locale === "en";
+  const fieldClass =
+    "h-12 rounded-[8px] border border-slate-200 bg-white px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/12";
+  const labelClass = "grid gap-2 text-sm font-black text-slate-900";
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,22 +57,42 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
   }
 
   return (
-    <form className="grid max-w-2xl content-start gap-5 self-start" onSubmit={handleSubmit}>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="grid gap-2 text-sm font-bold text-white">
+    <form
+      className="relative grid max-w-2xl content-start gap-5 self-start overflow-hidden rounded-[8px] border border-cyan-200/40 bg-white p-6 text-slate-950 shadow-[0_26px_70px_rgba(8,47,73,0.22)] sm:p-8"
+      onSubmit={handleSubmit}
+    >
+      <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cyan-200/55 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 left-10 h-56 w-56 rounded-full bg-sky-300/35 blur-3xl" />
+
+      <div className="relative border-b border-slate-200 pb-5">
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-700">
+          {isEnglish ? "Technical request" : "Solicitud técnica"}
+        </p>
+        <h3 className="mt-2 text-2xl font-black text-slate-950">
+          {isEnglish ? "Tell us what you need" : "Cuéntanos qué necesitas"}
+        </h3>
+        <p className="mt-2 text-sm leading-6 text-slate-600">
+          {isEnglish
+            ? "We will review your request and coordinate the next technical step."
+            : "Revisaremos tu solicitud y coordinaremos el siguiente paso técnico."}
+        </p>
+      </div>
+
+      <div className="relative grid gap-4 sm:grid-cols-2">
+        <label className={labelClass}>
           {isEnglish ? "Name" : "Nombre"}
           <input
-            className="h-12 rounded-[8px] border border-white/15 bg-white/10 px-4 text-white outline-none transition placeholder:text-white/45 focus:border-cyan-300"
+            className={fieldClass}
             name="name"
             placeholder={isEnglish ? "Your name" : "Tu nombre"}
             required
             type="text"
           />
         </label>
-        <label className="grid gap-2 text-sm font-bold text-white">
+        <label className={labelClass}>
           Email
           <input
-            className="h-12 rounded-[8px] border border-white/15 bg-white/10 px-4 text-white outline-none transition placeholder:text-white/45 focus:border-cyan-300"
+            className={fieldClass}
             name="email"
             placeholder={isEnglish ? "email@company.com" : "correo@empresa.com"}
             required
@@ -77,19 +100,40 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
           />
         </label>
       </div>
-      <label className="grid gap-2 text-sm font-bold text-white">
-        {isEnglish ? "Phone" : "Teléfono"}
-        <input
-          className="h-12 rounded-[8px] border border-white/15 bg-white/10 px-4 text-white outline-none transition placeholder:text-white/45 focus:border-cyan-300"
-          name="phone"
-          placeholder="+507 6202-3206"
-          type="tel"
-        />
-      </label>
-      <label className="grid gap-2 text-sm font-bold text-white">
+
+      <div className="relative grid gap-4 sm:grid-cols-2">
+        <label className={labelClass}>
+          {isEnglish ? "Phone" : "Teléfono"}
+          <input
+            className={fieldClass}
+            name="phone"
+            placeholder="+507 6202-3206"
+            type="tel"
+          />
+        </label>
+        <label className={labelClass}>
+          {isEnglish ? "Service" : "Servicio"}
+          <select
+            className={`${fieldClass} appearance-none`}
+            defaultValue=""
+            name="service"
+          >
+            <option disabled value="">
+              {isEnglish ? "Select service" : "Selecciona servicio"}
+            </option>
+            <option>{isEnglish ? "Technical service" : "Servicio técnico"}</option>
+            <option>{isEnglish ? "Metrology" : "Metrología"}</option>
+            <option>{isEnglish ? "Radiological protection" : "Protección radiológica"}</option>
+            <option>{isEnglish ? "Regulatory management" : "Gestión regulatoria"}</option>
+            <option>{isEnglish ? "Other request" : "Otra solicitud"}</option>
+          </select>
+        </label>
+      </div>
+
+      <label className={`${labelClass} relative`}>
         {isEnglish ? "Message" : "Mensaje"}
         <textarea
-          className="min-h-32 rounded-[8px] border border-white/15 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-white/45 focus:border-cyan-300"
+          className="min-h-32 rounded-[8px] border border-slate-200 bg-white px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/12"
           name="message"
           placeholder={
             isEnglish
@@ -99,29 +143,33 @@ export function ContactForm({ locale = "es" }: { locale?: Locale }) {
           required
         />
       </label>
-      <button
-        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-black text-slate-950 shadow-[0_14px_32px_rgba(255,255,255,0.14)] transition hover:-translate-y-0.5 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit"
-        disabled={status === "loading"}
-        type="submit"
-      >
-        <Send size={17} />
-        {status === "loading"
-          ? isEnglish
-            ? "Sending..."
-            : "Enviando..."
-          : isEnglish
-            ? "Send request"
-            : "Enviar solicitud"}
-      </button>
-      {message ? (
-        <p
-          className={`text-sm font-bold ${
-            status === "success" ? "text-cyan-200" : "text-red-200"
-          }`}
+
+      <div className="relative flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center">
+        <button
+          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-cyan-500 px-7 text-sm font-black text-slate-950 shadow-[0_18px_40px_rgba(34,211,238,0.28)] transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit"
+          disabled={status === "loading"}
+          type="submit"
         >
-          {message}
-        </p>
-      ) : null}
+          <Send size={17} />
+          {status === "loading"
+            ? isEnglish
+              ? "Sending..."
+              : "Enviando..."
+            : isEnglish
+              ? "Send request"
+              : "Enviar solicitud"}
+        </button>
+        {message ? (
+          <p
+            className={`inline-flex items-center gap-2 text-sm font-bold ${
+              status === "success" ? "text-cyan-700" : "text-red-600"
+            }`}
+          >
+            {status === "success" ? <CheckCircle2 size={17} /> : null}
+            {message}
+          </p>
+        ) : null}
+      </div>
     </form>
   );
 }
