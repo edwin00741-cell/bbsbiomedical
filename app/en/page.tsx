@@ -8,6 +8,7 @@ import {
   Header,
   HomeHero,
   HeroSupportImage,
+  RepairProcessSection,
   SectionHeading,
 } from "../components";
 import { clients } from "../data";
@@ -21,6 +22,7 @@ export default function EnglishHome() {
       <Header locale="en" />
       <HomeHero locale="en" />
       <HeroSupportImage />
+      <RepairProcessSection locale="en" />
 
       <section className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.92fr_1fr] lg:items-center">

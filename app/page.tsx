@@ -7,6 +7,7 @@ import {
   HomeHero,
   HeroSupportImage,
   IconCard,
+  RepairProcessSection,
   SectionHeading,
 } from "./components";
 import { clients, services } from "./data";
@@ -17,6 +18,7 @@ export default function Home() {
       <Header />
       <HomeHero />
       <HeroSupportImage />
+      <RepairProcessSection />
 
       <section className="bg-white px-6 py-24">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.92fr_1fr] lg:items-center">
@@ -70,7 +72,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             title="Nuestros Servicios"
-            description="Desarrollamos soluciónes técnicas modulares adaptadas a las necesidades específicas de clínicas, hospitales y centros diagnósticos."
+            description="Desarrollamos soluciones técnicas modulares adaptadas a las necesidades específicas de clínicas, hospitales y centros diagnósticos."
           />
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {services.map((service) => (

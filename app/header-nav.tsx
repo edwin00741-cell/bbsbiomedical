@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown, Globe2, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -78,6 +79,7 @@ export function HeaderNav({
   const [servicesOpen, setServicesOpen] = useState(false);
   const [currentHash, setCurrentHash] = useState("");
   const navRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
   const pathname = usePathname();
   const isEnglish = locale === "en";
   const navLinks = navByLocale[locale];
@@ -201,24 +203,28 @@ export function HeaderNav({
             >
               {isEnglish ? "Services" : "Servicios"} <ChevronDown size={16} />
             </button>
-            <div
-              className={`absolute left-1/2 top-9 w-72 -translate-x-1/2 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-2xl transition ${
-                servicesOpen
-                  ? "pointer-events-auto translate-y-0 opacity-100"
-                  : "pointer-events-none -translate-y-2 opacity-0"
-              }`}
-            >
-              {serviceLinks.map((link) => (
-                <Link
-                  className="block rounded-[8px] px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950"
-                  href={link.href}
-                  key={link.href}
-                  onClick={closeMenus}
+            <AnimatePresence>
+              {servicesOpen ? (
+                <motion.div
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  className="absolute left-1/2 top-9 w-72 -translate-x-1/2 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-2xl"
+                  exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: -8, scale: 0.98 }}
+                  transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+                  {serviceLinks.map((link) => (
+                    <Link
+                      className="block rounded-[8px] px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950"
+                      href={link.href}
+                      key={link.href}
+                      onClick={closeMenus}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </div>
           {navLinks.slice(2).map((link) => (
             <Link
@@ -258,13 +264,15 @@ export function HeaderNav({
         </button>
       </div>
 
-      <div
-        className={`absolute left-4 right-4 top-[76px] rounded-[8px] border border-slate-200 bg-white p-3 shadow-2xl transition lg:hidden ${
-          menuOpen
-            ? "pointer-events-auto translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-3 opacity-0"
-        }`}
-      >
+      <AnimatePresence>
+        {menuOpen ? (
+          <motion.div
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            className="absolute left-4 right-4 top-[76px] rounded-[8px] border border-slate-200 bg-white p-3 shadow-2xl lg:hidden"
+            exit={{ opacity: 0, y: -12, scale: 0.98 }}
+            initial={reduceMotion ? false : { opacity: 0, y: -12, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          >
         <nav className="grid gap-1 text-base font-bold text-slate-700">
           {navLinks.slice(0, 2).map((link) => (
             <Link
@@ -330,7 +338,9 @@ export function HeaderNav({
             {isEnglish ? "Español" : "English"}
           </Link>
         </nav>
-      </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }

@@ -16,6 +16,13 @@ import {
 } from "lucide-react";
 import { ContactForm } from "./contact-form";
 import { HeaderNav } from "./header-nav";
+import {
+  MotionCard,
+  Reveal,
+  RevealSection,
+  Stagger,
+  StaggerItem,
+} from "./motion-primitives";
 
 type Locale = "es" | "en";
 
@@ -31,6 +38,42 @@ const businessAddress =
   "Panamá, Panamá Oeste, La Chorrera, Ave. Libertadores, Calle los Libertadores, al lado de la Planta de hielo, Edificio 1, Local 1.";
 const businessHours =
   "Lunes a viernes, 8:00 a.m. a 5:00 p.m. Sábados, 9:00 a.m. a 12:00 md.";
+const repairSteps = {
+  es: [
+    {
+      title: "Diagnóstico técnico",
+      body: "Revisamos el equipo, identificamos fallas críticas y documentamos hallazgos antes de intervenir.",
+      icon: Microscope,
+    },
+    {
+      title: "Reparación controlada",
+      body: "Ejecutamos ajustes, reemplazos y pruebas funcionales con trazabilidad técnica de cada acción.",
+      icon: Wrench,
+    },
+    {
+      title: "Validación y entrega",
+      body: "Confirmamos desempeño, seguridad y estabilidad operativa antes de liberar el equipo.",
+      icon: ShieldCheck,
+    },
+  ],
+  en: [
+    {
+      title: "Technical diagnosis",
+      body: "We inspect the equipment, identify critical faults and document findings before intervention.",
+      icon: Microscope,
+    },
+    {
+      title: "Controlled repair",
+      body: "We perform adjustments, replacements and functional tests with technical traceability.",
+      icon: Wrench,
+    },
+    {
+      title: "Validation and delivery",
+      body: "We confirm performance, safety and operational stability before releasing the equipment.",
+      icon: ShieldCheck,
+    },
+  ],
+};
 
 type HeroProps = {
   eyebrow: string;
@@ -79,32 +122,36 @@ export function Hero({
   compact = false,
 }: HeroProps) {
   return (
-    <section
+    <RevealSection
       className={`relative overflow-hidden px-6 ${
         compact ? "pb-20 pt-16" : "pb-14 pt-16 lg:pb-20"
       }`}
     >
       <div className="absolute right-0 top-8 h-72 w-72 rounded-full bg-cyan-100/70 blur-3xl" />
       <div className="mx-auto max-w-7xl text-center">
-        <p className="mx-auto inline-flex rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-cyan-700 ring-1 ring-slate-200">
+        <Reveal className="mx-auto inline-flex rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-cyan-700 ring-1 ring-slate-200" y={10}>
           {eyebrow}
-        </p>
-        <h1 className="mx-auto mt-7 max-w-5xl text-5xl font-black leading-[1.02] text-slate-950 sm:text-6xl lg:text-7xl">
-          {title}
-        </h1>
-        <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-          {description}
-        </p>
-        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        </Reveal>
+        <Reveal delay={0.08}>
+          <h1 className="mx-auto mt-7 max-w-5xl text-5xl font-black leading-[1.02] text-slate-950 sm:text-6xl lg:text-7xl">
+            {title}
+          </h1>
+        </Reveal>
+        <Reveal delay={0.14}>
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
+            {description}
+          </p>
+        </Reveal>
+        <Reveal className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row" delay={0.2}>
           <Link className="btn-primary" href={primaryHref}>
             {primary}
           </Link>
           <Link className="btn-secondary" href={secondaryHref}>
             {secondary}
           </Link>
-        </div>
+        </Reveal>
       </div>
-    </section>
+    </RevealSection>
   );
 }
 
@@ -118,31 +165,33 @@ export function HomeHero({ locale = "es" }: { locale?: Locale }) {
       >
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.74)_36%,rgba(255,255,255,0.18)_63%,rgba(255,255,255,0)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(246,248,251,0.94)_100%)]" />
-      <div className="pointer-events-none absolute right-6 top-16 hidden gap-5 text-white/86 lg:grid">
+      <Stagger className="pointer-events-none absolute right-6 top-16 hidden gap-5 text-white/86 lg:grid" delay={0.36}>
         {[HeartPulse, Stethoscope, Dna].map((Icon, index) => (
-          <div
+          <StaggerItem
             className="flex h-20 w-20 items-center justify-center border border-white/50 bg-cyan-400/10 backdrop-blur-sm [clip-path:polygon(25%_5%,75%_5%,100%_50%,75%_95%,25%_95%,0_50%)]"
             key={index}
           >
             <Icon size={34} strokeWidth={2.4} />
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
 
         <div className="relative mx-auto grid min-h-[680px] max-w-7xl items-center px-6 py-16 sm:px-10 lg:px-14">
         <div className="max-w-3xl">
-          <div className="mb-14">
+          <Reveal className="mb-14" delay={0.05}>
             <BrandLogo size="hero" />
-          </div>
-          <h1 className="max-w-3xl text-4xl font-black uppercase leading-tight text-[#061b5f] sm:text-5xl lg:text-[3.35rem]">
-            {isEnglish ? "Technology that connects." : "Tecnología que conecta."}
-            <span className="block text-cyan-600">
-              {isEnglish ? "Service that supports." : "Servicio que respalda."}
-            </span>
-          </h1>
-          <div className="mt-12 grid max-w-4xl grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4">
+          </Reveal>
+          <Reveal delay={0.14}>
+            <h1 className="max-w-3xl text-4xl font-black uppercase leading-tight text-[#061b5f] sm:text-5xl lg:text-[3.35rem]">
+              {isEnglish ? "Technology that connects." : "Tecnología que conecta."}
+              <span className="block text-cyan-600">
+                {isEnglish ? "Service that supports." : "Servicio que respalda."}
+              </span>
+            </h1>
+          </Reveal>
+          <Stagger className="mt-12 grid max-w-4xl grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4" delay={0.22}>
             {heroFeatures[locale].map(({ label, icon: Icon }) => (
-              <div
+              <StaggerItem
                 className="flex min-h-[128px] flex-col items-center justify-start border-cyan-600/35 text-center sm:border-r sm:last:border-r-0"
                 key={label}
               >
@@ -152,9 +201,9 @@ export function HomeHero({ locale = "es" }: { locale?: Locale }) {
                 <p className="mt-4 max-w-[9rem] text-sm font-black uppercase leading-snug text-[#061b5f]">
                   {label}
                 </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </div>
       </div>
@@ -164,7 +213,7 @@ export function HomeHero({ locale = "es" }: { locale?: Locale }) {
 
 export function HeroSupportImage() {
   return (
-    <section className="bg-[#f6f8fb] px-6 py-16">
+    <RevealSection className="bg-[#f6f8fb] px-6 py-16">
       <div className="mx-auto max-w-7xl">
         <div className="overflow-hidden rounded-[8px] bg-slate-200 shadow-[0_30px_70px_rgba(15,23,42,0.22)]">
           <Image
@@ -177,13 +226,88 @@ export function HeroSupportImage() {
           />
         </div>
       </div>
-    </section>
+    </RevealSection>
+  );
+}
+
+export function RepairProcessSection({ locale = "es" }: { locale?: Locale }) {
+  const isEnglish = locale === "en";
+  const steps = repairSteps[locale];
+
+  return (
+    <RevealSection className="bg-white px-6 py-24">
+      <div className="mx-auto max-w-7xl">
+        <Reveal className="relative min-h-[320px] overflow-hidden bg-slate-200 sm:min-h-[420px] lg:min-h-[500px]" y={-18}>
+          <Image
+            alt={
+              isEnglish
+                ? "Technician repairing biomedical equipment"
+                : "Técnico reparando equipo biomédico"
+            }
+            className="object-cover"
+            fill
+            sizes="100vw"
+            src="/images/bbs-repair-process.png"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.03),rgba(15,23,42,0.34))]" />
+          <div className="absolute bottom-6 left-6 rounded-[8px] bg-white/90 px-4 py-3 shadow-xl backdrop-blur">
+            <BrandLogo compact />
+          </div>
+        </Reveal>
+
+        <div className="grid gap-10 py-12 lg:grid-cols-12 lg:py-16">
+          <Reveal className="lg:col-span-4">
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-cyan-700">
+              {isEnglish ? "Repair workflow" : "Proceso de reparación"}
+            </p>
+            <p className="mt-5 max-w-sm text-lg leading-8 text-slate-600">
+              {isEnglish
+                ? "A controlled process designed to recover reliability without improvisation."
+                : "Un método controlado para recuperar confiabilidad sin improvisaciones."}
+            </p>
+          </Reveal>
+
+          <div className="lg:col-span-8">
+            <Reveal>
+              <h2 className="max-w-3xl text-4xl font-black leading-tight text-slate-950">
+                {isEnglish
+                  ? "How we repair biomedical equipment safely and with technical evidence."
+                  : "Cómo realizamos reparaciones biomédicas con seguridad y evidencia técnica."}
+              </h2>
+              <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+                {isEnglish
+                  ? "Every intervention follows a clear sequence: assessment, corrective work, functional testing and documented delivery for clinical teams."
+                  : "Cada intervención sigue una secuencia clara: evaluación, trabajo correctivo, pruebas funcionales y entrega documentada para el equipo clínico."}
+              </p>
+            </Reveal>
+
+            <Stagger className="mt-10 grid gap-4 md:grid-cols-3" delay={0.12}>
+              {steps.map(({ title, body, icon: Icon }) => (
+                <StaggerItem key={title}>
+                  <div className="h-full rounded-[8px] border border-slate-200 bg-slate-50 p-5">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-cyan-100 text-cyan-800">
+                      <Icon size={22} strokeWidth={2.2} />
+                    </div>
+                    <h3 className="mt-5 text-xl font-black text-slate-950">
+                      {title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                      {body}
+                    </p>
+                  </div>
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </div>
+        </div>
+      </div>
+    </RevealSection>
   );
 }
 
 export function VisualPanel({ label, title, tone = "clinical" }: VisualProps) {
   return (
-    <div className={`visual-panel visual-${tone}`}>
+    <Reveal className={`visual-panel visual-${tone}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_18%,rgba(255,255,255,0.7),transparent_28%),linear-gradient(135deg,rgba(8,47,73,0.9),rgba(20,184,166,0.45))]" />
       <div className="relative flex h-full min-h-[360px] flex-col justify-between p-6 text-white">
         <div className="flex items-center justify-between text-xs font-black uppercase tracking-[0.16em] text-white/75">
@@ -207,7 +331,7 @@ export function VisualPanel({ label, title, tone = "clinical" }: VisualProps) {
           </h2>
         </div>
       </div>
-    </div>
+    </Reveal>
   );
 }
 
@@ -221,7 +345,7 @@ export function SectionHeading({
   description?: string;
 }) {
   return (
-    <div className="max-w-3xl">
+    <Reveal className="max-w-3xl">
       {eyebrow ? (
         <p className="text-sm font-black uppercase tracking-[0.12em] text-cyan-700">
           {eyebrow}
@@ -233,7 +357,7 @@ export function SectionHeading({
       {description ? (
         <p className="mt-4 text-lg leading-8 text-slate-600">{description}</p>
       ) : null}
-    </div>
+    </Reveal>
   );
 }
 
@@ -249,7 +373,7 @@ export function IconCard({
   icon: LucideIcon;
 }) {
   const body = (
-    <article className="h-full rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <MotionCard className="h-full rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm transition hover:shadow-xl">
       <div className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-700">
         <Icon size={24} strokeWidth={2.2} />
       </div>
@@ -260,7 +384,7 @@ export function IconCard({
           Saber más <ArrowRight size={16} />
         </span>
       ) : null}
-    </article>
+    </MotionCard>
   );
 
   return href ? <Link href={href}>{body}</Link> : body;
@@ -307,7 +431,7 @@ export function CTA({
 }) {
   const isEnglish = locale === "en";
   return (
-    <section className="px-6 py-20" id={isEnglish ? "contact" : "contacto"}>
+    <RevealSection className="px-6 py-20" id={isEnglish ? "contact" : "contacto"}>
       <div className="mx-auto grid max-w-7xl items-start gap-10 rounded-[8px] bg-slate-950 p-8 text-white lg:grid-cols-[0.9fr_1.1fr] lg:p-16">
         <div>
           <p className="text-sm font-black uppercase tracking-[0.14em] text-cyan-300">
@@ -343,7 +467,7 @@ export function CTA({
         </div>
         <ContactForm locale={locale} />
       </div>
-    </section>
+    </RevealSection>
   );
 }
 

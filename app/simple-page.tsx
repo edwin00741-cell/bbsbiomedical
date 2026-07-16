@@ -1,5 +1,12 @@
 ﻿import Image from "next/image";
 import { CTA, Footer, Header, Hero, SectionHeading } from "./components";
+import {
+  MotionCard,
+  Reveal,
+  RevealSection,
+  Stagger,
+  StaggerItem,
+} from "./motion-primitives";
 
 type InfoSection = {
   title: string;
@@ -47,9 +54,9 @@ export function SimplePage({
         primaryHref={isEnglish ? "#contact" : "#contacto"}
         secondaryHref={isEnglish ? "/en#services" : "/#servicios"}
       />
-      <section className="bg-white px-6 py-20">
+      <RevealSection className="bg-white px-6 py-20">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
-          <aside className="hidden h-full rounded-[8px] border border-slate-200 bg-slate-50 p-8 lg:flex lg:flex-col">
+          <Reveal className="hidden h-full rounded-[8px] border border-slate-200 bg-slate-50 p-8 lg:flex lg:flex-col">
             <div className="relative min-h-[520px] flex-1 overflow-hidden rounded-[8px] bg-slate-200">
               {image ? (
                 <Image
@@ -72,27 +79,26 @@ export function SimplePage({
             <p className="mt-5 text-sm font-black uppercase tracking-[0.14em] text-cyan-700">
               {sideLabel}
             </p>
-          </aside>
+          </Reveal>
           <div>
             <SectionHeading title={overviewTitle} description={description} />
-            <div className="mt-10 grid gap-5">
+            <Stagger className="mt-10 grid gap-5">
               {sections.map((section) => (
-                <article
-                  className="rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm"
-                  key={section.title}
-                >
-                  <h2 className="text-2xl font-black text-slate-950">
-                    {section.title}
-                  </h2>
-                  <p className="mt-4 text-base leading-8 text-slate-600">
-                    {section.body}
-                  </p>
-                </article>
+                <StaggerItem key={section.title}>
+                  <MotionCard className="rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm">
+                    <h2 className="text-2xl font-black text-slate-950">
+                      {section.title}
+                    </h2>
+                    <p className="mt-4 text-base leading-8 text-slate-600">
+                      {section.body}
+                    </p>
+                  </MotionCard>
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           </div>
         </div>
-      </section>
+      </RevealSection>
       <CTA title={ctaTitle} description={ctaDescription} locale={locale} />
       <Footer locale={locale} />
     </main>
