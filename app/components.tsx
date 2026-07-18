@@ -591,11 +591,17 @@ export function Footer({ locale = "es" }: { locale?: Locale }) {
   const isEnglish = locale === "en";
   const serviceLinks = isEnglish ? [
     { label: "Technical Service", href: "/en/technical-service" },
+    { label: "Medical Equipment Maintenance", href: "/en/medical-equipment-maintenance" },
+    { label: "Biomedical Support", href: "/en/biomedical-support" },
+    { label: "Medical Equipment Brands", href: "/en/medical-equipment-brands" },
     { label: "Metrology", href: "/en/metrology" },
     { label: "Radiological Protection", href: "/en/radiological-protection" },
     { label: "Regulatory Management", href: "/en/regulatory-management" },
   ] : [
     { label: "Servicio Técnico", href: "/servicio-tecnico" },
+    { label: "Mantenimiento de Equipos Médicos", href: "/mantenimiento-equipos-medicos" },
+    { label: "Soporte Biomédico", href: "/soporte-biomedico" },
+    { label: "Marcas de Equipos Médicos", href: "/marcas-equipos-medicos" },
     { label: "Metrología", href: "/metrologia" },
     { label: "Protección Radiológica", href: "/proteccion-radiologica" },
     { label: "Gestión Regulatoria", href: "/gestion-regulatoria" },

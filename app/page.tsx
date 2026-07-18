@@ -1,4 +1,5 @@
 ﻿import Image from "next/image";
+import Link from "next/link";
 import {
   CTA,
   CheckList,
@@ -106,6 +107,42 @@ export default function Home() {
                   src={client.logo}
                   width={240}
                 />
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </RevealSection>
+
+      <RevealSection className="px-6 py-20">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading
+            eyebrow="Búsquedas frecuentes"
+            title="Soporte técnico biomédico, mantenimiento y marcas de equipos médicos"
+            description="Contenido especializado para instituciones que buscan mantenimiento de equipos médicos, soporte biomédico multimarca y respaldo técnico en Panamá."
+          />
+          <Stagger className="mt-10 grid gap-5 md:grid-cols-3">
+            {[
+              {
+                title: "Mantenimiento de equipos médicos",
+                href: "/mantenimiento-equipos-medicos",
+                body: "Preventivo, correctivo, diagnóstico y documentación técnica.",
+              },
+              {
+                title: "Soporte biomédico",
+                href: "/soporte-biomedico",
+                body: "Gestión de casos, fallas, repuestos, instalación y seguimiento.",
+              },
+              {
+                title: "Marcas de equipos médicos",
+                href: "/marcas-equipos-medicos",
+                body: "Soporte multimarca para tecnología clínica, dental y laboratorio.",
+              },
+            ].map((item) => (
+              <StaggerItem key={item.href}>
+                <Link className="block h-full rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl" href={item.href}>
+                  <h3 className="text-2xl font-black text-slate-950">{item.title}</h3>
+                  <p className="mt-4 text-base leading-7 text-slate-600">{item.body}</p>
+                </Link>
               </StaggerItem>
             ))}
           </Stagger>

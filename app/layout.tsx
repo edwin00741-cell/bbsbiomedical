@@ -17,7 +17,18 @@ export const metadata: Metadata = {
     template: "%s | Biomedical Business and Service",
   },
   description:
-    "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
+    "Servicio técnico biomédico, mantenimiento de equipos médicos, soporte multimarca, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
+  keywords: [
+    "biomédica Panamá",
+    "servicio técnico biomédico",
+    "mantenimiento equipos médicos",
+    "soporte biomédico Panamá",
+    "reparación equipos médicos",
+    "metrología biomédica",
+    "protección radiológica Panamá",
+    "Biomedical Business and Service",
+    "BBS Biomedical",
+  ],
   openGraph: {
     type: "website",
     locale: "es_PA",
@@ -25,7 +36,7 @@ export const metadata: Metadata = {
     siteName: "Biomedical Business and Service",
     title: "Biomedical Business and Service",
     description:
-      "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
+      "Servicio técnico biomédico, mantenimiento de equipos médicos, soporte multimarca, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
     images: [
       {
         url: "/brand/bbs-primary-horizontal-color.png",
@@ -39,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Biomedical Business and Service",
     description:
-      "Servicio técnico biomédico, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
+      "Servicio técnico biomédico, mantenimiento de equipos médicos, soporte multimarca, metrología, protección radiológica y gestión regulatoria para instituciones de salud en Panamá.",
     images: ["/brand/bbs-primary-horizontal-color.png"],
   },
   alternates: {
@@ -99,6 +110,8 @@ export default function RootLayout({
     ],
     makesOffer: [
       "Servicio técnico biomédico",
+      "Mantenimiento de equipos médicos",
+      "Soporte técnico biomédico multimarca",
       "Metrología biomédica",
       "Protección radiológica",
       "Gestión regulatoria",

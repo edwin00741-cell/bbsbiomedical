@@ -126,6 +126,42 @@ export default function EnglishHome() {
         </div>
       </RevealSection>
 
+      <RevealSection className="px-6 py-20">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading
+            eyebrow="Common searches"
+            title="Biomedical technical support, maintenance and medical equipment brands"
+            description="Specialized content for institutions looking for medical equipment maintenance, multi-brand biomedical support and technical service in Panama."
+          />
+          <Stagger className="mt-10 grid gap-5 md:grid-cols-3">
+            {[
+              {
+                title: "Medical equipment maintenance",
+                href: "/en/medical-equipment-maintenance",
+                body: "Preventive, corrective, diagnosis and technical documentation.",
+              },
+              {
+                title: "Biomedical support",
+                href: "/en/biomedical-support",
+                body: "Case management, failures, spare parts, installation and follow-up.",
+              },
+              {
+                title: "Medical equipment brands",
+                href: "/en/medical-equipment-brands",
+                body: "Multi-brand support for clinical, dental and laboratory technology.",
+              },
+            ].map((item) => (
+              <StaggerItem key={item.href}>
+                <Link className="block h-full rounded-[8px] border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl" href={item.href}>
+                  <h3 className="text-2xl font-black text-slate-950">{item.title}</h3>
+                  <p className="mt-4 text-base leading-7 text-slate-600">{item.body}</p>
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </RevealSection>
+
       <CTA
         locale="en"
         title="Ready to improve clinical equipment reliability?"

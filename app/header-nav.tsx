@@ -26,12 +26,18 @@ const navByLocale = {
 const servicesByLocale = {
   es: [
     { label: "Servicio Técnico", href: "/servicio-tecnico" },
+    { label: "Mantenimiento de equipos médicos", href: "/mantenimiento-equipos-medicos" },
+    { label: "Soporte biomédico", href: "/soporte-biomedico" },
+    { label: "Marcas de equipos médicos", href: "/marcas-equipos-medicos" },
     { label: "Metrología", href: "/metrologia" },
     { label: "Protección Radiológica", href: "/proteccion-radiologica" },
     { label: "Gestión Regulatoria", href: "/gestion-regulatoria" },
   ],
   en: [
     { label: "Technical Service", href: "/en/technical-service" },
+    { label: "Medical equipment maintenance", href: "/en/medical-equipment-maintenance" },
+    { label: "Biomedical support", href: "/en/biomedical-support" },
+    { label: "Medical equipment brands", href: "/en/medical-equipment-brands" },
     { label: "Metrology", href: "/en/metrology" },
     { label: "Radiological Protection", href: "/en/radiological-protection" },
     { label: "Regulatory Management", href: "/en/regulatory-management" },
@@ -42,6 +48,9 @@ const spanishToEnglishPath: Record<string, string> = {
   "/": "/en",
   "/quienes-somos": "/en/about",
   "/servicio-tecnico": "/en/technical-service",
+  "/mantenimiento-equipos-medicos": "/en/medical-equipment-maintenance",
+  "/soporte-biomedico": "/en/biomedical-support",
+  "/marcas-equipos-medicos": "/en/medical-equipment-brands",
   "/metrologia": "/en/metrology",
   "/proteccion-radiologica": "/en/radiological-protection",
   "/gestion-regulatoria": "/en/regulatory-management",
@@ -207,7 +216,7 @@ export function HeaderNav({
               {servicesOpen ? (
                 <motion.div
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  className="absolute left-1/2 top-9 w-72 -translate-x-1/2 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-2xl"
+                  className="absolute left-1/2 top-9 w-80 -translate-x-1/2 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-2xl"
                   exit={{ opacity: 0, y: -8, scale: 0.98 }}
                   initial={reduceMotion ? false : { opacity: 0, y: -8, scale: 0.98 }}
                   transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
@@ -298,7 +307,7 @@ export function HeaderNav({
           </button>
           <div
             className={`grid overflow-hidden pl-3 transition-all ${
-              servicesOpen ? "max-h-72 opacity-100" : "max-h-0 opacity-0"
+              servicesOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
             }`}
           >
             {serviceLinks.map((link) => (
