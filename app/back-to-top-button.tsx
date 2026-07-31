@@ -1,8 +1,15 @@
 "use client";
 
 import { ArrowUp } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function BackToTopButton() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/bbs-control")) {
+    return null;
+  }
+
   return (
     <button
       aria-label="Subir al inicio"

@@ -7,10 +7,14 @@
     "build": "next build",
     "build:local": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/build-local.ps1",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "seed:bbs-superuser": "node scripts/seed-bbs-superuser.mjs"
   },
   "dependencies": {
     "@fontsource/montserrat": "^5.2.8",
+    "@react-pdf/renderer": "^4.5.1",
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.111.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "dotted-map": "^3.1.0",
@@ -19,7 +23,8 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "resend": "^6.16.0"
+    "resend": "^6.16.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",
@@ -28,6 +33,7 @@
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "playwright": "^1.62.1",
     "tailwindcss": "latest",
     "typescript": "latest"
   }

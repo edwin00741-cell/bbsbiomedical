@@ -2,10 +2,13 @@
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: "/bbs-control/",
+      },
+    ],
     sitemap: "https://bbsbiomedical.com/sitemap.xml",
   };
 }

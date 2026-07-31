@@ -12,12 +12,10 @@ import {
 } from "../../components";
 import {
   alaraSteps,
-  applicableSectors,
   capabilities,
   clients,
   projects,
   radiationScope,
-  values,
 } from "../../data";
 import { MotionCard, Reveal, RevealSection, Stagger, StaggerItem } from "../../motion-primitives";
 import { SimplePage } from "../../simple-page";
@@ -228,9 +226,9 @@ function EnglishAboutPage() {
               integrated healthcare technical support.
             </p>
             <blockquote className="mt-8 border-l-4 border-cyan-500 pl-6 text-xl font-bold leading-8 text-slate-800">
-              "Our mission is not only to implement technology; it is to ensure
+              &ldquo;Our mission is not only to implement technology; it is to ensure
               every diagnosis becomes the foundation for a sound life decision.
-              Precision is our native language."
+              Precision is our native language.&rdquo;
             </blockquote>
           </Reveal>
         </div>
@@ -488,7 +486,7 @@ function EnglishRadiologicalProtectionPage() {
               Management Philosophy: The ALARA Principle
             </h2>
             <p className="mt-5 text-lg leading-8 text-slate-300">
-              "As Low As Reasonably Achievable." We apply scientific rigor to
+              &ldquo;As Low As Reasonably Achievable.&rdquo; We apply scientific rigor to
               keep radiation doses as low as reasonably possible, balancing
               diagnostic quality with maximum safety.
             </p>
