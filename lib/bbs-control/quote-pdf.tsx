@@ -1,4 +1,5 @@
 ﻿import path from "node:path";
+import { readFileSync } from "node:fs";
 /* eslint-disable jsx-a11y/alt-text */
 import {
   Document,
@@ -13,7 +14,12 @@ import { displayDate, money } from "./format";
 import type { BusinessSettings, QuoteWithItems } from "./types";
 import { defaultBusinessSettings } from "./quotes";
 
-const watermarkLogo = path.join(process.cwd(), "public", "brand", "bbs-symbol-color.png");
+function pngDataUri(filePath: string) {
+  return `data:image/png;base64,${readFileSync(filePath).toString("base64")}`;
+}
+
+const brandLogo = pngDataUri(path.join(process.cwd(), "public", "brand", "bbs-primary-horizontal-white.png"));
+const watermarkLogo = pngDataUri(path.join(process.cwd(), "public", "brand", "bbs-symbol-color.png"));
 
 const styles = StyleSheet.create({
   page: {
@@ -31,25 +37,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  logoBox: {
-    backgroundColor: "#ffffff",
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    width: 184,
-  },
-  logoText: {
-    color: "#082f6f",
-    fontSize: 26,
-    fontWeight: 700,
-    letterSpacing: 1,
-  },
-  logoSubText: {
-    color: "#0891b2",
-    fontSize: 7,
-    fontWeight: 700,
-    letterSpacing: 1.6,
-    marginTop: 2,
+  logo: {
+    width: 164,
+    height: 42,
+    objectFit: "contain",
   },
   address: {
     marginTop: 12,
@@ -226,11 +217,7 @@ export function QuotePdfDocument({
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
-            <View style={styles.logoBox}>
-              <Text style={styles.logoText}>BBS</Text>
-              <Text style={styles.logoSubText}>BIOMEDICAL</Text>
-              <Text style={styles.logoSubText}>BUSINESS & SERVICES</Text>
-            </View>
+            <Image src={brandLogo} style={styles.logo} />
             <Text style={styles.address}>{address}</Text>
             {contact ? <Text style={styles.headerContact}>{contact}</Text> : null}
           </View>
