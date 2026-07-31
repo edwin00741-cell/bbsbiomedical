@@ -34,6 +34,18 @@ export const userSchema = z.object({
   role: z.enum(["super_admin", "admin"]),
 });
 
+export const userUpdateSchema = z.object({
+  user_id: z.string().uuid("Usuario inválido."),
+  full_name: z.string().trim().min(2, "Nombre requerido."),
+  role: z.enum(["super_admin", "admin"]),
+  is_active: z.coerce.boolean().default(false),
+});
+
+export const userPasswordSchema = z.object({
+  user_id: z.string().uuid("Usuario inválido."),
+  password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres."),
+});
+
 export const itemSchema = z.object({
   sku: emptyToNull,
   name: z.string().trim().min(2, "Nombre requerido."),

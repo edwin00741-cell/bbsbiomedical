@@ -2,6 +2,7 @@
 import Link from "next/link";
 import {
   BarChart3,
+  ChevronDown,
   CreditCard,
   FileMinus,
   FilePlus2,
@@ -16,16 +17,38 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { signOutAction } from "./actions";
 import type { BackOfficeUser } from "../../lib/bbs-control/types";
 
-const navLinks = [
+type NavLink = {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  children?: NavLink[];
+};
+
+const navLinks: NavLink[] = [
   { label: "Panel", href: "/bbs-control", icon: Gauge },
   { label: "Clientes", href: "/bbs-control/clientes", icon: Users },
-  { label: "Facturas", href: "/bbs-control/facturas", icon: FileText },
-  { label: "Nueva factura", href: "/bbs-control/facturas/nueva", icon: FilePlus2 },
-  { label: "Cotizaciones", href: "/bbs-control/cotizaciones", icon: Receipt },
-  { label: "Nueva cotización", href: "/bbs-control/cotizaciones/nueva", icon: FilePlus2 },
+  {
+    label: "Facturas",
+    href: "/bbs-control/facturas",
+    icon: FileText,
+    children: [
+      { label: "Todas las facturas", href: "/bbs-control/facturas", icon: FileText },
+      { label: "Nueva factura", href: "/bbs-control/facturas/nueva", icon: FilePlus2 },
+    ],
+  },
+  {
+    label: "Cotizaciones",
+    href: "/bbs-control/cotizaciones",
+    icon: Receipt,
+    children: [
+      { label: "Todas las cotizaciones", href: "/bbs-control/cotizaciones", icon: Receipt },
+      { label: "Nueva cotización", href: "/bbs-control/cotizaciones/nueva", icon: FilePlus2 },
+    ],
+  },
   { label: "Notas de crédito", href: "/bbs-control/notas-credito", icon: FileMinus },
   { label: "Pagos", href: "/bbs-control/pagos", icon: CreditCard },
   { label: "Reembolsos", href: "/bbs-control/reembolsos", icon: RefreshCcw },
@@ -58,16 +81,38 @@ export function BackOfficeShell({
           />
         </Link>
         <nav className="mt-10 grid max-h-[calc(100vh-260px)] gap-1 overflow-y-auto pr-1">
-          {navLinks.map((link) => (
-            <Link
-              className="flex items-center gap-3 rounded-[8px] px-4 py-2.5 text-sm font-black text-slate-300 transition hover:bg-cyan-300/10 hover:text-white"
-              href={link.href}
-              key={link.href}
-            >
-              <link.icon className="text-cyan-300" size={17} />
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) =>
+            link.children ? (
+              <details className="group rounded-[8px]" key={link.href} open>
+                <summary className="flex cursor-pointer list-none items-center gap-3 rounded-[8px] px-4 py-2.5 text-sm font-black text-slate-300 transition hover:bg-cyan-300/10 hover:text-white">
+                  <link.icon className="text-cyan-300" size={17} />
+                  <span className="flex-1">{link.label}</span>
+                  <ChevronDown className="transition group-open:rotate-180" size={15} />
+                </summary>
+                <div className="ml-6 mt-1 grid gap-1 border-l border-cyan-300/20 pl-3">
+                  {link.children.map((child) => (
+                    <Link
+                      className="flex items-center gap-2 rounded-[8px] px-3 py-2 text-xs font-black text-slate-400 transition hover:bg-cyan-300/10 hover:text-white"
+                      href={child.href}
+                      key={child.href}
+                    >
+                      <child.icon className="text-cyan-300" size={14} />
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+            ) : (
+              <Link
+                className="flex items-center gap-3 rounded-[8px] px-4 py-2.5 text-sm font-black text-slate-300 transition hover:bg-cyan-300/10 hover:text-white"
+                href={link.href}
+                key={link.href}
+              >
+                <link.icon className="text-cyan-300" size={17} />
+                {link.label}
+              </Link>
+            ),
+          )}
         </nav>
         <div className="absolute bottom-6 left-5 right-5 rounded-[8px] border border-cyan-300/20 bg-white/5 p-4">
           <p className="text-sm font-black">{user.full_name}</p>
@@ -96,15 +141,35 @@ export function BackOfficeShell({
             </form>
           </div>
           <nav className="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-1">
-            {navLinks.map((link) => (
-              <Link
-                className="min-w-fit rounded-full border border-cyan-100 bg-white px-4 py-2 text-xs font-black text-slate-700"
-                href={link.href}
-                key={link.href}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              link.children ? (
+                <details className="group min-w-fit" key={link.href}>
+                  <summary className="flex h-9 cursor-pointer list-none items-center gap-2 rounded-full border border-cyan-100 bg-white px-4 text-xs font-black text-slate-700">
+                    {link.label}
+                    <ChevronDown className="transition group-open:rotate-180" size={13} />
+                  </summary>
+                  <div className="absolute z-30 mt-2 grid min-w-52 gap-1 rounded-[8px] border border-cyan-100 bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,0.12)]">
+                    {link.children.map((child) => (
+                      <Link
+                        className="rounded-[8px] px-3 py-2 text-xs font-black text-slate-700 hover:bg-cyan-50 hover:text-cyan-700"
+                        href={child.href}
+                        key={child.href}
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ) : (
+                <Link
+                  className="min-w-fit rounded-full border border-cyan-100 bg-white px-4 py-2 text-xs font-black text-slate-700"
+                  href={link.href}
+                  key={link.href}
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
           </nav>
         </header>
         <main className="w-full min-w-0 px-5 py-8 lg:px-8 lg:py-10">{children}</main>

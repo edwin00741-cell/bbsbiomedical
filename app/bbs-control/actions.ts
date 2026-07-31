@@ -19,6 +19,8 @@ import {
   quoteSchema,
   quoteStatusSchema,
   userSchema,
+  userPasswordSchema,
+  userUpdateSchema,
 } from "../../lib/bbs-control/validation";
 import { usernameToInternalEmail } from "../../lib/bbs-control/env";
 
@@ -162,10 +164,33 @@ export async function createUserAction(formData: FormData) {
     redirectWithError("/bbs-control/usuarios", "Solo super admin puede crear otro super admin.");
   }
 
-  const admin = createSupabaseAdminClient();
+  let admin: ReturnType<typeof createSupabaseAdminClient>;
+  try {
+    admin = createSupabaseAdminClient();
+  } catch {
+    redirectWithError("/bbs-control/usuarios", "Falta configurar SUPABASE_SERVICE_ROLE_KEY para crear usuarios.");
+  }
+
+  const { data: existingProfile } = await admin
+    .from("profiles")
+    .select("id")
+    .eq("username", parsed.data.username)
+    .maybeSingle();
+
+  if (existingProfile) {
+    redirectWithError("/bbs-control/usuarios", "Ese usuario ya existe.");
+  }
+
   const { data: authUser, error: authError } = await admin.auth.admin.createUser({
     email: usernameToInternalEmail(parsed.data.username),
     password: parsed.data.password,
+    app_metadata: {
+      bbs_role: role,
+    },
+    user_metadata: {
+      full_name: parsed.data.full_name,
+      username: parsed.data.username,
+    },
     email_confirm: true,
   });
 
@@ -188,6 +213,94 @@ export async function createUserAction(formData: FormData) {
 
   revalidatePath("/bbs-control/usuarios");
   redirect("/bbs-control/usuarios?success=Usuario creado.");
+}
+
+export async function updateUserAction(formData: FormData) {
+  const actor = await requireBackOfficeUser();
+  const raw = Object.fromEntries(formData);
+  const parsed = userUpdateSchema.safeParse({
+    ...raw,
+    is_active: formData.get("is_active") === "on",
+  });
+
+  if (!parsed.success) {
+    redirectWithError("/bbs-control/usuarios", parsed.error.issues[0]?.message || "Datos inválidos.");
+  }
+
+  if (actor.role !== "super_admin") {
+    redirectWithError("/bbs-control/usuarios", "Solo super admin puede editar usuarios.");
+  }
+
+  if (parsed.data.user_id === actor.id && (parsed.data.role !== "super_admin" || !parsed.data.is_active)) {
+    redirectWithError("/bbs-control/usuarios", "No puedes quitarte tu propio acceso super admin.");
+  }
+
+  let admin: ReturnType<typeof createSupabaseAdminClient>;
+  try {
+    admin = createSupabaseAdminClient();
+  } catch {
+    redirectWithError("/bbs-control/usuarios", "Falta configurar SUPABASE_SERVICE_ROLE_KEY para editar usuarios.");
+  }
+
+  const { error: profileError } = await admin
+    .from("profiles")
+    .update({
+      full_name: parsed.data.full_name,
+      role: parsed.data.role,
+      is_active: parsed.data.is_active,
+    })
+    .eq("id", parsed.data.user_id);
+
+  if (profileError) {
+    redirectWithError("/bbs-control/usuarios", profileError.message);
+  }
+
+  const { error: authError } = await admin.auth.admin.updateUserById(parsed.data.user_id, {
+    app_metadata: {
+      bbs_role: parsed.data.role,
+    },
+    user_metadata: {
+      full_name: parsed.data.full_name,
+    },
+  });
+
+  if (authError) {
+    redirectWithError("/bbs-control/usuarios", authError.message);
+  }
+
+  revalidatePath("/bbs-control/usuarios");
+  redirect("/bbs-control/usuarios?success=Usuario actualizado.");
+}
+
+export async function resetUserPasswordAction(formData: FormData) {
+  const actor = await requireBackOfficeUser();
+  const parsed = userPasswordSchema.safeParse(Object.fromEntries(formData));
+
+  if (!parsed.success) {
+    redirectWithError("/bbs-control/usuarios", parsed.error.issues[0]?.message || "Datos inválidos.");
+  }
+
+  if (actor.role !== "super_admin") {
+    redirectWithError("/bbs-control/usuarios", "Solo super admin puede resetear contraseñas.");
+  }
+
+  let admin: ReturnType<typeof createSupabaseAdminClient>;
+  try {
+    admin = createSupabaseAdminClient();
+  } catch {
+    redirectWithError("/bbs-control/usuarios", "Falta configurar SUPABASE_SERVICE_ROLE_KEY para resetear contraseñas.");
+  }
+
+  const { error } = await admin.auth.admin.updateUserById(parsed.data.user_id, {
+    password: parsed.data.password,
+  });
+
+  if (error) {
+    redirectWithError("/bbs-control/usuarios", error.message);
+  }
+
+  revalidatePath("/bbs-control/usuarios");
+  redirect("/bbs-control/usuarios?success=Contraseña actualizada.");
 }
 export async function createItemAction(formData: FormData) {
   const actor = await requireBackOfficeUser();
