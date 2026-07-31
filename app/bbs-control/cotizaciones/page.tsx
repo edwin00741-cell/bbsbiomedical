@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChevronDown, Mail } from "lucide-react";
 import {
   BackOfficeCard,
   BackOfficeShell,
@@ -54,18 +55,9 @@ export default async function QuotesPage({
   if (keyword) {
     query = query.or(`client_name.ilike.%${keyword}%,quote_number.ilike.%${keyword}%,seller_name.ilike.%${keyword}%`);
   }
-
-  if (status) {
-    query = query.eq("status", status);
-  }
-
-  if (start) {
-    query = query.gte("issue_date", start);
-  }
-
-  if (end) {
-    query = query.lte("issue_date", end);
-  }
+  if (status) query = query.eq("status", status);
+  if (start) query = query.gte("issue_date", start);
+  if (end) query = query.lte("issue_date", end);
 
   const { data: quotes } = await query;
 
@@ -73,24 +65,16 @@ export default async function QuotesPage({
     <BackOfficeShell user={user}>
       <PageHeader
         action={
-          <div className="flex gap-2">
-            <Link href="/bbs-control/cotizaciones/nueva">
-              <PrimaryButton type="button">+ Nueva cotización</PrimaryButton>
-            </Link>
-            <button
-              className="h-12 rounded-[8px] border border-cyan-200 bg-white px-4 text-sm font-black text-slate-950"
-              type="button"
-            >
-              ▾
-            </button>
-          </div>
+          <Link href="/bbs-control/cotizaciones/nueva">
+            <PrimaryButton type="button">+ Nueva cotización</PrimaryButton>
+          </Link>
         }
         eyebrow="Cotizaciones"
         title="Cotizaciones o estimados"
       />
       <FlashMessage searchParams={Promise.resolve(params)} />
       <BackOfficeCard className="mb-6">
-        <form className="grid gap-4 lg:grid-cols-[150px_150px_150px_1fr_170px_110px]" method="get">
+        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-[130px_150px_150px_minmax(220px,1fr)_150px_100px]" method="get">
           <label className="grid gap-2 text-xs font-black uppercase tracking-[0.12em] text-slate-500">
             Período
             <SelectInput name="period">
@@ -123,7 +107,7 @@ export default async function QuotesPage({
             Tipo
             <SelectInput defaultValue={status} name="status">
               <option value="">Todos</option>
-              <option value="draft">Cotizaciones abiertas</option>
+              <option value="draft">Abiertas</option>
               <option value="sent">Enviadas</option>
               <option value="approved">Aprobadas</option>
               <option value="rejected">Rechazadas</option>
@@ -137,9 +121,64 @@ export default async function QuotesPage({
           </div>
         </form>
       </BackOfficeCard>
-      <BackOfficeCard>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[1040px] text-left text-sm">
+      <BackOfficeCard className="overflow-visible">
+        <div className="grid gap-3 md:hidden">
+          {(quotes || []).map((quote) => (
+            <article className="rounded-[8px] border border-slate-100 bg-white p-4 shadow-sm" key={quote.id}>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <Link className="font-black text-cyan-800" href={`/bbs-control/cotizaciones/${quote.id}/editar`}>
+                    {quote.quote_number}
+                  </Link>
+                  <p className="mt-1 text-xs font-bold text-slate-500">{displayDate(quote.issue_date)}</p>
+                </div>
+                <span className={`rounded-full px-3 py-1 text-xs font-black ${statusClass(quote.status)}`}>
+                  {statusLabel[quote.status as QuoteStatus] || quote.status}
+                </span>
+              </div>
+              <div className="mt-4 grid gap-2 text-sm font-semibold text-slate-700">
+                <p>
+                  <span className="text-slate-400">Cliente: </span>
+                  {quote.client_name}
+                </p>
+                <p>
+                  <span className="text-slate-400">Vendedor: </span>
+                  {quote.seller_name || "Sin vendedor"}
+                </p>
+                <p className="text-base font-black text-slate-950">{money(Number(quote.total))}</p>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <Link
+                  className="inline-flex h-10 items-center justify-center rounded-[8px] border border-cyan-200 text-xs font-black text-cyan-800"
+                  href={`/bbs-control/cotizaciones/${quote.id}/editar`}
+                >
+                  Editar
+                </Link>
+                <a
+                  className="inline-flex h-10 items-center justify-center rounded-[8px] bg-slate-950 text-xs font-black text-white"
+                  href={`/api/bbs-control/quotes/${quote.id}/pdf?inline=1`}
+                  target="_blank"
+                >
+                  Ver PDF
+                </a>
+                <form action={duplicateQuoteAction}>
+                  <input name="quote_id" type="hidden" value={quote.id} />
+                  <button className="h-10 w-full rounded-[8px] border border-slate-200 text-xs font-black text-slate-700">
+                    Duplicar
+                  </button>
+                </form>
+                <form action={sendQuoteAction}>
+                  <input name="quote_id" type="hidden" value={quote.id} />
+                  <button className="h-10 w-full rounded-[8px] border border-slate-200 text-xs font-black text-slate-700">
+                    Enviar
+                  </button>
+                </form>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="hidden overflow-x-auto pb-16 md:block lg:overflow-visible lg:pb-0">
+          <table className="w-full min-w-[920px] text-left text-sm">
             <thead className="border-b border-slate-200 text-xs uppercase tracking-[0.14em] text-slate-500">
               <tr>
                 <th className="py-3">Fecha</th>
@@ -163,32 +202,32 @@ export default async function QuotesPage({
                     </Link>
                   </td>
                   <td className="font-semibold text-slate-700">Cotización</td>
-                  <td className="font-semibold text-slate-800">{quote.client_name}</td>
-                  <td className="font-semibold text-slate-700">{quote.seller_name || "Sin vendedor"}</td>
+                  <td className="max-w-[210px] truncate font-semibold text-slate-800">{quote.client_name}</td>
+                  <td className="max-w-[210px] truncate font-semibold text-slate-700">{quote.seller_name || "Sin vendedor"}</td>
                   <td className="text-right font-black text-slate-950">{money(Number(quote.total))}</td>
                   <td className="text-center">
                     <span className={`rounded-full px-3 py-1 text-xs font-black ${statusClass(quote.status)}`}>
                       {statusLabel[quote.status as QuoteStatus] || quote.status}
                     </span>
                   </td>
-                  <td className="text-center text-lg">
+                  <td className="text-center">
                     <form action={sendQuoteAction}>
                       <input name="quote_id" type="hidden" value={quote.id} />
                       <button
-                        className="text-slate-500 transition hover:text-cyan-700"
+                        className="inline-flex size-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-cyan-50 hover:text-cyan-700"
                         title="Enviar por correo"
                         type="submit"
                       >
-                        ✉
+                        <Mail size={16} />
                       </button>
                     </form>
                   </td>
                   <td className="text-center">
                     <details className="relative inline-block">
-                      <summary className="cursor-pointer list-none rounded-[8px] px-3 py-2 font-black text-slate-700 hover:bg-slate-100">
-                        ▼
+                      <summary className="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-full text-slate-700 hover:bg-slate-100">
+                        <ChevronDown size={16} />
                       </summary>
-                      <div className="absolute right-0 z-10 mt-2 w-56 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-xl">
+                      <div className="absolute right-0 z-20 mt-2 w-56 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-xl">
                         <Link className="block rounded-[6px] px-3 py-2 font-bold hover:bg-cyan-50" href="/bbs-control/facturas/nueva">
                           Factura
                         </Link>
@@ -230,17 +269,22 @@ export default async function QuotesPage({
             </tbody>
           </table>
         </div>
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4 text-sm font-bold text-slate-600">
+        <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-4 text-sm font-bold text-slate-600 md:flex-row md:items-center md:justify-between">
           <span>Página 1 de 1</span>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button className="rounded-[8px] border border-slate-200 px-3 py-2 text-slate-400" disabled>
               Anterior
             </button>
             <button className="rounded-[8px] border border-slate-200 px-3 py-2 text-slate-400" disabled>
-              Siguiente &gt;
+              Siguiente
             </button>
-            <span className="ml-2">Saltar</span>
-            <TextInput className="h-10 w-16 px-2 text-center" defaultValue="1" />
+            <label className="ml-0 flex items-center gap-2 md:ml-2">
+              <span>Saltar</span>
+              <input
+                className="h-10 w-20 rounded-[8px] border border-slate-200 bg-white px-2 text-center text-sm font-black text-slate-950 outline-none"
+                defaultValue="1"
+              />
+            </label>
           </div>
         </div>
       </BackOfficeCard>

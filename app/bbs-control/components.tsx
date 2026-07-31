@@ -79,7 +79,7 @@ export function BackOfficeShell({
           </form>
         </div>
       </aside>
-      <div className="lg:pl-72">
+      <div className="min-w-0 lg:pl-72">
         <header className="sticky top-0 z-20 border-b border-cyan-100 bg-white/90 px-5 py-4 shadow-sm backdrop-blur lg:hidden">
           <div className="flex items-center justify-between">
             <Image
@@ -95,7 +95,7 @@ export function BackOfficeShell({
               </button>
             </form>
           </div>
-          <nav className="mt-4 flex gap-2 overflow-x-auto pb-1">
+          <nav className="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-1">
             {navLinks.map((link) => (
               <Link
                 className="min-w-fit rounded-full border border-cyan-100 bg-white px-4 py-2 text-xs font-black text-slate-700"
@@ -107,7 +107,7 @@ export function BackOfficeShell({
             ))}
           </nav>
         </header>
-        <main className="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-10">{children}</main>
+        <main className="w-full min-w-0 px-5 py-8 lg:px-8 lg:py-10">{children}</main>
       </div>
     </div>
   );
@@ -159,7 +159,7 @@ export function PageHeader({
         <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-700">
           {eyebrow}
         </p>
-        <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">{title}</h1>
+        <h1 className="mt-2 text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl">{title}</h1>
         {description ? (
           <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{description}</p>
         ) : null}
@@ -186,10 +186,12 @@ export function BackOfficeCard({
 }
 
 export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  const widthClass = props.className?.includes("w-") ? "" : "w-full";
+
   return (
     <input
       {...props}
-      className={`h-12 w-full rounded-[8px] border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 ${
+      className={`h-12 ${widthClass} rounded-[8px] border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 ${
         props.className || ""
       }`}
     />
@@ -208,10 +210,12 @@ export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
 }
 
 export function SelectInput(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  const widthClass = props.className?.includes("w-") ? "" : "w-full";
+
   return (
     <select
       {...props}
-      className={`h-12 w-full rounded-[8px] border border-slate-200 bg-white px-4 text-sm font-black text-slate-950 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 ${
+      className={`h-12 ${widthClass} rounded-[8px] border border-slate-200 bg-white px-4 text-sm font-black text-slate-950 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 ${
         props.className || ""
       }`}
     />

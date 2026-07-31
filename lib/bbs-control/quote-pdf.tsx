@@ -13,7 +13,6 @@ import { displayDate, money } from "./format";
 import type { BusinessSettings, QuoteWithItems } from "./types";
 import { defaultBusinessSettings } from "./quotes";
 
-const brandLogo = path.join(process.cwd(), "public", "brand", "bbs-primary-horizontal-white.png");
 const watermarkLogo = path.join(process.cwd(), "public", "brand", "bbs-symbol-color.png");
 
 const styles = StyleSheet.create({
@@ -32,10 +31,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  logo: {
-    width: 164,
-    height: 42,
-    objectFit: "contain",
+  logoBox: {
+    backgroundColor: "#ffffff",
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    width: 184,
+  },
+  logoText: {
+    color: "#082f6f",
+    fontSize: 26,
+    fontWeight: 700,
+    letterSpacing: 1,
+  },
+  logoSubText: {
+    color: "#0891b2",
+    fontSize: 7,
+    fontWeight: 700,
+    letterSpacing: 1.6,
+    marginTop: 2,
   },
   address: {
     marginTop: 12,
@@ -63,10 +77,10 @@ const styles = StyleSheet.create({
   },
   metaLabel: {
     color: "#a5f3fc",
-    width: 58,
+    width: 72,
   },
   metaValue: {
-    width: 120,
+    width: 130,
     color: "#ffffff",
   },
   body: {
@@ -89,8 +103,18 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 10,
     fontWeight: 700,
-    marginBottom: 46,
+    marginBottom: 8,
     textTransform: "uppercase",
+  },
+  projectDescription: {
+    borderColor: "#bae6fd",
+    borderRadius: 6,
+    borderWidth: 1,
+    color: "#334155",
+    lineHeight: 1.45,
+    marginBottom: 18,
+    minHeight: 54,
+    padding: 9,
   },
   table: {
     borderColor: "#0f172a",
@@ -178,12 +202,9 @@ const styles = StyleSheet.create({
     fontSize: 8,
   },
   footerNote: {
-    bottom: 24,
     color: "#64748b",
     fontSize: 8,
-    left: 42,
-    position: "absolute",
-    right: 42,
+    marginTop: 16,
     textAlign: "center",
   },
 });
@@ -205,7 +226,11 @@ export function QuotePdfDocument({
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
-            <Image src={brandLogo} style={styles.logo} />
+            <View style={styles.logoBox}>
+              <Text style={styles.logoText}>BBS</Text>
+              <Text style={styles.logoSubText}>BIOMEDICAL</Text>
+              <Text style={styles.logoSubText}>BUSINESS & SERVICES</Text>
+            </View>
             <Text style={styles.address}>{address}</Text>
             {contact ? <Text style={styles.headerContact}>{contact}</Text> : null}
           </View>
@@ -228,12 +253,13 @@ export function QuotePdfDocument({
         <View style={styles.body}>
           <Image src={watermarkLogo} style={styles.watermark} />
           <View style={styles.divider} />
-          <Text style={styles.sectionLabel}>
-            DESCRIPCIÓN DEL PROYECTO: {quote.project_description || "Servicio técnico biomédico."}
+          <Text style={styles.sectionLabel}>DESCRIPCIÓN DEL PROYECTO:</Text>
+          <Text style={styles.projectDescription}>
+            {quote.project_description || "Servicio técnico biomédico."}
           </Text>
           <View style={styles.table}>
             <View style={styles.tableHeader}>
-            <Text style={styles.productCell}>PRODUCTO / SERVICIO</Text>
+              <Text style={styles.productCell}>PRODUCTO / SERVICIO</Text>
               <Text style={styles.qtyCell}>CANTIDAD</Text>
               <Text style={styles.priceCell}>PRECIO</Text>
               <Text style={styles.totalCell}>TOTAL</Text>

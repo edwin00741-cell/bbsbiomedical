@@ -124,6 +124,30 @@ export async function createClientAction(formData: FormData) {
   redirect("/bbs-control/clientes?success=Cliente creado.");
 }
 
+export async function updateClientAction(formData: FormData) {
+  await requireBackOfficeUser();
+  const id = formValue(formData, "client_id");
+  const parsed = clientSchema.safeParse(Object.fromEntries(formData));
+
+  if (!id) {
+    redirectWithError("/bbs-control/clientes", "Cliente no encontrado.");
+  }
+
+  if (!parsed.success) {
+    redirectWithError("/bbs-control/clientes", parsed.error.issues[0]?.message || "Datos inválidos.");
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.from("clients").update(parsed.data).eq("id", id);
+
+  if (error) {
+    redirectWithError("/bbs-control/clientes", error.message);
+  }
+
+  revalidatePath("/bbs-control/clientes");
+  redirect("/bbs-control/clientes?success=Cliente actualizado.");
+}
+
 export async function createUserAction(formData: FormData) {
   const actor = await requireBackOfficeUser();
   const parsed = userSchema.safeParse(Object.fromEntries(formData));
