@@ -1,118 +1,25 @@
-﻿import {
-  BackOfficeCard,
-  BackOfficeShell,
-  FlashMessage,
-  PageHeader,
-  PrimaryButton,
-  SelectInput,
-  TextArea,
-  TextInput,
-} from "../components";
-import { createItemAction } from "../actions";
-import { money } from "../../../lib/bbs-control/format";
-import {
-  createSupabaseServerClient,
-  requireBackOfficeUser,
-} from "../../../lib/bbs-control/supabase-server";
-
-export const dynamic = "force-dynamic";
-
-export default async function ItemsPage({
-  searchParams,
-}: {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const user = await requireBackOfficeUser();
-  const supabase = await createSupabaseServerClient();
-  const { data: items } = await supabase.from("items")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  return (
-    <BackOfficeShell user={user}>
-      <PageHeader
-        description="Catálogo de servicios, repuestos y artículos reutilizables en cotizaciones y facturas."
-        eyebrow="Artículos"
-        title="Catálogo comercial"
-      />
-      <FlashMessage searchParams={searchParams} />
-      <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
-        <BackOfficeCard>
-          <h2 className="text-xl font-black text-slate-950">Nuevo artículo</h2>
-          <form action={createItemAction} className="mt-5 grid gap-4">
-            <label className="grid gap-2 text-sm font-black text-slate-900">
-              Código / SKU
-              <TextInput name="sku" placeholder="BBS-SRV-001" />
-            </label>
-            <label className="grid gap-2 text-sm font-black text-slate-900">
-              Nombre
-              <TextInput name="name" required />
-            </label>
-            <label className="grid gap-2 text-sm font-black text-slate-900">
-              Descripción
-              <TextArea name="description" />
-            </label>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Precio
-                <TextInput defaultValue="0" min="0" name="unit_price" step="0.01" type="number" />
-              </label>
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Unidad
-                <SelectInput defaultValue="servicio" name="unit">
-                  <option value="servicio">servicio</option>
-                  <option value="unidad">unidad</option>
-                  <option value="hora">hora</option>
-                  <option value="visita">visita</option>
-                  <option value="repuesto">repuesto</option>
-                </SelectInput>
-              </label>
-            </div>
-            <input name="is_active" type="hidden" value="true" />
-            <PrimaryButton type="submit">Crear artículo</PrimaryButton>
-          </form>
-        </BackOfficeCard>
-        <BackOfficeCard>
-          <h2 className="text-xl font-black text-slate-950">Artículos registrados</h2>
-          <div className="mt-5 overflow-x-auto">
-            <table className="w-full min-w-[720px] text-left text-sm">
-              <thead className="border-b border-slate-200 text-xs uppercase tracking-[0.14em] text-slate-500">
-                <tr>
-                  <th className="py-3">SKU</th>
-                  <th>Artículo</th>
-                  <th>Unidad</th>
-                  <th className="text-right">Precio</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {(items || []).map((item) => (
-                  <tr key={item.id}>
-                    <td className="py-4 font-black text-slate-950">{item.sku || "-"}</td>
-                    <td>
-                      <p className="font-black text-slate-950">{item.name}</p>
-                      <p className="mt-1 line-clamp-1 text-xs font-semibold text-slate-500">
-                        {item.description || "Sin descripción"}
-                      </p>
-                    </td>
-                    <td className="font-semibold text-slate-700">{item.unit}</td>
-                    <td className="text-right font-black text-slate-950">{money(Number(item.unit_price))}</td>
-                    <td>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-700">
-                        {item.is_active ? "Activo" : "Inactivo"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </BackOfficeCard>
-      </div>
-    </BackOfficeShell>
-  );
+import Link from "next/link";
+import {BackOfficeShell,PageHeader,FlashMessage,DataError} from "../components";
+import {RecordDialog} from "../record-dialog";
+import {RowActions,ActionSubmit} from "../row-actions";
+import {Pagination} from "../pagination";
+import {ItemForm} from "./item-form";
+import {setItemActive} from "./actions";
+import {createSupabaseServerClient,requireBackOfficeUser} from "../../../lib/bbs-control/supabase-server";
+import {param,searchOr,pageHref, type SearchParams} from "../../../lib/bbs-control/list-filters";
+import {money} from "../../../lib/bbs-control/format";
+import type {CatalogItem} from "../../../lib/bbs-control/catalog";
+export const dynamic="force-dynamic";
+export default async function ItemsPage({searchParams}:{searchParams?:Promise<SearchParams>}){
+ const user=await requireBackOfficeUser();const params=await searchParams||{};const db=await createSupabaseServerClient();const keyword=param(params,"keyword");const inactive=param(params,"inactive")==="1";const page=Math.max(1,Number.parseInt(param(params,"page"))||1);
+ let query=db.from("items").select("*",{count:"exact"}).order("name").order("id");if(!inactive)query=query.eq("is_active",true);if(keyword)query=query.or(searchOr(["sku","name","description","supplier"],keyword));
+ const [result,taxes]=await Promise.all([query.range((page-1)*20,page*20-1),db.from("tax_rates").select("id,name,rate").eq("is_active",true).order("rate")]);
+ const id=param(params,"edit")||param(params,"history");const selected=id?(await db.from("items").select("*").eq("id",id).maybeSingle()).data:null;
+ const movements=param(params,"history")&&selected?(await db.from("inventory_movements").select("id,quantity,reason,created_at").eq("item_id",selected.id).order("created_at",{ascending:false}).limit(100)).data:null;
+ return <BackOfficeShell user={user}><PageHeader title="Artículos" eyebrow="Catálogo" action={<Link className="bbs-button bbs-button-primary" href="/bbs-control/articulos?new=1">+ Nuevo artículo</Link>}/><FlashMessage searchParams={Promise.resolve(params)}/>
+ <form className="bbs-filters"><label>Buscar:<input className="bbs-input" name="keyword" defaultValue={keyword} placeholder="Código o descripción"/></label><label className="bbs-checkbox"><input type="checkbox" name="inactive" value="1" defaultChecked={inactive}/>Incluir inactivos</label><button className="bbs-button">Buscar</button></form>
+ {result.error||taxes.error?<DataError>No se pudo cargar el catálogo.</DataError>:<><div className="bbs-table-scroll"><table className="bbs-table" style={{minWidth:850}}><thead><tr>{["Código","Descripción","Impuesto","Valor","Cantidad","Estado","Acción"].map(t=><th key={t}>{t}</th>)}</tr></thead><tbody>{((result.data||[]) as CatalogItem[]).map(item=><tr key={item.id}><td>{item.sku||"—"}</td><td><Link href={`/bbs-control/articulos?edit=${item.id}`}>{item.name}</Link><p>{item.description}</p></td><td>{taxes.data?.find(t=>t.id===item.tax_rate_id)?.name||"Ninguno"}</td><td className="bbs-money">{money(Number(item.unit_price))}</td><td>{item.manage_stock?<span className={Number(item.stock_quantity)<=Number(item.warning_quantity)?"bbs-badge bbs-badge-overdue":""}>{item.stock_quantity}</span>:"—"}</td><td>{item.is_active?"Activo":"Inactivo"}</td><td><RowActions label={`Acciones de ${item.name}`}><Link href={`/bbs-control/articulos?edit=${item.id}`}>Editar</Link><Link href={`/bbs-control/articulos?history=${item.id}`}>Movimientos</Link><form action={setItemActive}><input type="hidden" name="id" value={item.id}/><input type="hidden" name="version" value={item.updated_at}/><input type="hidden" name="active" value={item.is_active?"0":"1"}/><ActionSubmit>{item.is_active?"Desactivar":"Reactivar"}</ActionSubmit></form></RowActions></td></tr>)}{!result.data?.length?<tr><td colSpan={7} className="bbs-empty">No se encontraron artículos.</td></tr>:null}</tbody></table></div><Pagination path="/bbs-control/articulos" params={params} page={page} count={result.count||0}/>{page>1&&page>Math.max(1,Math.ceil((result.count||0)/20))?<Link className="bbs-button" href={pageHref("/bbs-control/articulos",params,1)}>Volver a la primera página</Link>:null}</>}
+ {param(params,"new")==="1"||param(params,"edit")?<RecordDialog title={selected?"Editar artículo":"Nuevo artículo"} closeHref="/bbs-control/articulos"><ItemForm item={selected||undefined} taxes={taxes.data||[]}/></RecordDialog>:null}
+ {param(params,"history")&&selected?<RecordDialog title={`Movimientos de ${selected.name}`} closeHref="/bbs-control/articulos"><p>Existencias actuales: {selected.stock_quantity}. Se muestran los últimos 100 movimientos.</p><div className="bbs-table-scroll"><table className="bbs-table"><thead><tr><th>Fecha</th><th>Cantidad</th><th>Motivo</th></tr></thead><tbody>{(movements||[]).map(m=><tr key={m.id}><td>{m.created_at.slice(0,16).replace("T"," ")}</td><td>{m.quantity}</td><td>{m.reason}</td></tr>)}</tbody></table></div></RecordDialog>:null}
+ </BackOfficeShell>;
 }
-
-
-
-

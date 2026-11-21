@@ -1,0 +1,7 @@
+.bbs-recurrence-form { max-width:850px; }
+.bbs-recurrence-form fieldset { min-inline-size:0; display:grid; gap:16px; }
+.bbs-recurrence-form label { display:grid; grid-template-columns:185px minmax(0,1fr); align-items:center; gap:12px; }
+.bbs-recurrence-run { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin:18px 0; }
+.bbs-recurrence-run p { margin:0; }
+.bbs-recurrence-actions { display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin:20px 0; }
+@media(max-width:540px) { .bbs-recurrence-form label { grid-template-columns:minmax(0,1fr); gap:5px; } }

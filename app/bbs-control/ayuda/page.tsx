@@ -1,23 +1,19 @@
-﻿import { BriskModulePage } from "../module-page";
-
-export const dynamic = "force-dynamic";
-
-export default function HelpPage() {
-  return (
-    <BriskModulePage
-      config={{
-        eyebrow: "Ayuda",
-        title: "Centro de ayuda interno",
-        description: "Guías operativas para el equipo que use el panel privado.",
-        features: [
-          "Cómo crear clientes.",
-          "Cómo crear y enviar cotizaciones.",
-          "Cómo convertir cotizaciones en facturas.",
-          "Cómo registrar pagos y reembolsos.",
-        ],
-      }}
-    />
-  );
-}
-
-
+import Link from"next/link";
+import{BackOfficeShell,PageHeader}from"../components";
+import{requireBackOfficeUser}from"../../../lib/bbs-control/supabase-server";
+import{getBusinessSettings}from"../../../lib/bbs-control/quotes";
+const guides=[
+ ["Clientes","/clientes","Cree el cliente y defina vendedor, direcciones, método, plazo y exención. Al seleccionarlo en un documento se copian esas condiciones. Puede cambiarlas en ese documento sin modificar el cliente. Desactivar conserva su historial."],
+ ["Cotizaciones y facturas","/cotizaciones","Agregue artículos del catálogo o líneas manuales. Configure impuesto, descuento fijo/porcentaje/por línea y envío. Use la vista previa sin guardar; luego guarde y descargue o abra el detalle para enviar el correo. La nota privada permanece dentro de BBS Control."],
+ ["Conversión y emisión","/facturas","Desde una cotización elija Crear factura. Puede guardar borrador o emitir con vencimiento calculado. Si ya existe una factura activa se abre esa factura. Las facturas con pagos o créditos requieren deshacer las aplicaciones antes de modificar sus importes."],
+ ["Pagos","/pagos","Registre el total recibido, fecha, método y referencia. Reparta el importe entre las facturas del mismo cliente; el resto queda disponible. Aplicar ese remanente después no registra un segundo ingreso. Deshacer libera la aplicación y conserva su historial."],
+ ["Notas de crédito","/notas-credito","Cree el crédito desde una factura o como documento independiente. Aplique el importe disponible a facturas del mismo cliente. El crédito reduce deuda y ventas; por sí solo no representa salida de dinero. Un crédito sin usos puede editarse o anularse."],
+ ["Reembolsos","/reembolsos","Seleccione cliente y pago de origen. Puede devolver efectivo no aplicado; para devolver una factura pagada seleccione también el crédito emitido desde esa factura. El sistema sustituye el efectivo por crédito y registra la devolución sin reabrir la deuda. Anular el reembolso revierte esos efectos."],
+ ["Recurrencia y entregas","/recurrentes","Cree una plantilla desde una factura guardada, con fecha inicial, intervalo y fecha final opcional. Puede pausar, reactivar y revisar las facturas generadas. El calendario se revisa cada 15 minutos. La nota de entrega y la etiqueta se descargan desde la factura emitida."],
+ ["Inventario","/articulos","Active Gestionar inventario en los artículos físicos. La emisión descuenta existencias y la anulación las repone. Editar una factura ajusta la diferencia. Las cotizaciones no descuentan. Cambiar la cantidad actual registra un ajuste en el historial; el umbral destaca existencias bajas."],
+ ["Informes y exportaciones","/informes","Seleccione informe, período y filtros. Verifique el resultado y descargue el mismo conjunto en CSV o PDF. Los cobros cuentan pagos recibidos menos devoluciones; las facturas pendientes representan deuda. La antigüedad usa saldo reconstruido a la fecha de corte."],
+ ["Importaciones","/herramientas","Descargue la plantilla, cargue CSV, asigne columnas y revise errores. Las filas con el mismo número forman un documento de varias líneas. Confirme el lote completo; las facturas importadas quedan como borrador. Deshacer rechaza registros modificados o utilizados posteriormente; artículos y créditos mantienen su historial mediante desactivación/anulación."],
+ ["Configuración","/configuracion","Configure empresa, moneda, numeración, papel, plantilla, colores, columnas y notas predeterminadas. Los documentos ya guardados conservan sus datos. Administre impuestos aquí, y métodos/grupos/vendedores desde Clientes."],
+]as const;
+export const dynamic="force-dynamic";
+export default async function HelpPage(){const user=await requireBackOfficeUser();const settings=await getBusinessSettings();return<BackOfficeShell user={user}><PageHeader title="Ayuda" eyebrow="Guía de BBS Control"/>{guides.map(([title,path,text])=><section className="bbs-card mb-5" key={path}><h2>{title}</h2><p className="my-4">{text}</p><Link className="bbs-button" href={`/bbs-control${path}`}>Abrir {title.toLocaleLowerCase("es")}</Link></section>)}{settings.email?<p>Contacto de la empresa: <a href={`mailto:${settings.email}`}>{settings.email}</a></p>:null}</BackOfficeShell>;}

@@ -1,0 +1,8 @@
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { getBackOfficeUser,createSupabaseServerClient } from "../../../../../../lib/bbs-control/supabase-server";
+import { can } from "../../../../../../lib/bbs-control/permissions";
+import { renderServicePdf } from "../../../../../../lib/bbs-control/service-pdf";
+import type { Equipment,ServiceReport } from "../../../../../../lib/bbs-control/service";
+export const runtime="nodejs";
+export async function GET(_request:Request,{params}:{params:Promise<{id:string}>}){const user=await getBackOfficeUser();if(!user||user.must_change_password||!can(user.role,"service.manage"))return NextResponse.json({error:"No autorizado."},{status:403});const{id}=await params;if(!z.uuid().safeParse(id).success)return NextResponse.json({error:"Reporte inválido."},{status:400});const db=await createSupabaseServerClient();const r=await db.from("service_reports").select("*").eq("id",id).maybeSingle();if(r.error)return NextResponse.json({error:"No se pudo cargar el reporte."},{status:500});if(!r.data)return NextResponse.json({error:"No encontrado."},{status:404});const e=await db.from("equipment").select("*,clients(name)").eq("id",r.data.equipment_id).single();if(e.error)return NextResponse.json({error:"No se pudo cargar el equipo."},{status:500});const bytes=await renderServicePdf(r.data as ServiceReport,(r.data.equipment_snapshot || {...e.data,client_name:e.data.clients?.name}) as Equipment);return new NextResponse(new Uint8Array(bytes),{headers:{"Content-Type":"application/pdf","Content-Disposition":`attachment; filename="${r.data.number}.pdf"`,"Cache-Control":"private, no-store"}});}

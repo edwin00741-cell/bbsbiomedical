@@ -1,0 +1,16 @@
+node_modules
+.next
+.next-build
+.next-local
+.next-build-local
+.vercel
+.git
+.bbs-private
+.env
+.env*.local
+tmp
+docs
+tests
+supabase
+tsconfig.tsbuildinfo
+*.log

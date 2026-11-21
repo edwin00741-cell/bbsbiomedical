@@ -1,4 +1,4 @@
-﻿export type BbsRole = "super_admin" | "admin";
+export type BbsRole = "super_admin" | "admin" | "cotizador";
 export type QuoteStatus = "draft" | "sent" | "approved" | "rejected" | "expired";
 
 export type BackOfficeUser = {
@@ -7,6 +7,7 @@ export type BackOfficeUser = {
   full_name: string;
   role: BbsRole;
   is_active: boolean;
+  must_change_password?: boolean;
 };
 
 export type Client = {
@@ -74,6 +75,12 @@ export type BusinessSettings = {
   currency: string;
   quote_prefix: string;
   default_validity_days: number;
+  invoice_prefix?: string;
+  tax_id?: string | null;
+  website?: string | null;
+  document_preferences?: { page_size?: "LETTER" | "A4" | "LEGAL"; accent_color?: string; template?: "classic" | "minimal";
+    quote_title?: string; estimate_title?: string; invoice_title?: string; default_public_notes?: string; default_footer_notes?: string;
+    date_format?: "iso" | "day-first"; show_sku?: boolean; show_tax?: boolean; show_seller?: boolean; stripe_rows?: boolean; payment_footer?: string; default_terms_days?: number; };
 };
 
 export type Item = {
@@ -102,6 +109,7 @@ export type Invoice = {
   tax_total: number;
   total: number;
   amount_paid: number;
+  amount_credited?: number;
   created_at: string;
 };
 

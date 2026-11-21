@@ -1,5 +1,8 @@
 ﻿import type { Metadata } from "next";
 
+import "./commercial.css";
+import "./brand.css";
+
 export const metadata: Metadata = {
   title: "Back-office",
   robots: {

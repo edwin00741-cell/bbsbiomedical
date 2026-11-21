@@ -4,6 +4,8 @@ node_modules
 # next.js
 .next
 .next-build
+.next-local
+.next-build-local
 out
 
 # production
@@ -23,7 +25,13 @@ pnpm-debug.log*
 .vercel
 
 # misc
+.bbs-private/
 .DS_Store
 *.pem
+
+# local verification and tool state
+tmp/
+*.tsbuildinfo
+supabase/.temp/
 
 .vercel

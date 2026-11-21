@@ -1,28 +1,27 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { Resend } from "resend";
-import { renderQuotePdfBuffer } from "../../lib/bbs-control/quote-pdf";
+import { z } from "zod";
+import { getCommercialDocument } from "../../lib/bbs-control/documents";
+import { duplicateDocument } from "./document-output-actions";
+import {signInAction as signInWithPassword} from "./login/actions";
+import {createManagedUser,updateManagedUser,resetManagedPassword} from "./usuarios/actions";
+import {can} from "../../lib/bbs-control/permissions";
 import { getBusinessSettings, getQuoteWithItems } from "../../lib/bbs-control/quotes";
 import {
-  createSupabaseAdminClient,
   createSupabaseServerClient,
-  getBackOfficeUser,
   requireBackOfficeUser,
 } from "../../lib/bbs-control/supabase-server";
-import type { BbsRole, QuoteStatus } from "../../lib/bbs-control/types";
+import type { QuoteStatus } from "../../lib/bbs-control/types";
 import {
   businessSettingsSchema,
   clientSchema,
   itemSchema,
   quoteSchema,
   quoteStatusSchema,
-  userSchema,
-  userPasswordSchema,
-  userUpdateSchema,
 } from "../../lib/bbs-control/validation";
-import { usernameToInternalEmail } from "../../lib/bbs-control/env";
+import { addDaysForInput, dateForInput } from "../../lib/bbs-control/format";
 
 function redirectWithError(path: string, message: string): never {
   redirect(`${path}?error=${encodeURIComponent(message)}`);
@@ -33,21 +32,24 @@ function formValue(formData: FormData, key: string) {
   return typeof value === "string" ? value : "";
 }
 
-function safeBackOfficePath(path: string) {
-  return path.startsWith("/bbs-control") && !path.startsWith("/bbs-control/login")
-    ? path
-    : "/bbs-control";
-}
-
 function parseQuoteItems(formData: FormData) {
-  return Array.from({ length: 8 })
-    .map((_, index) => ({
+  const indices = new Set<number>();
+
+  for (const key of formData.keys()) {
+    const match = key.match(/^item_(?:id|description|quantity|unit_price)_(\d+)$/);
+    if (match) {
+      indices.add(Number(match[1]));
+    }
+  }
+
+  return Array.from(indices)
+    .sort((a, b) => a - b)
+    .map((index) => ({
       item_id: formValue(formData, `item_id_${index}`) || null,
       description: formValue(formData, `item_description_${index}`),
       quantity: formValue(formData, `item_quantity_${index}`),
       unit_price: formValue(formData, `item_unit_price_${index}`),
-    }))
-    .filter((item) => item.description.trim().length > 0);
+    }));
 }
 
 async function insertQuoteEvent(quoteId: string, eventType: string, note?: string) {
@@ -63,40 +65,8 @@ async function insertQuoteEvent(quoteId: string, eventType: string, note?: strin
 }
 
 export async function signInAction(formData: FormData) {
-  const username = formValue(formData, "username").trim().toLowerCase();
-  const password = formValue(formData, "password");
-  const nextPath = safeBackOfficePath(formValue(formData, "next"));
-
-  if (!username || !password) {
-    redirectWithError("/bbs-control/login", "Usuario y contraseña requeridos.");
-  }
-
-  const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.auth.signInWithPassword({
-    email: usernameToInternalEmail(username),
-    password,
-  });
-
-  if (error) {
-    const message = error.message.toLowerCase().includes("fetch")
-      ? "No se pudo conectar con Supabase. Reinicia el servidor local con acceso de red."
-      : "Credenciales inválidas.";
-    redirectWithError("/bbs-control/login", message);
-  }
-
-  const actor = await getBackOfficeUser();
-
-  if (!actor) {
-    await supabase.auth.signOut();
-    redirectWithError("/bbs-control/login", "El usuario no tiene un perfil interno activo.");
-  }
-
-  if (!actor.is_active) {
-    await supabase.auth.signOut();
-    redirectWithError("/bbs-control/login", "Usuario inactivo.");
-  }
-
-  redirect(nextPath);
+  const result=await signInWithPassword({error:""},formData);
+  if(result.error)redirectWithError("/bbs-control/login",result.error);
 }
 export async function signOutAction() {
   const supabase = await createSupabaseServerClient();
@@ -151,156 +121,21 @@ export async function updateClientAction(formData: FormData) {
 }
 
 export async function createUserAction(formData: FormData) {
-  const actor = await requireBackOfficeUser();
-  const parsed = userSchema.safeParse(Object.fromEntries(formData));
-
-  if (!parsed.success) {
-    redirectWithError("/bbs-control/usuarios", parsed.error.issues[0]?.message || "Datos inválidos.");
-  }
-
-  const role = parsed.data.role as BbsRole;
-
-  if (role === "super_admin" && actor.role !== "super_admin") {
-    redirectWithError("/bbs-control/usuarios", "Solo super admin puede crear otro super admin.");
-  }
-
-  let admin: ReturnType<typeof createSupabaseAdminClient>;
-  try {
-    admin = createSupabaseAdminClient();
-  } catch {
-    redirectWithError("/bbs-control/usuarios", "Falta configurar SUPABASE_SERVICE_ROLE_KEY para crear usuarios.");
-  }
-
-  const { data: existingProfile } = await admin
-    .from("profiles")
-    .select("id")
-    .eq("username", parsed.data.username)
-    .maybeSingle();
-
-  if (existingProfile) {
-    redirectWithError("/bbs-control/usuarios", "Ese usuario ya existe.");
-  }
-
-  const { data: authUser, error: authError } = await admin.auth.admin.createUser({
-    email: usernameToInternalEmail(parsed.data.username),
-    password: parsed.data.password,
-    app_metadata: {
-      bbs_role: role,
-    },
-    user_metadata: {
-      full_name: parsed.data.full_name,
-      username: parsed.data.username,
-    },
-    email_confirm: true,
-  });
-
-  if (authError || !authUser.user) {
-    redirectWithError("/bbs-control/usuarios", authError?.message || "No se pudo crear el usuario.");
-  }
-
-  const { error: profileError } = await admin.from("profiles").insert({
-    id: authUser.user.id,
-    username: parsed.data.username,
-    full_name: parsed.data.full_name,
-    role,
-    created_by: actor.id,
-  });
-
-  if (profileError) {
-    await admin.auth.admin.deleteUser(authUser.user.id);
-    redirectWithError("/bbs-control/usuarios", profileError.message);
-  }
-
-  revalidatePath("/bbs-control/usuarios");
-  redirect("/bbs-control/usuarios?success=Usuario creado.");
+  const result=await createManagedUser({error:""},formData);
+  if(result.error)redirectWithError("/bbs-control/usuarios",result.error);
+  redirect("/bbs-control/usuarios?success=Usuario%20creado.");
 }
 
 export async function updateUserAction(formData: FormData) {
-  const actor = await requireBackOfficeUser();
-  const raw = Object.fromEntries(formData);
-  const parsed = userUpdateSchema.safeParse({
-    ...raw,
-    is_active: formData.get("is_active") === "on",
-  });
-
-  if (!parsed.success) {
-    redirectWithError("/bbs-control/usuarios", parsed.error.issues[0]?.message || "Datos inválidos.");
-  }
-
-  if (actor.role !== "super_admin") {
-    redirectWithError("/bbs-control/usuarios", "Solo super admin puede editar usuarios.");
-  }
-
-  if (parsed.data.user_id === actor.id && (parsed.data.role !== "super_admin" || !parsed.data.is_active)) {
-    redirectWithError("/bbs-control/usuarios", "No puedes quitarte tu propio acceso super admin.");
-  }
-
-  let admin: ReturnType<typeof createSupabaseAdminClient>;
-  try {
-    admin = createSupabaseAdminClient();
-  } catch {
-    redirectWithError("/bbs-control/usuarios", "Falta configurar SUPABASE_SERVICE_ROLE_KEY para editar usuarios.");
-  }
-
-  const { error: profileError } = await admin
-    .from("profiles")
-    .update({
-      full_name: parsed.data.full_name,
-      role: parsed.data.role,
-      is_active: parsed.data.is_active,
-    })
-    .eq("id", parsed.data.user_id);
-
-  if (profileError) {
-    redirectWithError("/bbs-control/usuarios", profileError.message);
-  }
-
-  const { error: authError } = await admin.auth.admin.updateUserById(parsed.data.user_id, {
-    app_metadata: {
-      bbs_role: parsed.data.role,
-    },
-    user_metadata: {
-      full_name: parsed.data.full_name,
-    },
-  });
-
-  if (authError) {
-    redirectWithError("/bbs-control/usuarios", authError.message);
-  }
-
-  revalidatePath("/bbs-control/usuarios");
-  redirect("/bbs-control/usuarios?success=Usuario actualizado.");
+  const result=await updateManagedUser({error:""},formData);
+  if(result.error)redirectWithError("/bbs-control/usuarios",result.error);
+  redirect("/bbs-control/usuarios?success=Usuario%20actualizado.");
 }
 
 export async function resetUserPasswordAction(formData: FormData) {
-  const actor = await requireBackOfficeUser();
-  const parsed = userPasswordSchema.safeParse(Object.fromEntries(formData));
-
-  if (!parsed.success) {
-    redirectWithError("/bbs-control/usuarios", parsed.error.issues[0]?.message || "Datos inválidos.");
-  }
-
-  if (actor.role !== "super_admin") {
-    redirectWithError("/bbs-control/usuarios", "Solo super admin puede resetear contraseñas.");
-  }
-
-  let admin: ReturnType<typeof createSupabaseAdminClient>;
-  try {
-    admin = createSupabaseAdminClient();
-  } catch {
-    redirectWithError("/bbs-control/usuarios", "Falta configurar SUPABASE_SERVICE_ROLE_KEY para resetear contraseñas.");
-  }
-
-  const { error } = await admin.auth.admin.updateUserById(parsed.data.user_id, {
-    password: parsed.data.password,
-  });
-
-  if (error) {
-    redirectWithError("/bbs-control/usuarios", error.message);
-  }
-
-  revalidatePath("/bbs-control/usuarios");
-  redirect("/bbs-control/usuarios?success=Contraseña actualizada.");
+  const result=await resetManagedPassword({error:""},formData);
+  if(result.error)redirectWithError("/bbs-control/usuarios",result.error);
+  redirect("/bbs-control/usuarios?success=Contraseña%20actualizada.");
 }
 export async function createItemAction(formData: FormData) {
   const actor = await requireBackOfficeUser();
@@ -334,10 +169,8 @@ export async function updateBusinessSettingsAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const { id, ...values } = parsed.data;
-  const payload = {
-    ...values,
-    legal_name: values.legal_name || values.business_name,
-  };
+  const { business_name, ...rest } = values;
+  const payload = { ...rest, company_name: business_name, legal_name: values.legal_name || business_name, updated_at: new Date().toISOString() };
   const { error } = id
     ? await supabase.from("business_settings").update(payload).eq("id", id)
     : await supabase.from("business_settings").insert(payload);
@@ -350,8 +183,11 @@ export async function updateBusinessSettingsAction(formData: FormData) {
   redirect("/bbs-control/configuracion?success=Configuración actualizada.");
 }
 
-export async function createQuoteAction(formData: FormData) {
-  const actor = await requireBackOfficeUser();
+async function saveQuote(formData: FormData, quoteId?: string) {
+  await requireBackOfficeUser();
+  if (quoteId !== undefined && !z.uuid().safeParse(quoteId).success) {
+    return { error: "Cotización inválida." };
+  }
   const items = parseQuoteItems(formData);
   const raw = {
     client_id: formValue(formData, "client_id") || null,
@@ -367,132 +203,53 @@ export async function createQuoteAction(formData: FormData) {
   const parsed = quoteSchema.safeParse(raw);
 
   if (!parsed.success) {
-    redirectWithError("/bbs-control/cotizaciones/nueva", parsed.error.issues[0]?.message || "Datos inválidos.");
+    return { error: parsed.error.issues[0]?.message || "Datos inválidos." };
   }
 
-  const subtotal = parsed.data.items.reduce(
-    (sum, item) => sum + Number(item.quantity) * Number(item.unit_price),
-    0,
-  );
   const supabase = await createSupabaseServerClient();
-  const { data: quote, error } = await supabase.from("quotes")
-    .insert({
-      client_id: parsed.data.client_id,
-      client_name: parsed.data.client_name,
-      client_email: parsed.data.client_email,
-      seller_name: parsed.data.seller_name,
-      issue_date: parsed.data.issue_date,
-      valid_until: parsed.data.valid_until,
-      project_description: parsed.data.project_description,
-      notes: parsed.data.notes,
-      subtotal,
-      total: subtotal,
-      created_by: actor.id,
-    })
-    .select("id")
-    .single();
-
-  if (error || !quote) {
-    redirectWithError("/bbs-control/cotizaciones/nueva", error?.message || "No se pudo crear la cotización.");
+  const { items: quoteItems, ...values } = parsed.data;
+  let id: string;
+  try {
+    const { data, error } = await supabase.rpc("save_quote", {
+      p_quote: values,
+      p_items: quoteItems,
+      p_quote_id: quoteId || null,
+    });
+    if (error || !data) {
+      return { error: error?.message || "No se pudo guardar la cotización." };
+    }
+    id = data;
+  } catch {
+    return { error: "No se pudo conectar. Los datos del formulario se conservan; intenta guardar nuevamente." };
   }
-
-  const { error: itemsError } = await supabase.from("quote_items").insert(
-    parsed.data.items.map((item, index) => ({
-      quote_id: quote.id,
-      item_id: item.item_id,
-      description: item.description,
-      quantity: item.quantity,
-      unit_price: item.unit_price,
-      position: index,
-    })),
-  );
-
-  if (itemsError) {
-    redirectWithError(`/bbs-control/cotizaciones/${quote.id}`, itemsError.message);
-  }
-
-  await insertQuoteEvent(quote.id, "created", "Cotización creada.");
   revalidatePath("/bbs-control/cotizaciones");
-  redirect(`/bbs-control/cotizaciones/${quote.id}?success=Cotización creada.`);
+  revalidatePath(`/bbs-control/cotizaciones/${id}`);
+  redirect(`/bbs-control/cotizaciones/${id}?success=${quoteId ? "Cotización actualizada." : "Cotización creada."}`);
+}
+
+export async function createQuoteAction(formData: FormData) {
+  return saveQuote(formData);
 }
 
 export async function updateQuoteAction(formData: FormData) {
-  await requireBackOfficeUser();
-  const id = formValue(formData, "quote_id");
-  const items = parseQuoteItems(formData);
-  const raw = {
-    client_id: formValue(formData, "client_id") || null,
-    client_name: formValue(formData, "client_name"),
-    client_email: formValue(formData, "client_email"),
-    seller_name: formValue(formData, "seller_name"),
-    issue_date: formValue(formData, "issue_date"),
-    valid_until: formValue(formData, "valid_until"),
-    project_description: formValue(formData, "project_description"),
-    notes: formValue(formData, "notes"),
-    items,
-  };
-  const parsed = quoteSchema.safeParse(raw);
-
-  if (!parsed.success) {
-    redirectWithError(`/bbs-control/cotizaciones/${id}/editar`, parsed.error.issues[0]?.message || "Datos inválidos.");
-  }
-
-  const subtotal = parsed.data.items.reduce(
-    (sum, item) => sum + Number(item.quantity) * Number(item.unit_price),
-    0,
-  );
-  const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("quotes")
-    .update({
-      client_id: parsed.data.client_id,
-      client_name: parsed.data.client_name,
-      client_email: parsed.data.client_email,
-      seller_name: parsed.data.seller_name,
-      issue_date: parsed.data.issue_date,
-      valid_until: parsed.data.valid_until,
-      project_description: parsed.data.project_description,
-      notes: parsed.data.notes,
-      subtotal,
-      total: subtotal,
-    })
-    .eq("id", id);
-
-  if (error) {
-    redirectWithError(`/bbs-control/cotizaciones/${id}/editar`, error.message);
-  }
-
-  await supabase.from("quote_items").delete().eq("quote_id", id);
-  const { error: itemsError } = await supabase.from("quote_items").insert(
-    parsed.data.items.map((item, index) => ({
-      quote_id: id,
-      item_id: item.item_id,
-      description: item.description,
-      quantity: item.quantity,
-      unit_price: item.unit_price,
-      position: index,
-    })),
-  );
-
-  if (itemsError) {
-    redirectWithError(`/bbs-control/cotizaciones/${id}/editar`, itemsError.message);
-  }
-
-  await insertQuoteEvent(id, "updated", "Cotización editada.");
-  revalidatePath(`/bbs-control/cotizaciones/${id}`);
-  redirect(`/bbs-control/cotizaciones/${id}?success=Cotización actualizada.`);
+  return saveQuote(formData, formValue(formData, "quote_id"));
 }
 
 export async function updateQuoteStatusAction(formData: FormData) {
-  await requireBackOfficeUser();
+  const actor=await requireBackOfficeUser();
   const id = formValue(formData, "quote_id");
-  const status = quoteStatusSchema.parse(formValue(formData, "status")) as QuoteStatus;
+  const parsed = quoteStatusSchema.safeParse(formValue(formData, "status"));
+  if (!z.uuid().safeParse(id).success || !parsed.success) redirectWithError("/bbs-control/cotizaciones", "Estado o cotización inválidos.");
+  const status = parsed.data as QuoteStatus;
+  if(!can(actor.role,"quotes.approve")&&!["draft","sent"].includes(status))redirectWithError(`/bbs-control/cotizaciones/${id}`,"La aprobación o rechazo requiere un administrador.");
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("quotes").update({ status }).eq("id", id);
+  const { data,error } = await supabase.from("quotes").update({ status }).eq("id", id).select("id").maybeSingle();
 
   if (error) {
     redirectWithError(`/bbs-control/cotizaciones/${id}`, error.message);
   }
 
+  if(!data)redirectWithError(`/bbs-control/cotizaciones/${id}`,"La cotización no está disponible o su rol no permite este cambio.");
   await insertQuoteEvent(id, "status_changed", `Estado actualizado a ${status}.`);
   revalidatePath(`/bbs-control/cotizaciones/${id}`);
   redirect(`/bbs-control/cotizaciones/${id}?success=Estado actualizado.`);
@@ -501,13 +258,15 @@ export async function updateQuoteStatusAction(formData: FormData) {
 export async function markQuoteSentAction(formData: FormData) {
   await requireBackOfficeUser();
   const id = formValue(formData, "quote_id");
+  if (!z.uuid().safeParse(id).success) redirectWithError("/bbs-control/cotizaciones", "Cotización inválida.");
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("quotes").update({ status: "sent" }).eq("id", id);
+  const { data,error } = await supabase.from("quotes").update({ status: "sent", emailed_at: new Date().toISOString() }).eq("id", id).select("id").maybeSingle();
 
   if (error) {
     redirectWithError(`/bbs-control/cotizaciones/${id}`, error.message);
   }
 
+  if(!data)redirectWithError(`/bbs-control/cotizaciones/${id}`,"La cotización no está disponible o su rol no permite este cambio.");
   await insertQuoteEvent(id, "marked_sent", "Marcada como enviada manualmente.");
   revalidatePath(`/bbs-control/cotizaciones/${id}`);
   redirect(`/bbs-control/cotizaciones/${id}?success=Cotización marcada como enviada.`);
@@ -516,20 +275,29 @@ export async function markQuoteSentAction(formData: FormData) {
 export async function deleteQuoteAction(formData: FormData) {
   await requireBackOfficeUser();
   const id = formValue(formData, "quote_id");
+  if (!z.uuid().safeParse(id).success) redirectWithError("/bbs-control/cotizaciones", "Cotización inválida.");
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("quotes").delete().eq("id", id);
+  const { data,error } = await supabase.from("quotes").delete().eq("id", id).select("id").maybeSingle();
 
   if (error) {
-    redirectWithError(`/bbs-control/cotizaciones/${id}`, error.message);
+    redirectWithError(`/bbs-control/cotizaciones/${id}`, error.code === "23503" ? "Esta cotización tiene una factura asociada y debe conservarse." : "No se pudo borrar la cotización.");
   }
+
+  if(!data)redirectWithError("/bbs-control/cotizaciones","No tiene permiso para borrar esta cotización o ya no está disponible.");
 
   revalidatePath("/bbs-control/cotizaciones");
   redirect("/bbs-control/cotizaciones?success=Cotización borrada.");
 }
 
 export async function duplicateQuoteAction(formData: FormData) {
-  const actor = await requireBackOfficeUser();
+  await requireBackOfficeUser();
   const id = formValue(formData, "quote_id");
+  if (!z.uuid().safeParse(id).success) redirectWithError("/bbs-control/cotizaciones", "Cotización inválida.");
+  const commercial = await getCommercialDocument("quote", id);
+  if (commercial?.commercial_version) {
+    const data = new FormData(); data.set("kind", "quote"); data.set("document_id", id);
+    return duplicateDocument(data);
+  }
   const source = await getQuoteWithItems(id);
 
   if (!source) {
@@ -537,90 +305,39 @@ export async function duplicateQuoteAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const { data: quote, error } = await supabase.from("quotes")
-    .insert({
+  const settings = await getBusinessSettings();
+  const { data: newId, error } = await supabase.rpc("save_quote", {
+    p_quote: {
       client_id: source.client_id,
       client_name: source.client_name,
       client_email: source.client_email,
       seller_name: source.seller_name,
       project_description: source.project_description,
       notes: source.notes,
-      subtotal: source.subtotal,
-      total: source.total,
-      created_by: actor.id,
-    })
-    .select("id")
-    .single();
-
-  if (error || !quote) {
-    redirectWithError(`/bbs-control/cotizaciones/${id}`, error?.message || "No se pudo duplicar.");
-  }
-
-  await supabase.from("quote_items").insert(
-    source.items.map((item, index) => ({
-      quote_id: quote.id,
+      issue_date: dateForInput(),
+      valid_until: addDaysForInput(settings.default_validity_days || 30),
+    },
+    p_items: source.items.map((item) => ({
+      item_id: item.item_id,
       description: item.description,
       quantity: item.quantity,
       unit_price: item.unit_price,
-      position: index,
     })),
-  );
-  await insertQuoteEvent(quote.id, "duplicated", `Duplicada desde ${source.quote_number}.`);
+    p_quote_id: null,
+  });
+
+  if (error || !newId) {
+    redirectWithError(`/bbs-control/cotizaciones/${id}`, error?.message || "No se pudo duplicar.");
+  }
+
+  await insertQuoteEvent(newId, "duplicated", `Duplicada desde ${source.quote_number}.`);
   revalidatePath("/bbs-control/cotizaciones");
-  redirect(`/bbs-control/cotizaciones/${quote.id}?success=Cotización duplicada.`);
+  redirect(`/bbs-control/cotizaciones/${newId}?success=Cotización duplicada.`);
 }
 
 export async function sendQuoteAction(formData: FormData) {
   await requireBackOfficeUser();
   const id = formValue(formData, "quote_id");
-  const quote = await getQuoteWithItems(id);
-
-  if (!quote) {
-    redirectWithError("/bbs-control/cotizaciones", "Cotización no encontrada.");
-  }
-
-  if (!quote.client_email) {
-    redirectWithError(`/bbs-control/cotizaciones/${id}`, "El cliente no tiene correo.");
-  }
-
-  if (!process.env.RESEND_API_KEY) {
-    redirectWithError(`/bbs-control/cotizaciones/${id}`, "Resend no está configurado.");
-  }
-
-  const settings = await getBusinessSettings();
-  const pdf = await renderQuotePdfBuffer(quote, settings);
-  const resend = new Resend(process.env.RESEND_API_KEY);
-
-  await resend.emails.send({
-    from:
-      process.env.RESEND_FROM_EMAIL ||
-      "Biomedical Business and Service <no-reply@bbsbiomedical.com>",
-    to: quote.client_email,
-    subject: `Cotización ${quote.quote_number} - Biomedical Business and Service`,
-    text: [
-      `Estimado cliente,`,
-      "",
-      `Adjuntamos la cotización ${quote.quote_number}.`,
-      "",
-      "Biomedical Business and Service",
-      "brodriguez@rysbioservices.com",
-      "+507 6202-3206",
-    ].join("\n"),
-    attachments: [
-      {
-        filename: `${quote.quote_number}.pdf`,
-        content: pdf,
-      },
-    ],
-  });
-
-  const supabase = await createSupabaseServerClient();
-  await supabase.from("quotes").update({ status: "sent" }).eq("id", id);
-  await insertQuoteEvent(id, "sent", `Enviada a ${quote.client_email}.`);
-  revalidatePath(`/bbs-control/cotizaciones/${id}`);
-  redirect(`/bbs-control/cotizaciones/${id}?success=Cotización enviada.`);
+  if (!z.uuid().safeParse(id).success) redirectWithError("/bbs-control/cotizaciones", "Cotización inválida.");
+  redirect(`/bbs-control/cotizaciones/${id}?email=1`);
 }
-
-
-
-

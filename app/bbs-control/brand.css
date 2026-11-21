@@ -1,0 +1,42 @@
+/* Restore the navy/cyan identity of the original BBS Control interface. */
+.bbs-control { --bbs-blue:#042235; --bbs-heading:#0f172a; --bbs-green:#0e7490; background:linear-gradient(180deg,#f8fbff,#eef6fb); color:#0f172a; font-family:Montserrat,Arial,sans-serif; line-height:1.5; }
+.bbs-sidebar { background:linear-gradient(180deg,#020617,#042235 52%,#020617); border-right:1px solid #67e8f91a; box-shadow:12px 0 36px #02061712; }
+.bbs-brand { min-height:88px; padding:20px; }
+.bbs-brand img { width:198px; }
+.bbs-nav { padding:0 12px; }
+.bbs-nav-link { min-height:43px; border-radius:8px; margin:3px 0; padding:10px 12px; color:#cbd5e1; font-size:13px; font-weight:600; }
+.bbs-nav-link svg { color:#67e8f9; flex-shrink:0; }
+.bbs-nav-link:hover { background:#67e8f91a; color:white; }
+.bbs-nav-link[aria-current="page"] { background:#67e8f91f; color:#a5f3fc; box-shadow:inset 3px 0 #22d3ee; }
+.bbs-nav-child { padding-left:39px; font-size:12px; }
+.bbs-main { max-width:1800px; margin:auto; }
+.bbs-control :is(h1,h2,h3) { font-weight:700; letter-spacing:-.025em; }
+.bbs-control h1 { font-size:32px; }
+.bbs-page-header { margin-bottom:28px; }
+.bbs-page-header p { color:#64748b; max-width:70ch; }
+.bbs-eyebrow { color:#0e7490 !important; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.16em; margin:0 0 8px !important; }
+.bbs-card,.bbs-create { border:1px solid #dbeaf0; border-radius:10px; box-shadow:0 12px 32px #0f172a06; }
+.bbs-input,.bbs-select,.bbs-textarea { border-color:#cbd5e1; border-radius:7px; min-height:38px; padding:7px 10px; }
+.bbs-button { border-radius:7px; min-height:38px; padding:7px 14px; font-weight:600; border-color:#cbd5e1; }
+.bbs-button-primary { background:#0e7490; border-color:#0e7490; color:white; }
+.bbs-button-primary:hover { background:#155e75; border-color:#155e75; }
+.bbs-table-scroll { border-color:#dbeaf0; border-radius:9px; background:white; }
+.bbs-table :is(th,td) { padding:11px 10px; }
+.bbs-table th { background:#042235; color:#e0f2fe; border-color:#164e63; font-size:12px; font-weight:600; }
+.bbs-table tbody tr:nth-child(even) { background:#f8fbfd; }
+.bbs-table tbody tr:hover { background:#ecfeff; }
+.bbs-table a:not(.bbs-button) { color:#0e7490; font-weight:600; }
+.bbs-badge { border-radius:5px; padding:3px 8px; }
+.bbs-message { border-radius:8px; }
+.bbs-mobile-header { background:white; border-bottom:1px solid #dbeaf0; }
+.bbs-mobile-nav .bbs-nav-link { color:#334155; }
+.bbs-mobile-nav .bbs-nav-link svg { color:#0e7490; }
+.bbs-mobile-nav .bbs-nav-link[aria-current="page"] { color:#0e7490; background:#ecfeff; }
+.bbs-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin:20px 0; }
+.bbs-fields label { display:grid; align-content:start; gap:6px; font-size:13px; font-weight:600; }
+.bbs-fields .bbs-wide { grid-column:1/-1; }
+.bbs-toolbar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:18px 0; }
+.bbs-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin:20px 0; }
+.bbs-metric { border:1px solid #cfe6ee; background:white; border-radius:9px; padding:18px; }
+.bbs-metric strong { display:block; font-size:24px; color:#0e7490; }
+@media(max-width:700px) { .bbs-fields,.bbs-metrics { grid-template-columns:1fr; }.bbs-control h1 { font-size:26px; }.bbs-main { padding:24px 16px; } }

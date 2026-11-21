@@ -16,13 +16,15 @@ export const defaultBusinessSettings: BusinessSettings = {
 
 export async function getBusinessSettings(): Promise<BusinessSettings> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("business_settings")
-    .select("id, business_name, legal_name, email, phone, address, currency, quote_prefix, default_validity_days")
+    .select("*")
     .limit(1)
     .maybeSingle();
 
-  return (data as BusinessSettings | null) || defaultBusinessSettings;
+  if (error) throw new Error("No se pudo cargar la configuración de la empresa.");
+
+  return data ? {...data,business_name:data.company_name,legal_name:data.legal_name||data.company_name} as BusinessSettings : defaultBusinessSettings;
 }
 
 export async function getQuoteWithItems(id: string): Promise<QuoteWithItems | null> {
@@ -31,13 +33,14 @@ export async function getQuoteWithItems(id: string): Promise<QuoteWithItems | nu
     .from("quotes")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
-  if (error || !quote) {
+  if (error) throw new Error("No se pudo cargar la cotización.");
+  if (!quote) {
     return null;
   }
 
-  const [{ data: items }, { data: client }, { data: events }] = await Promise.all([
+  const [{ data: items, error: itemsError }, { data: client }, { data: events }] = await Promise.all([
     supabase
       .from("quote_items")
       .select("*")
@@ -52,6 +55,8 @@ export async function getQuoteWithItems(id: string): Promise<QuoteWithItems | nu
       .eq("quote_id", id)
       .order("created_at", { ascending: false }),
   ]);
+
+  if (itemsError) throw new Error("No se pudieron cargar los artículos de la cotización.");
 
   return {
     ...(quote as QuoteWithItems),

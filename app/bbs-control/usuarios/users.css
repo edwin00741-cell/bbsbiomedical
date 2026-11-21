@@ -1,0 +1,24 @@
+.bbs-users .bbs-user-form { padding:12px 0; }
+.bbs-user-form fieldset { min-width:0; }
+.bbs-user-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 24px; }
+.bbs-user-fields > label { display:grid; gap:6px; align-content:start; }
+.bbs-user-fields > .bbs-checkbox { display:flex; align-items:center; gap:8px; margin:24px 0 0; }
+.bbs-user-password { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:12px; margin:18px 0; }
+.bbs-users .bbs-password-field > label { display:block; margin-bottom:6px; }
+.bbs-users .bbs-auth-hint { font-size:12px; color:#666; margin-top:5px; }
+.bbs-user-password > button { margin-top:24px; }
+.bbs-user-recovery { border-top:1px solid #ddd; margin-top:16px; padding-top:6px; }
+.bbs-user-recovery .bbs-user-form > button { margin-top:12px; }
+.bbs-user-recovery-link { margin:16px 0; }
+.bbs-user-recovery-link > label { display:grid; gap:6px; }
+.bbs-user-recovery-link textarea { min-height:95px; overflow-wrap:anywhere; }
+.bbs-user-recovery-link > button { margin-top:8px; }
+.bbs-user-panel { border-top:1px solid #ddd; margin-top:20px; padding-top:16px; }
+.bbs-user-panel summary { cursor:pointer; color:#415779; font-size:18px; }
+.bbs-user-roles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin:18px 0 24px; padding:14px; border:1px solid #ddd; }
+.bbs-user-roles h2 { font-size:17px; margin-bottom:4px; }
+.bbs-user-roles p { font-size:13px; color:#666; }
+.bbs-users-table { min-width:900px; }
+.bbs-users-queue { margin:28px 0; }
+.bbs-users-queue h2 { margin-bottom:12px; }
+@media(max-width:640px) { .bbs-user-fields { grid-template-columns:1fr; }.bbs-user-fields > .bbs-checkbox { margin-top:0; }.bbs-user-password { grid-template-columns:1fr; gap:8px; }.bbs-user-password > button { margin-top:0; justify-self:start; }.bbs-user-roles { grid-template-columns:1fr; } }

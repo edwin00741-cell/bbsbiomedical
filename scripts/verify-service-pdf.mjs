@@ -1,0 +1,14 @@
+import fs from "node:fs";
+import path from "node:path";
+import ts from "typescript";
+import { Module } from "node:module";
+const filename=path.resolve("lib/bbs-control/__service-pdf-verification.cjs");
+const renderer=new Module(filename);renderer.filename=filename;renderer.paths=Module._nodeModulePaths(path.dirname(filename));
+renderer._compile(ts.transpileModule(fs.readFileSync("lib/bbs-control/service-pdf.tsx","utf8"),{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true,target:ts.ScriptTarget.ES2020}}).outputText,filename);
+const equipment={id:"qa",client_id:"qa",client_name:"Cliente de demostración",description:"Sillón dental",serial_number:"SERIE-DEMO-001",model:"Modelo de prueba",brand:"Marca de prueba",asset_number:"ACT-001",department:"Odontología",address:"Panamá",updated_at:"2026-11-21T12:00:00Z"};
+const report={id:"qa",number:"SR-DEMO-2026",equipment_id:"qa",created_at:equipment.updated_at,updated_at:equipment.updated_at,payload:{equipment_id:"qa",reported_date:"2026-11-21",scheduled_date:"2026-11-21",completed_date:"2026-11-21",next_due_date:"2027-05-21",purchase_order:"OC-DEMO",service_types:["preventivo"],status:"completado",condition:"funcional",description:"Mantenimiento preventivo del equipo dental.",work_performed:"Inspección general, limpieza y verificación del funcionamiento.",observations:"Equipo funcional. Próxima revisión programada a seis meses.",received_by:"Responsable de demostración",technician:"Técnico de demostración",parts:[{catalog:"PIEZA-DEMO",description:"Pieza de demostración",quoted:true,installed:true}]}};
+fs.mkdirSync("tmp/pdfs/reunion",{recursive:true});
+fs.writeFileSync("tmp/pdfs/reunion/service-demo.pdf",await renderer.exports.renderServicePdf(report,equipment));
+const long={...report,payload:{...report.payload,parts:Array.from({length:65},(_,i)=>({...report.payload.parts[0],catalog:`DEMO-${i+1}`}))}};
+fs.writeFileSync("tmp/pdfs/reunion/service-long.pdf",await renderer.exports.renderServicePdf(long,equipment));
+console.log("Two service PDFs rendered from synthetic data.");

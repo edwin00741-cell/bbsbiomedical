@@ -1,23 +1,15 @@
-﻿import { BriskModulePage } from "../module-page";
-
-export const dynamic = "force-dynamic";
-
-export default function ToolsPage() {
-  return (
-    <BriskModulePage
-      config={{
-        eyebrow: "Herramientas",
-        title: "Herramientas",
-        description: "Utilidades internas para operaciones comerciales y soporte administrativo.",
-        features: [
-          "Duplicar documentos comerciales.",
-          "Exportar datos a CSV.",
-          "Importar clientes o artículos.",
-          "Revisar eventos del sistema.",
-        ],
-      }}
-    />
-  );
+import Link from"next/link";
+import{BackOfficeShell,PageHeader,FlashMessage,DataError}from"../components";
+import{ActionSubmit}from"../row-actions";
+import{Pagination}from"../pagination";
+import{ImportForm}from"./import-form";
+import{undoImport}from"./actions";
+import{createSupabaseServerClient,requireBackOfficeUser}from"../../../lib/bbs-control/supabase-server";
+import{param,type SearchParams}from"../../../lib/bbs-control/list-filters";
+export const dynamic="force-dynamic";
+export default async function ToolsPage({searchParams}:{searchParams?:Promise<SearchParams>}){
+ const user=await requireBackOfficeUser();const params=await searchParams||{};const page=Math.max(1,parseInt(param(params,"page"))||1);const db=await createSupabaseServerClient();const[batches,events]=await Promise.all([db.from("import_batches").select("*",{count:"exact"}).order("created_at",{ascending:false}).range((page-1)*20,page*20-1),db.from("document_events").select("id,document_type,event_type,note,created_at").order("created_at",{ascending:false}).limit(50)]);
+ return<BackOfficeShell user={user}><PageHeader title="Herramientas" eyebrow="Operaciones"/><FlashMessage searchParams={Promise.resolve(params)}/><div className="bbs-inline-actions mb-5"><Link className="bbs-button" href="/bbs-control/informes">Exportar informes CSV / PDF</Link><Link className="bbs-button" href="/bbs-control/recurrentes">Facturas recurrentes</Link></div><ImportForm/>
+ <section className="bbs-card mt-5"><h2>Historial de importaciones</h2>{batches.error?<DataError>No se pudo cargar el historial.</DataError>:<><div className="bbs-table-scroll"><table className="bbs-table"><thead><tr>{["Fecha","Archivo","Tipo","Registros","Estado","Acción"].map(x=><th key={x}>{x}</th>)}</tr></thead><tbody>{(batches.data||[]).map(b=><tr key={b.id}><td>{b.created_at.slice(0,16).replace("T"," ")}</td><td>{b.file_name}</td><td>{b.kind}</td><td>{b.row_count}</td><td>{b.status==="reverted"?"Deshecha":"Completada"}</td><td>{b.status==="completed"?<form action={undoImport}><input type="hidden" name="batch_id" value={b.id}/><ActionSubmit confirmMessage="¿Deshacer este lote? Los registros modificados o utilizados después impedirán la reversión.">Deshacer</ActionSubmit></form>:"—"}</td></tr>)}{!batches.data?.length?<tr><td colSpan={6} className="bbs-empty">No hay importaciones.</td></tr>:null}</tbody></table></div><Pagination path="/bbs-control/herramientas" params={params} page={page} count={batches.count||0}/></>}</section>
+ <section className="bbs-card mt-5"><h2>Actividad reciente de documentos</h2>{events.error?<DataError>No se pudo cargar la actividad.</DataError>:<div className="bbs-table-scroll"><table className="bbs-table"><thead><tr><th>Fecha</th><th>Documento</th><th>Evento</th><th>Detalle</th></tr></thead><tbody>{(events.data||[]).map(e=><tr key={e.id}><td>{e.created_at.slice(0,16).replace("T"," ")}</td><td>{e.document_type}</td><td>{e.event_type}</td><td>{e.note}</td></tr>)}</tbody></table></div>}</section></BackOfficeShell>;
 }
-
-

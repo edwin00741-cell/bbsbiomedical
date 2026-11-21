@@ -1,28 +1,4 @@
-﻿import { BriskModulePage } from "../module-page";
-
+import { FinanceListPage } from "../finance-page";
+import type { SearchParams } from "../../../lib/bbs-control/list-filters";
 export const dynamic = "force-dynamic";
-
-export default function PaymentsPage() {
-  return (
-    <BriskModulePage
-      config={{
-        eyebrow: "Pagos",
-        title: "Pagos recibidos",
-        description: "Registro de pagos aplicados a facturas y clientes.",
-        tableName: "payments",
-        columns: "id, reference, amount, status, paid_at",
-        numberField: "reference",
-        nameField: "status",
-        dateField: "paid_at",
-        amountField: "amount",
-        features: [
-          "Aplicar pago a factura.",
-          "Registrar método y referencia.",
-          "Preparado para conciliación e historial.",
-        ],
-      }}
-    />
-  );
-}
-
-
+export default function PaymentsPage({ searchParams }: { searchParams?: Promise<SearchParams> }) { return <FinanceListPage kind="payment" searchParams={searchParams} />; }

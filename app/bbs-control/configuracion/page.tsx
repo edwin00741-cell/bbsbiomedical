@@ -1,112 +1,14 @@
-import {
-  BackOfficeCard,
-  BackOfficeShell,
-  FlashMessage,
-  PageHeader,
-  PrimaryButton,
-  TextArea,
-  TextInput,
-} from "../components";
-import { updateBusinessSettingsAction } from "../actions";
-import { defaultBusinessSettings, getBusinessSettings } from "../../../lib/bbs-control/quotes";
-import { requireBackOfficeUser } from "../../../lib/bbs-control/supabase-server";
-
-export const dynamic = "force-dynamic";
-
-export default async function SettingsPage({
-  searchParams,
-}: {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const user = await requireBackOfficeUser();
-  const settings = await getBusinessSettings();
-  const isPersisted = settings.id !== "default";
-
-  return (
-    <BackOfficeShell user={user}>
-      <PageHeader
-        description="Estos datos se usan en cotizaciones, PDFs y comunicaciones enviadas desde el panel."
-        eyebrow="Configuración"
-        title="Configuración de empresa"
-      />
-      <FlashMessage searchParams={searchParams} />
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <BackOfficeCard>
-          <form action={updateBusinessSettingsAction} className="grid gap-5">
-            {isPersisted ? <input name="id" type="hidden" value={settings.id} /> : null}
-            <div className="grid gap-4 lg:grid-cols-2">
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Nombre comercial
-                <TextInput
-                  defaultValue={settings.business_name}
-                  name="business_name"
-                  required
-                />
-              </label>
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Razón social
-                <TextInput
-                  defaultValue={settings.legal_name || settings.business_name}
-                  name="legal_name"
-                />
-              </label>
-            </div>
-            <div className="grid gap-4 lg:grid-cols-2">
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Correo
-                <TextInput defaultValue={settings.email || ""} name="email" type="email" />
-              </label>
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Teléfonos
-                <TextInput defaultValue={settings.phone || ""} name="phone" />
-              </label>
-            </div>
-            <label className="grid gap-2 text-sm font-black text-slate-900">
-              Dirección
-              <TextArea defaultValue={settings.address || ""} name="address" />
-            </label>
-            <div className="grid gap-4 lg:grid-cols-3">
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Moneda
-                <TextInput defaultValue={settings.currency || "USD"} name="currency" required />
-              </label>
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Prefijo de cotización
-                <TextInput defaultValue={settings.quote_prefix || "BBS"} name="quote_prefix" required />
-              </label>
-              <label className="grid gap-2 text-sm font-black text-slate-900">
-                Validez por defecto
-                <TextInput
-                  defaultValue={String(settings.default_validity_days || 30)}
-                  min="1"
-                  name="default_validity_days"
-                  required
-                  type="number"
-                />
-              </label>
-            </div>
-            <PrimaryButton className="w-fit" type="submit">
-              Guardar configuración
-            </PrimaryButton>
-          </form>
-        </BackOfficeCard>
-        <BackOfficeCard className="bg-[linear-gradient(180deg,#020617_0%,#063047_100%)] text-white">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
-            Vista rápida
-          </p>
-          <h2 className="mt-4 text-2xl font-black">{settings.business_name}</h2>
-          <p className="mt-4 text-sm leading-6 text-slate-200">
-            {settings.address || defaultBusinessSettings.address}
-          </p>
-          <div className="mt-6 grid gap-3 text-sm font-bold text-slate-100">
-            <p>{settings.phone || defaultBusinessSettings.phone}</p>
-            <p>{settings.email || defaultBusinessSettings.email}</p>
-          </div>
-          <div className="mt-8 rounded-[8px] border border-cyan-300/20 bg-white/5 p-4 text-sm leading-6 text-slate-200">
-            El PDF usa el logo oficial, la marca de agua del isotipo y estos datos. Las redes sociales no se muestran hasta que estén configuradas.
-          </div>
-        </BackOfficeCard>
-      </div>
-    </BackOfficeShell>
-  );
+import Link from"next/link";
+import{BackOfficeShell,PageHeader,DataError}from"../components";
+import{SettingsForm,TaxForm}from"./settings-form";
+import{getBusinessSettings}from"../../../lib/bbs-control/quotes";
+import{createSupabaseServerClient,requireBackOfficeUser}from"../../../lib/bbs-control/supabase-server";
+export const dynamic="force-dynamic";
+export default async function SettingsPage(){
+ const user=await requireBackOfficeUser();const db=await createSupabaseServerClient();const[settings,raw,taxes,history]=await Promise.all([getBusinessSettings(),db.from("business_settings").select("updated_at").limit(1).maybeSingle(),db.from("tax_rates").select("*").order("rate"),db.from("quotes").select("id",{count:"exact",head:true})]);
+ return<BackOfficeShell user={user}><PageHeader eyebrow="Preferencias" title="Configuración"/><nav className="bbs-inline-actions mb-5" aria-label="Secciones de configuración">{[["#empresa","Empresa"],["#regional","Regional y números"],["#diseno","Diseño, plantillas y texto"],["#notas","Notas"],["#impuestos","Impuestos"],["/bbs-control/clientes?catalog=salespeople","Vendedores"],["/bbs-control/clientes?catalog=methods","Métodos de pago"],["/bbs-control/articulos","Inventario"],["/bbs-control/recurrentes","Recurrencia"],["/bbs-control/usuarios","Usuarios"]].map(([href,label])=><Link className="bbs-button" key={href} href={href}>{label}</Link>)}</nav>
+ {raw.error||!raw.data?<DataError>No se pudo cargar la configuración.</DataError>:<SettingsForm settings={settings} version={raw.data.updated_at} currencyLocked={Boolean(history.count)}/>}
+ <section className="bbs-card mt-5" id="impuestos"><h2>Impuestos</h2><p>El porcentaje se copia al documento. Modificar una tasa no cambia los documentos ya guardados.</p>{taxes.error?<DataError>No se pudieron cargar los impuestos.</DataError>:<>{(taxes.data||[]).map(t=><TaxForm key={t.id} tax={t}/>)}<h3 className="mt-5">Nuevo impuesto</h3><TaxForm/></>}</section>
+ <section className="bbs-card mt-5"><h2>Cobros y comunicaciones</h2><p>Los pagos registran el dinero recibido por el método seleccionado. La gestión de usuarios está disponible para el administrador principal.</p><p className="mt-4">Correo: {process.env.RESEND_API_KEY ? "proveedor conectado" : "pendiente de conectar el proveedor de BBS; descarga e impresión disponibles"}.</p><Link className="bbs-button mt-4" href="/bbs-control/ayuda">Ver guías operativas</Link></section>
+ </BackOfficeShell>;
 }

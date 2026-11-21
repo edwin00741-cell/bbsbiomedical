@@ -1,23 +1,12 @@
-﻿import { BriskModulePage } from "../module-page";
-
+import Link from "next/link";
+import { BackOfficeShell, PageHeader } from "../components";
+import { requireBackOfficeUser } from "../../../lib/bbs-control/supabase-server";
+import { reportCatalog } from "../../../lib/bbs-control/reports-types";
+import "./reports.css";
 export const dynamic = "force-dynamic";
-
-export default function ReportsPage() {
-  return (
-    <BriskModulePage
-      config={{
-        eyebrow: "Informes",
-        title: "Informes comerciales",
-        description: "Vista preparada para ingresos, cotizaciones, facturas pendientes y actividad mensual.",
-        features: [
-          "Ingresos por mes.",
-          "Cotizaciones enviadas y aprobadas.",
-          "Facturas pendientes y vencidas.",
-          "Clientes con mayor actividad.",
-        ],
-      }}
-    />
-  );
+export default async function ReportsPage() {
+  const user = await requireBackOfficeUser(), groups = [...new Set(reportCatalog.map((row) => row.group))];
+  return <BackOfficeShell user={user}><PageHeader eyebrow="Informes" title="Informes" />
+    <div className="bbs-report-catalog">{groups.map((group) => <section className="bbs-card" key={group}><h2>{group}</h2><ul>{reportCatalog.filter((row) => row.group === group).map((row) => <li key={row.id}><Link href={`/bbs-control/informes/${row.id}`}>{row.name}</Link></li>)}</ul></section>)}</div>
+  </BackOfficeShell>;
 }
-
-

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { assertSupabaseAdminEnv, assertSupabasePublicEnv } from "./env";
 import type { BackOfficeUser } from "./types";
+import {can,type Capability} from "./permissions";
 
 export async function createSupabaseServerClient() {
   const { url, anonKey } = assertSupabasePublicEnv();
@@ -50,7 +51,7 @@ export async function getBackOfficeUser(): Promise<BackOfficeUser | null> {
 
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, username, full_name, role, is_active")
+    .select("id, username, full_name, role, is_active, must_change_password")
     .eq("id", user.id)
     .eq("is_active", true)
     .single();
@@ -69,7 +70,15 @@ export async function requireBackOfficeUser() {
     redirect("/bbs-control/login");
   }
 
+  if(user.must_change_password) redirect("/bbs-control/cambiar-contrasena");
+
   return user;
+}
+
+export async function requireCapability(capability:Capability){
+ const user=await requireBackOfficeUser();
+ if(!can(user.role,capability))redirect("/bbs-control/acceso-denegado");
+ return user;
 }
 
 

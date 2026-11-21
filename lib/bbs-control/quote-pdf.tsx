@@ -27,13 +27,20 @@ const styles = StyleSheet.create({
     color: "#0f172a",
     fontFamily: "Helvetica",
     fontSize: 10,
-    padding: 0,
+    paddingTop: 186,
+    paddingBottom: 48,
+    paddingHorizontal: 36,
   },
   header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 164,
     backgroundColor: "#075985",
     color: "#ffffff",
-    paddingHorizontal: 42,
-    paddingVertical: 24,
+    paddingHorizontal: 36,
+    paddingVertical: 18,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -44,20 +51,22 @@ const styles = StyleSheet.create({
   },
   address: {
     marginTop: 12,
-    width: 225,
+    width: 235,
+    fontSize: 9,
     lineHeight: 1.4,
     color: "#dff7ff",
   },
   headerContact: {
     marginTop: 6,
-    width: 225,
+    width: 235,
+    fontSize: 8,
     lineHeight: 1.4,
     color: "#ffffff",
   },
   quoteTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 700,
-    marginBottom: 14,
+    marginBottom: 10,
     textAlign: "right",
   },
   metaRow: {
@@ -71,18 +80,16 @@ const styles = StyleSheet.create({
     width: 72,
   },
   metaValue: {
-    width: 130,
+    width: 140,
     color: "#ffffff",
   },
   body: {
     position: "relative",
-    paddingHorizontal: 42,
-    paddingVertical: 26,
   },
   watermark: {
     position: "absolute",
-    top: 155,
-    left: 135,
+    top: 290,
+    left: 140,
     width: 315,
     opacity: 0.055,
   },
@@ -126,26 +133,26 @@ const styles = StyleSheet.create({
     borderColor: "#0f172a",
     borderRightWidth: 1,
     padding: 6,
-    width: "49%",
+    width: "52%",
   },
   qtyCell: {
     borderColor: "#0f172a",
     borderRightWidth: 1,
     padding: 6,
     textAlign: "center",
-    width: "20%",
+    width: "12%",
   },
   priceCell: {
     borderColor: "#0f172a",
     borderRightWidth: 1,
     padding: 6,
     textAlign: "right",
-    width: "15%",
+    width: "18%",
   },
   totalCell: {
     padding: 6,
     textAlign: "right",
-    width: "16%",
+    width: "18%",
   },
   rowBorder: {
     borderBottomColor: "#0f172a",
@@ -153,7 +160,7 @@ const styles = StyleSheet.create({
   },
   totalRow: {
     flexDirection: "row",
-    marginLeft: "69%",
+    marginLeft: "64%",
   },
   totalLabel: {
     backgroundColor: "#075985",
@@ -183,7 +190,7 @@ const styles = StyleSheet.create({
   signatures: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 72,
+    marginTop: 40,
   },
   signature: {
     borderTopColor: "#0f172a",
@@ -193,9 +200,12 @@ const styles = StyleSheet.create({
     fontSize: 8,
   },
   footerNote: {
+    position: "absolute",
+    bottom: 18,
+    left: 36,
+    right: 36,
     color: "#64748b",
     fontSize: 8,
-    marginTop: 16,
     textAlign: "center",
   },
 });
@@ -215,13 +225,13 @@ export function QuotePdfDocument({
   return (
     <Document title={`Cotización ${quote.quote_number}`}>
       <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <View>
+        <View fixed style={styles.header}>
+          <View style={{ width: 235 }}>
             <Image src={brandLogo} style={styles.logo} />
             <Text style={styles.address}>{address}</Text>
             {contact ? <Text style={styles.headerContact}>{contact}</Text> : null}
           </View>
-          <View>
+          <View style={{ width: 222 }}>
             <Text style={styles.quoteTitle}>COTIZACIÓN #{quote.quote_number}</Text>
             <View style={styles.metaRow}>
               <Text style={styles.metaLabel}>FECHA:</Text>
@@ -237,22 +247,22 @@ export function QuotePdfDocument({
             </View>
           </View>
         </View>
+        <Image fixed src={watermarkLogo} style={styles.watermark} />
         <View style={styles.body}>
-          <Image src={watermarkLogo} style={styles.watermark} />
           <View style={styles.divider} />
           <Text style={styles.sectionLabel}>DESCRIPCIÓN DEL PROYECTO:</Text>
           <Text style={styles.projectDescription}>
             {quote.project_description || "Servicio técnico biomédico."}
           </Text>
           <View style={styles.table}>
-            <View style={styles.tableHeader}>
+            <View fixed style={styles.tableHeader}>
               <Text style={styles.productCell}>PRODUCTO / SERVICIO</Text>
               <Text style={styles.qtyCell}>CANTIDAD</Text>
               <Text style={styles.priceCell}>PRECIO</Text>
               <Text style={styles.totalCell}>TOTAL</Text>
             </View>
             {rows.map((item) => (
-              <View key={item.id} style={[styles.tableRow, styles.rowBorder]}>
+              <View key={item.id} wrap={false} style={[styles.tableRow, styles.rowBorder]}>
                 <Text style={styles.productCell}>{item.description}</Text>
                 <Text style={styles.qtyCell}>{item.quantity}</Text>
                 <Text style={styles.priceCell}>{money(item.unit_price)}</Text>
@@ -260,7 +270,7 @@ export function QuotePdfDocument({
               </View>
             ))}
             {blankRows.map((_, index) => (
-              <View key={`blank-${index}`} style={[styles.tableRow, styles.rowBorder]}>
+              <View key={`blank-${index}`} wrap={false} style={[styles.tableRow, styles.rowBorder]}>
                 <Text style={styles.productCell}> </Text>
                 <Text style={styles.qtyCell}> </Text>
                 <Text style={styles.priceCell}> </Text>
@@ -268,7 +278,7 @@ export function QuotePdfDocument({
               </View>
             ))}
           </View>
-          <View style={styles.totalRow}>
+          <View wrap={false} style={styles.totalRow}>
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalValue}>{money(quote.total)}</Text>
           </View>
@@ -276,14 +286,14 @@ export function QuotePdfDocument({
             Cotización válida hasta el {displayDate(quote.valid_until)}.
           </Text>
           {quote.notes ? <Text style={styles.notes}>{quote.notes}</Text> : null}
-          <View style={styles.signatures}>
+          <View wrap={false} style={styles.signatures}>
             <Text style={styles.signature}>Firma de Cliente</Text>
             <Text style={styles.signature}>Firma de Vendedor</Text>
           </View>
-          <Text style={styles.footerNote}>
-            {settings.business_name} · Cotización generada por el panel interno BBS.
-          </Text>
         </View>
+        <Text fixed style={styles.footerNote} render={({ pageNumber, totalPages }) =>
+          `${settings.business_name} · ${quote.quote_number} · Página ${pageNumber} de ${totalPages}`
+        } />
       </Page>
     </Document>
   );

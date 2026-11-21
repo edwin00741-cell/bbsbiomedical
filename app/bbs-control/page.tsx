@@ -1,94 +1,110 @@
-﻿import Link from "next/link";
-import { BackOfficeCard, BackOfficeShell, PageHeader } from "./components";
+import Link from "next/link";
+import { ClipboardList, CreditCard, FileMinus, FileText, Package, Receipt, Repeat2, UserPlus, Users } from "lucide-react";
+import { BackOfficeShell, DataError } from "./components";
+import { ListFilters } from "./list-controls";
+import { Pagination } from "./pagination";
 import { money } from "../../lib/bbs-control/format";
-import {
-  createSupabaseServerClient,
-  requireBackOfficeUser,
-} from "../../lib/bbs-control/supabase-server";
+import { incomeMonths, invoiceBalance, monthlyIncome, readAllPages } from "../../lib/bbs-control/dashboard";
+import { pageHref, panamaToday, parseListFilters, searchOr, type SearchParams } from "../../lib/bbs-control/list-filters";
+import { createSupabaseServerClient, requireBackOfficeUser } from "../../lib/bbs-control/supabase-server";
+import type { Invoice } from "../../lib/bbs-control/types";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
+const shortcuts = [
+  { label: "Factura", icon: FileText, href: "/bbs-control/facturas/nueva" },
+  { label: "Recurrente", icon: Repeat2, href: "/bbs-control/recurrentes/nueva" },
+  { label: "Cliente", icon: Users, href: "/bbs-control/clientes?new=1" },
+  { label: "Cotización", icon: Receipt, href: "/bbs-control/cotizaciones/nueva" },
+  { label: "Nota de crédito", icon: FileMinus, href: "/bbs-control/notas-credito/nueva" },
+  { label: "Pago", icon: CreditCard, href: "/bbs-control/pagos/nuevo" },
+  { label: "Artículo", icon: Package, href: "/bbs-control/articulos?new=1" },
+  { label: "Invitar usuario", icon: UserPlus, href: "/bbs-control/usuarios" },
+];
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
   const user = await requireBackOfficeUser();
+  const params = searchParams ? await searchParams : {};
+  const today = panamaToday();
+  let filters = parseListFilters({}, today);
+  let filterError = "";
+  try { filters = parseListFilters(params, today); }
+  catch (error) { filterError = error instanceof Error ? error.message : "Filtros inválidos."; }
   const supabase = await createSupabaseServerClient();
-  const [{ count: clients }, { count: quotes }, { data: recentQuotes }] = await Promise.all([
-    supabase.from("clients").select("id", { count: "exact", head: true }),
-    supabase.from("quotes").select("id", { count: "exact", head: true }),
-    supabase.from("quotes")
-      .select("id, quote_number, client_name, status, total, created_at")
-      .order("created_at", { ascending: false })
-      .limit(6),
+  const months = incomeMonths(today);
+  const invoicesPromise = filterError ? Promise.resolve({ data: null, error: { message: filterError } }) : readAllPages<Invoice>((from, to) => {
+    let query = supabase.from("invoices")
+      .select("id,invoice_number,client_name,client_email,seller_name,status,issue_date,due_date,subtotal,tax_total,total,amount_paid,amount_credited,created_at", { count: "exact" })
+      .in("status", ["sent", "partial", "overdue"]).order("issue_date", { ascending: false }).order("id")
+      .range(from, to);
+    if (filters.start) query = query.gte("issue_date", filters.start);
+    if (filters.end) query = query.lte("issue_date", filters.end);
+    if (filters.keyword) query = query.or(searchOr(["client_name", "invoice_number", "seller_name"], filters.keyword));
+    return query;
+  });
+  type Payment = { id: string; amount: number; status: string; paid_at: string };
+  type Refund = { id: string; amount: number; status: string; refunded_at: string };
+  const [invoicesResult, paymentsResult, refundsResult] = await Promise.all([
+    invoicesPromise,
+    readAllPages<Payment>((from, to) => supabase.from("payments").select("id,amount,status,paid_at", { count: "exact" })
+      .gte("paid_at", `${months[0].key}-01`).lte("paid_at", `${today}T23:59:59.999Z`).order("id").range(from, to)),
+    readAllPages<Refund>((from, to) => supabase.from("refunds").select("id,amount,status,refunded_at", { count: "exact" })
+      .gte("refunded_at", `${months[0].key}-01`).lte("refunded_at", `${today}T23:59:59.999Z`).order("id").range(from, to)),
   ]);
-
-  return (
-    <BackOfficeShell user={user}>
-      <PageHeader
-        action={
-          <Link
-            className="inline-flex h-12 items-center justify-center rounded-full bg-cyan-500 px-6 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
-            href="/bbs-control/cotizaciones/nueva"
-          >
-            Nueva cotización
-          </Link>
-        }
-        description="Control interno para usuarios, clientes y cotizaciones de Biomedical Business and Service."
-        eyebrow="Back-office"
-        title="Panel operativo"
-      />
-      <div className="grid gap-5 md:grid-cols-3">
-        <BackOfficeCard>
-          <p className="text-sm font-black uppercase tracking-[0.14em] text-slate-500">Clientes</p>
-          <p className="mt-3 text-4xl font-black text-slate-950">{clients || 0}</p>
-        </BackOfficeCard>
-        <BackOfficeCard>
-          <p className="text-sm font-black uppercase tracking-[0.14em] text-slate-500">Cotizaciones</p>
-          <p className="mt-3 text-4xl font-black text-slate-950">{quotes || 0}</p>
-        </BackOfficeCard>
-        <BackOfficeCard>
-          <p className="text-sm font-black uppercase tracking-[0.14em] text-slate-500">Rol activo</p>
-          <p className="mt-3 text-2xl font-black text-cyan-700">{user.role}</p>
-        </BackOfficeCard>
-      </div>
-      <BackOfficeCard className="mt-6">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-xl font-black text-slate-950">Cotizaciones recientes</h2>
-          <Link className="text-sm font-black text-cyan-700" href="/bbs-control/cotizaciones">
-            Ver todas
-          </Link>
-        </div>
-        <div className="mt-5 overflow-x-auto">
-          <table className="w-full min-w-[680px] text-left text-sm">
-            <thead className="border-b border-slate-200 text-xs uppercase tracking-[0.14em] text-slate-500">
-              <tr>
-                <th className="py-3">Número</th>
-                <th>Cliente</th>
-                <th>Estado</th>
-                <th className="text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {(recentQuotes || []).map((quote) => (
-                <tr key={quote.id}>
-                  <td className="py-4 font-black text-slate-950">
-                    <Link href={`/bbs-control/cotizaciones/${quote.id}`}>{quote.quote_number}</Link>
-                  </td>
-                  <td className="font-semibold text-slate-700">{quote.client_name}</td>
-                  <td>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-700">
-                      {quote.status}
-                    </span>
-                  </td>
-                  <td className="text-right font-black text-slate-950">{money(Number(quote.total))}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </BackOfficeCard>
-    </BackOfficeShell>
-  );
+  const pending = (invoicesResult.data || []).filter((invoice) => invoiceBalance(invoice) > 0);
+  const pages = Math.max(1, Math.ceil(pending.length / 20));
+  if (!invoicesResult.error && filters.page > pages) redirect(pageHref("/bbs-control", params, pages));
+  const rows = pending.slice((filters.page - 1) * 20, filters.page * 20);
+  const chartError = paymentsResult.error || refundsResult.error;
+  const income = monthlyIncome(today,
+    (paymentsResult.data || []).map((payment) => ({ ...payment, date: payment.paid_at })),
+    (refundsResult.data || []).map((refund) => ({ ...refund, date: refund.refunded_at })));
+  const scale = Math.max(1, ...income.map((month) => Math.abs(month.amount)));
+  return <BackOfficeShell user={user}>
+    <section className="bbs-create" aria-label="Crear documentos y registros">
+      <h1>Crear</h1>
+      <div className="bbs-create-links">{shortcuts.map(({ label, icon: Icon, ...shortcut }) =>
+        "href" in shortcut ? <Link className="bbs-create-link" href={shortcut.href!} key={label}><Icon aria-hidden="true" /><span>{label}</span></Link>
+          : <button className="bbs-create-link" type="button" disabled title="Próximamente" key={label}><Icon aria-hidden="true" /><span>{label}</span></button>)}</div>
+    </section>
+    <section aria-labelledby="pending-heading">
+      <h2 id="pending-heading" className="bbs-dashboard-title" style={{ fontSize: 40 }}>Facturas pendientes</h2>
+      <ListFilters key={JSON.stringify(params)} {...filters} placeholder="Cliente, número de factura" />
+      {invoicesResult.error ? <DataError>{filterError || "No se pudieron cargar las facturas pendientes. Intente nuevamente."}</DataError> :
+        <><div className="bbs-table-scroll"><table className="bbs-table">
+          <thead><tr>{["Fecha", "Número", "Cliente", "Importe a pagar", "Total", "Estado", "Enviado", "Acción"].map((label) =>
+            <th key={label} scope="col" className={label === "Total" || label === "Importe a pagar" ? "bbs-money" : ""}>{label}</th>)}</tr></thead>
+          <tbody>{rows.map((invoice) => {
+            const overdue = invoice.due_date < today;
+            return <tr key={invoice.id}>
+              <td>{invoice.issue_date}</td>
+              <td><Link href={`/bbs-control/facturas?view=${invoice.id}`}>{invoice.invoice_number}</Link></td>
+              <td>{invoice.client_name}</td><td className="bbs-money">{money(invoiceBalance(invoice))}</td>
+              <td className="bbs-money">{money(Number(invoice.total))}</td>
+              <td><span className={`bbs-badge bbs-badge-${overdue ? "overdue" : invoice.status}`}>{overdue ? "Atrasado" : invoice.status === "partial" ? "Parcial" : "Pendiente"}</span></td>
+              <td>—</td><td><Link className="bbs-button" href={`/bbs-control/facturas?view=${invoice.id}`}>Ver factura</Link></td>
+            </tr>;
+          })}{!rows.length ? <tr><td colSpan={8} className="bbs-empty">No se encontraron facturas pendientes.</td></tr> : null}</tbody>
+        </table></div><Pagination path="/bbs-control" params={params} page={filters.page} count={pending.length} /></>}
+    </section>
+    <div className="bbs-dashboard-bottom">
+      <section className="bbs-common-tasks"><h2>Tareas comunes</h2>
+        <ul><li><Link href="/bbs-control/cotizaciones/nueva">Crear una cotización</Link></li>
+          <li><Link href="/bbs-control/clientes?new=1">Crear un cliente</Link></li>
+          <li><Link href="/bbs-control/articulos#nuevo-articulo">Crear un artículo</Link></li>
+          <li><Link href="/bbs-control/configuracion">Configurar mi empresa</Link></li>
+          <li><Link href="/bbs-control/usuarios">Administrar usuarios</Link></li></ul>
+        <ClipboardList aria-hidden="true" />
+      </section>
+      <section aria-labelledby="income-heading"><h2 id="income-heading">Ingresos por mes</h2>
+        {chartError ? <DataError>No se pudieron cargar los ingresos. Intente nuevamente.</DataError> : <>
+          <div className="bbs-months" role="list" aria-label="Ingresos netos de los últimos seis meses">
+            {income.map((month) => <div className="bbs-month" role="listitem" key={month.key} aria-label={`${month.key}: ${money(month.amount)}`}>
+              <div className="bbs-month-bar" aria-hidden="true"><span data-negative={month.amount < 0} style={{ height: `${Math.abs(month.amount) / scale * 100}%` }} /></div>
+              <strong>{money(month.amount)}</strong><small>{month.label}</small>
+            </div>)}
+          </div><p className="bbs-chart-note">Pagos recibidos menos reembolsos procesados, según fecha de movimiento.</p></>}
+      </section>
+    </div>
+  </BackOfficeShell>;
 }
-
-
-
-

@@ -1,0 +1,14 @@
+.bbs-report-catalog { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; max-width:1100px; }
+.bbs-report-catalog h2 { margin-bottom:14px; }
+.bbs-report-catalog li { margin:8px 0; }
+.bbs-report-catalog a { color:#172fb1; text-decoration:none; }
+.bbs-report-catalog a:hover { text-decoration:underline; }
+.bbs-report-tools { display:flex; flex-wrap:wrap; gap:6px; margin:18px 0; }
+.bbs-report-table-wrap { position:relative; width:100%; overflow-x:auto; }
+.bbs-report-table { min-width:850px; }
+.bbs-report-table th { position:relative; white-space:normal; }
+.bbs-report-table td { max-width:400px; overflow-wrap:anywhere; }
+.bbs-report-table tfoot td { background:#e6ebf1; font-weight:600; border-top:1px solid #aaa; }
+.bbs-report-notes { margin-top:16px; display:grid; gap:7px; color:#606060; }
+.bbs-report-email label { display:grid; gap:5px; margin:15px 0; }
+@media(max-width:700px) { .bbs-report-catalog { grid-template-columns:minmax(0,1fr); } }

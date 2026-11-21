@@ -1,293 +1,87 @@
 import Link from "next/link";
-import { ChevronDown, Mail } from "lucide-react";
-import {
-  BackOfficeCard,
-  BackOfficeShell,
-  FlashMessage,
-  PageHeader,
-  PrimaryButton,
-  SelectInput,
-  TextInput,
-} from "../components";
-import {
-  deleteQuoteAction,
-  duplicateQuoteAction,
-  sendQuoteAction,
-} from "../actions";
-import { displayDate, money } from "../../../lib/bbs-control/format";
-import {
-  createSupabaseServerClient,
-  requireBackOfficeUser,
-} from "../../../lib/bbs-control/supabase-server";
-import type { QuoteStatus } from "../../../lib/bbs-control/types";
+import { redirect } from "next/navigation";
+import { BackOfficeShell, DataError, FlashMessage, PageHeader } from "../components";
+import { ListFilters } from "../list-controls";
+import { Pagination } from "../pagination";
+import { ActionSubmit, RowActions } from "../row-actions";
+import { deleteQuoteAction, duplicateQuoteAction, sendQuoteAction } from "../actions";
+import { money } from "../../../lib/bbs-control/format";
+import { pageHref, param, parseListFilters, searchOr, type SearchParams } from "../../../lib/bbs-control/list-filters";
+import { createSupabaseServerClient, requireBackOfficeUser } from "../../../lib/bbs-control/supabase-server";
+import { quoteStatusSchema } from "../../../lib/bbs-control/validation";
+import type { Quote, QuoteStatus } from "../../../lib/bbs-control/types";
+import {can} from "../../../lib/bbs-control/permissions";
 
 export const dynamic = "force-dynamic";
-
 const statusLabel: Record<QuoteStatus, string> = {
-  draft: "Abierto",
-  sent: "Enviado",
-  approved: "Aprobado",
-  rejected: "Rechazado",
-  expired: "Expirado",
+  draft: "Abierto", sent: "Enviado", approved: "Aprobado", rejected: "Rechazado", expired: "Expirado",
 };
-
-function statusClass(status: QuoteStatus) {
-  if (status === "approved") return "bg-emerald-100 text-emerald-700";
-  if (status === "sent") return "bg-cyan-100 text-cyan-800";
-  if (status === "rejected" || status === "expired") return "bg-red-100 text-red-700";
-  return "bg-slate-100 text-slate-700";
-}
-
-export default async function QuotesPage({
-  searchParams,
-}: {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function QuotesPage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
   const user = await requireBackOfficeUser();
   const params = searchParams ? await searchParams : {};
-  const keyword = typeof params.keyword === "string" ? params.keyword.trim() : "";
-  const status = typeof params.status === "string" ? params.status : "";
-  const start = typeof params.start === "string" ? params.start : "";
-  const end = typeof params.end === "string" ? params.end : "";
+  let filters = parseListFilters({});
+  let filterError = "";
+  try { filters = parseListFilters(params); }
+  catch (error) { filterError = error instanceof Error ? error.message : "Filtros inválidos."; }
+  const rawStatus = param(params, "status");
+  const parsedStatus = quoteStatusSchema.safeParse(rawStatus);
+  if (rawStatus && !parsedStatus.success) filterError = "Estado inválido.";
+  const status = parsedStatus.success ? parsedStatus.data : "";
   const supabase = await createSupabaseServerClient();
-  let query = supabase.from("quotes").select("*").order("created_at", { ascending: false });
-
-  if (keyword) {
-    query = query.or(`client_name.ilike.%${keyword}%,quote_number.ilike.%${keyword}%,seller_name.ilike.%${keyword}%`);
+  const kind = ["quote", "estimate"].includes(param(params, "kind")) ? param(params, "kind") : "";
+  let result: { data: (Quote & { document_kind?: string; emailed_at?: string | null })[] | null; count: number | null; error: unknown } = { data: null, count: 0, error: null };
+  if (!filterError) {
+    const makeQuery = (head = false) => {
+      let query = supabase.from("quotes").select("*", { count: "exact", head })
+        .order("issue_date", { ascending: false }).order("created_at", { ascending: false }).order("id");
+      if (filters.keyword) query = query.or(searchOr(["client_name", "quote_number", "seller_name"], filters.keyword));
+      if (status) query = query.eq("status", status);
+      if (kind) query = query.eq("document_kind", kind);
+      if (filters.start) query = query.gte("issue_date", filters.start);
+      if (filters.end) query = query.lte("issue_date", filters.end);
+      return head ? query : query.range((filters.page - 1) * 20, filters.page * 20 - 1);
+    };
+    result = await makeQuery();
+    if ((result.error as { code?: string } | null)?.code === "PGRST103") result = await makeQuery(true);
   }
-  if (status) query = query.eq("status", status);
-  if (start) query = query.gte("issue_date", start);
-  if (end) query = query.lte("issue_date", end);
-
-  const { data: quotes } = await query;
-
-  return (
-    <BackOfficeShell user={user}>
-      <PageHeader
-        action={
-          <Link href="/bbs-control/cotizaciones/nueva">
-            <PrimaryButton type="button">+ Nueva cotización</PrimaryButton>
-          </Link>
-        }
-        eyebrow="Cotizaciones"
-        title="Cotizaciones o estimados"
-      />
-      <FlashMessage searchParams={Promise.resolve(params)} />
-      <BackOfficeCard className="mb-6">
-        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-[130px_150px_150px_minmax(220px,1fr)_150px_100px]" method="get">
-          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-            Período
-            <SelectInput name="period">
-              <option>Todos</option>
-              <option>Hoy</option>
-              <option>Últimos 7 días</option>
-              <option>Últimos 30 días</option>
-              <option>Este mes</option>
-              <option>Este año</option>
-              <option>Personalizar</option>
-            </SelectInput>
-          </label>
-          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-            Inicio
-            <TextInput defaultValue={start} name="start" type="date" />
-          </label>
-          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-            Fin
-            <TextInput defaultValue={end} name="end" type="date" />
-          </label>
-          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-            Palabra clave
-            <TextInput
-              defaultValue={keyword}
-              name="keyword"
-              placeholder="Cliente, cotización #, vendedor"
-            />
-          </label>
-          <label className="grid gap-2 text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-            Tipo
-            <SelectInput defaultValue={status} name="status">
-              <option value="">Todos</option>
-              <option value="draft">Abiertas</option>
-              <option value="sent">Enviadas</option>
-              <option value="approved">Aprobadas</option>
-              <option value="rejected">Rechazadas</option>
-              <option value="expired">Expiradas</option>
-            </SelectInput>
-          </label>
-          <div className="flex items-end">
-            <button className="h-12 w-full rounded-[8px] border border-slate-200 bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-cyan-700">
-              Buscar
-            </button>
-          </div>
-        </form>
-      </BackOfficeCard>
-      <BackOfficeCard className="overflow-visible">
-        <div className="grid gap-3 md:hidden">
-          {(quotes || []).map((quote) => (
-            <article className="rounded-[8px] border border-slate-100 bg-white p-4 shadow-sm" key={quote.id}>
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <Link className="font-black text-cyan-800" href={`/bbs-control/cotizaciones/${quote.id}/editar`}>
-                    {quote.quote_number}
-                  </Link>
-                  <p className="mt-1 text-xs font-bold text-slate-500">{displayDate(quote.issue_date)}</p>
-                </div>
-                <span className={`rounded-full px-3 py-1 text-xs font-black ${statusClass(quote.status)}`}>
-                  {statusLabel[quote.status as QuoteStatus] || quote.status}
-                </span>
-              </div>
-              <div className="mt-4 grid gap-2 text-sm font-semibold text-slate-700">
-                <p>
-                  <span className="text-slate-400">Cliente: </span>
-                  {quote.client_name}
-                </p>
-                <p>
-                  <span className="text-slate-400">Vendedor: </span>
-                  {quote.seller_name || "Sin vendedor"}
-                </p>
-                <p className="text-base font-black text-slate-950">{money(Number(quote.total))}</p>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <Link
-                  className="inline-flex h-10 items-center justify-center rounded-[8px] border border-cyan-200 text-xs font-black text-cyan-800"
-                  href={`/bbs-control/cotizaciones/${quote.id}/editar`}
-                >
-                  Editar
-                </Link>
-                <a
-                  className="inline-flex h-10 items-center justify-center rounded-[8px] bg-slate-950 text-xs font-black text-white"
-                  href={`/api/bbs-control/quotes/${quote.id}/pdf?inline=1`}
-                  target="_blank"
-                >
-                  Ver PDF
-                </a>
-                <form action={duplicateQuoteAction}>
-                  <input name="quote_id" type="hidden" value={quote.id} />
-                  <button className="h-10 w-full rounded-[8px] border border-slate-200 text-xs font-black text-slate-700">
-                    Duplicar
-                  </button>
-                </form>
-                <form action={sendQuoteAction}>
-                  <input name="quote_id" type="hidden" value={quote.id} />
-                  <button className="h-10 w-full rounded-[8px] border border-slate-200 text-xs font-black text-slate-700">
-                    Enviar
-                  </button>
-                </form>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="hidden overflow-x-auto pb-16 md:block lg:overflow-visible lg:pb-0">
-          <table className="w-full min-w-[920px] text-left text-sm">
-            <thead className="border-b border-slate-200 text-xs uppercase tracking-[0.14em] text-slate-500">
-              <tr>
-                <th className="py-3">Fecha</th>
-                <th className="text-center">Número</th>
-                <th>Tipo</th>
-                <th>Cliente</th>
-                <th>Vendedor</th>
-                <th className="text-right">Total</th>
-                <th className="text-center">Estado</th>
-                <th className="text-center">Enviado</th>
-                <th className="text-center">Acción</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {(quotes || []).map((quote) => (
-                <tr className="transition hover:bg-cyan-50/50" key={quote.id}>
-                  <td className="py-4 font-semibold text-slate-700">{displayDate(quote.issue_date)}</td>
-                  <td className="text-center font-black text-cyan-800">
-                    <Link href={`/bbs-control/cotizaciones/${quote.id}/editar`}>
-                      {quote.quote_number}
-                    </Link>
-                  </td>
-                  <td className="font-semibold text-slate-700">Cotización</td>
-                  <td className="max-w-[210px] truncate font-semibold text-slate-800">{quote.client_name}</td>
-                  <td className="max-w-[210px] truncate font-semibold text-slate-700">{quote.seller_name || "Sin vendedor"}</td>
-                  <td className="text-right font-black text-slate-950">{money(Number(quote.total))}</td>
-                  <td className="text-center">
-                    <span className={`rounded-full px-3 py-1 text-xs font-black ${statusClass(quote.status)}`}>
-                      {statusLabel[quote.status as QuoteStatus] || quote.status}
-                    </span>
-                  </td>
-                  <td className="text-center">
-                    <form action={sendQuoteAction}>
-                      <input name="quote_id" type="hidden" value={quote.id} />
-                      <button
-                        className="inline-flex size-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-cyan-50 hover:text-cyan-700"
-                        title="Enviar por correo"
-                        type="submit"
-                      >
-                        <Mail size={16} />
-                      </button>
-                    </form>
-                  </td>
-                  <td className="text-center">
-                    <details className="relative inline-block">
-                      <summary className="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-full text-slate-700 hover:bg-slate-100">
-                        <ChevronDown size={16} />
-                      </summary>
-                      <div className="absolute right-0 z-20 mt-2 w-56 rounded-[8px] border border-slate-200 bg-white p-2 text-left shadow-xl">
-                        <Link className="block rounded-[6px] px-3 py-2 font-bold hover:bg-cyan-50" href="/bbs-control/facturas/nueva">
-                          Factura
-                        </Link>
-                        <Link className="block rounded-[6px] px-3 py-2 font-bold hover:bg-cyan-50" href={`/bbs-control/cotizaciones/${quote.id}/editar`}>
-                          Editar
-                        </Link>
-                        <a className="block rounded-[6px] px-3 py-2 font-bold hover:bg-cyan-50" href={`/api/bbs-control/quotes/${quote.id}/pdf`}>
-                          Descargar PDF
-                        </a>
-                        <a className="block rounded-[6px] px-3 py-2 font-bold hover:bg-cyan-50" href={`/api/bbs-control/quotes/${quote.id}/pdf?inline=1`} target="_blank">
-                          Ver PDF
-                        </a>
-                        <a className="block rounded-[6px] px-3 py-2 font-bold hover:bg-cyan-50" href={`/api/bbs-control/quotes/${quote.id}/pdf?inline=1`} target="_blank">
-                          Imprimir cotización
-                        </a>
-                        <form action={duplicateQuoteAction}>
-                          <input name="quote_id" type="hidden" value={quote.id} />
-                          <button className="block w-full rounded-[6px] px-3 py-2 text-left font-bold hover:bg-cyan-50">
-                            Crear duplicado
-                          </button>
-                        </form>
-                        <form action={sendQuoteAction}>
-                          <input name="quote_id" type="hidden" value={quote.id} />
-                          <button className="block w-full rounded-[6px] px-3 py-2 text-left font-bold hover:bg-cyan-50">
-                            Correo electrónico
-                          </button>
-                        </form>
-                        <form action={deleteQuoteAction}>
-                          <input name="quote_id" type="hidden" value={quote.id} />
-                          <button className="block w-full rounded-[6px] px-3 py-2 text-left font-bold text-red-700 hover:bg-red-50">
-                            Borrar
-                          </button>
-                        </form>
-                      </div>
-                    </details>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-4 text-sm font-bold text-slate-600 md:flex-row md:items-center md:justify-between">
-          <span>Página 1 de 1</span>
-          <div className="flex flex-wrap items-center gap-2">
-            <button className="rounded-[8px] border border-slate-200 px-3 py-2 text-slate-400" disabled>
-              Anterior
-            </button>
-            <button className="rounded-[8px] border border-slate-200 px-3 py-2 text-slate-400" disabled>
-              Siguiente
-            </button>
-            <label className="ml-0 flex items-center gap-2 md:ml-2">
-              <span>Saltar</span>
-              <input
-                className="h-10 w-20 rounded-[8px] border border-slate-200 bg-white px-2 text-center text-sm font-black text-slate-950 outline-none"
-                defaultValue="1"
-              />
-            </label>
-          </div>
-        </div>
-      </BackOfficeCard>
-    </BackOfficeShell>
-  );
+  const pages = Math.max(1, Math.ceil((result.count || 0) / 20));
+  if (!filterError && !result.error && filters.page > pages) redirect(pageHref("/bbs-control/cotizaciones", params, pages));
+  return <BackOfficeShell user={user}>
+    <PageHeader eyebrow="Cotizaciones" title="Cotizaciones o estimados" action={
+      <Link className="bbs-button bbs-button-primary" href="/bbs-control/cotizaciones/nueva">+ Nueva cotización</Link>
+    } />
+    <FlashMessage searchParams={Promise.resolve(params)} />
+    <ListFilters key={JSON.stringify(params)} {...filters} placeholder="Cliente, cotización, vendedor">
+      <label>Tipo:<select className="bbs-select" name="kind" defaultValue={kind}><option value="">Todos</option><option value="quote">Cotizaciones</option><option value="estimate">Estimados</option></select></label>
+      <label>Estado:<select className="bbs-select" name="status" defaultValue={status}>
+        <option value="">Todos</option>{Object.entries(statusLabel).map(([key, label]) => <option value={key} key={key}>{label}</option>)}
+      </select></label>
+    </ListFilters>
+    {filterError || result.error ? <DataError>{filterError || "No se pudieron cargar las cotizaciones. Intente nuevamente."}</DataError> : <>
+      <div className="bbs-table-scroll"><table className="bbs-table bbs-quotes-table">
+        <thead><tr>{["Fecha", "Número", "Tipo", "Cliente", "Vendedor", "Total", "Estado", "Enviado", "Acción"].map((label) =>
+          <th key={label} scope="col" className={label === "Total" ? "bbs-money" : ""}>{label}</th>)}</tr></thead>
+        <tbody>{(result.data || []).map((quote) => <tr key={quote.id}>
+          <td className="bbs-nowrap">{quote.issue_date}</td>
+          <td><Link href={`/bbs-control/cotizaciones/${quote.id}/editar`}>{quote.quote_number}</Link></td>
+          <td>{quote.document_kind === "estimate" ? "Estimado" : "Cotización"}</td><td>{quote.client_name}</td><td>{quote.seller_name || "—"}</td>
+          <td className="bbs-money">{money(Number(quote.total))}</td>
+          <td><span className={`bbs-badge bbs-badge-${quote.status}`}>{statusLabel[quote.status]}</span></td>
+          <td>{quote.emailed_at ? <span className="bbs-badge bbs-badge-sent">Enviado</span> : "—"}</td>
+          <td><RowActions label={`Acciones de cotización ${quote.quote_number}`}>
+            {can(user.role,"finance.write")?<Link href={`/bbs-control/facturas/nueva?quote_id=${quote.id}`}>Factura</Link>:null}
+            <Link href={`/bbs-control/cotizaciones/${quote.id}`}>Ver detalle</Link>
+            <Link href={`/bbs-control/cotizaciones/${quote.id}/editar`}>Editar</Link>
+            <a href={`/api/bbs-control/quotes/${quote.id}/pdf`}>Descargar PDF</a>
+            <a href={`/api/bbs-control/quotes/${quote.id}/pdf?inline=1`} target="_blank" rel="noopener noreferrer">Ver PDF / Imprimir</a>
+            <form action={duplicateQuoteAction}><input type="hidden" name="quote_id" value={quote.id} /><ActionSubmit>Crear duplicado</ActionSubmit></form>
+            <form action={sendQuoteAction}><input type="hidden" name="quote_id" value={quote.id} /><ActionSubmit>Correo electrónico</ActionSubmit></form>
+            {user.role!=="cotizador"||["draft","sent"].includes(quote.status)?<form action={deleteQuoteAction}><input type="hidden" name="quote_id" value={quote.id} />
+              <ActionSubmit danger confirmMessage={`¿Borrar cotización ${quote.quote_number}? Esta acción no se puede deshacer.`}>Borrar</ActionSubmit></form>:null}
+          </RowActions></td>
+        </tr>)}{!result.data?.length ? <tr><td colSpan={9} className="bbs-empty">No se encontraron cotizaciones.</td></tr> : null}</tbody>
+      </table></div>
+      <Pagination path="/bbs-control/cotizaciones" params={params} page={filters.page} count={result.count || 0} />
+    </>}
+  </BackOfficeShell>;
 }

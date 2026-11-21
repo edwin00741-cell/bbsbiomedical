@@ -1,0 +1,27 @@
+.bbs-auth-page { min-height:100vh; display:grid; place-items:center; padding:35px 20px; background:radial-gradient(circle at top left,#527894,#233c5d 48%,#16283d); color:#1d2e43; font:15px/1.5 Arial,Helvetica,sans-serif; }
+.bbs-auth-card { width:100%; max-width:470px; border:1px solid #d5dee7; background:#fff; padding:32px; box-shadow:0 18px 55px #05132340; }
+.bbs-auth-card img { width:250px; max-width:100%; height:auto; margin-bottom:30px; }
+.bbs-auth-card h1 { font-size:32px; font-weight:400; color:#415779; line-height:1.2; margin:0 0 12px; }
+.bbs-auth-card p { margin:8px 0 18px; color:#58687a; }
+.bbs-auth-form { display:grid; gap:18px; margin-top:25px; }
+.bbs-auth-form label,.bbs-password-field > label { display:block; color:#263c54; margin-bottom:6px; }
+.bbs-auth-input { width:100%; min-height:44px; border:1px solid #b8c2ce; border-radius:0; background:#fff; color:#182c42; padding:9px 11px; font:inherit; }
+.bbs-auth-submit { display:flex; justify-content:center; align-items:center; width:100%; min-height:46px; border:1px solid #008509; border-radius:0; padding:10px 18px; background:#008509; color:#fff !important; font:600 16px/1.4 Arial,Helvetica,sans-serif; cursor:pointer; }
+.bbs-auth-submit:hover { background:#006b08; }
+.bbs-auth-submit:disabled { opacity:.65; cursor:wait; }
+.bbs-auth-error { padding:11px 13px; background:#fff2f2; border:1px solid #d9a9a9; color:#9b2222 !important; }
+.bbs-auth-success { padding:11px 13px; background:#eef8f0; border:1px solid #b4d5bd; color:#246533 !important; }
+.bbs-auth-card a { color:#175a91; text-decoration:underline; }
+.bbs-auth-links { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:22px; }
+.bbs-auth-card .bbs-auth-hint { font-size:13px; margin:7px 0 0; color:#607084; }
+.bbs-auth-card :is(input,button,a):focus-visible { outline:3px solid #1473b4; outline-offset:3px; }
+.bbs-auth-signout { border:0; background:transparent; color:#175a91; text-decoration:underline; cursor:pointer; font:inherit; padding:0; }
+@media(max-width:480px) { .bbs-auth-page { padding:20px 14px; }.bbs-auth-card { padding:24px 20px; }.bbs-auth-card h1 { font-size:28px; } }
+
+/* Original BBS identity, with the current project logo. */
+.bbs-auth-page { background:linear-gradient(145deg,#020617,#042235 60%,#0e7490);font-family:Montserrat,Arial,sans-serif; }
+.bbs-auth-card { border-radius:12px;border-color:#cffafe; }
+.bbs-auth-card h1 { color:#042235;font-weight:700; }
+.bbs-auth-input,.bbs-auth-submit { border-radius:7px; }
+.bbs-auth-submit { background:#0e7490;border-color:#0e7490;font-family:inherit; }
+.bbs-auth-submit:hover { background:#155e75; }

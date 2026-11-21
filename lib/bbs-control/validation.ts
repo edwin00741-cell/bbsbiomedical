@@ -65,9 +65,9 @@ export const quoteStatusSchema = z.enum([
 
 export const quoteItemInputSchema = z.object({
   item_id: z.string().uuid().optional().nullable(),
-  description: z.string().trim().min(2),
-  quantity: z.coerce.number().positive(),
-  unit_price: z.coerce.number().min(0),
+  description: z.string().trim().min(2, "Describa cada producto o servicio."),
+  quantity: z.coerce.number().positive().max(9999999999.99).multipleOf(0.01),
+  unit_price: z.coerce.number().min(0).max(9999999999.99).multipleOf(0.01),
 });
 
 export const quoteSchema = z.object({
@@ -75,11 +75,14 @@ export const quoteSchema = z.object({
   client_name: z.string().trim().min(2, "Cliente requerido."),
   client_email: optionalEmail,
   seller_name: z.string().trim().min(2, "Vendedor requerido."),
-  issue_date: z.string().trim().min(1),
-  valid_until: z.string().trim().min(1),
+  issue_date: z.iso.date("Fecha de emisión inválida."),
+  valid_until: z.iso.date("Fecha de validez inválida."),
   project_description: emptyToNull,
   notes: emptyToNull,
   items: z.array(quoteItemInputSchema).min(1, "Agregue al menos un producto o servicio."),
+}).refine((quote) => quote.valid_until >= quote.issue_date, {
+  path: ["valid_until"],
+  message: "La validez no puede ser anterior a la fecha de emisión.",
 });
 
 export const businessSettingsSchema = z.object({

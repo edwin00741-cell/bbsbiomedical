@@ -1,0 +1,8 @@
+import { redirect } from "next/navigation";
+import { BackOfficeShell,DataError,PageHeader } from "../components";
+import { createSupabaseServerClient,requireBackOfficeUser } from "../../../lib/bbs-control/supabase-server";
+import { canUseTemplates } from "../../../lib/bbs-control/service";
+import { readAllPages } from "../../../lib/bbs-control/dashboard";
+import { PrivateUpload } from "../private-upload";
+export const dynamic="force-dynamic";
+export default async function Templates(){const user=await requireBackOfficeUser();if(!canUseTemplates(user))redirect("/bbs-control/acceso-denegado");const db=await createSupabaseServerClient();const files=await readAllPages<{id:string;name:string;created_at:string}>((from,to)=>db.from("document_templates").select("id,name,created_at",{count:"exact"}).order("created_at",{ascending:false}).order("id").range(from,to));return <BackOfficeShell user={user}><PageHeader eyebrow="Documentos corporativos" title="Mis plantillas" description="Cartas, formatos y documentos disponibles únicamente para su usuario."/><section className="bbs-card"><PrivateUpload kind="template"/>{files.error?<DataError/>:<div className="bbs-table-scroll"><table className="bbs-table"><thead><tr><th>Documento</th><th>Fecha</th><th>Acción</th></tr></thead><tbody>{files.data?.map(f=><tr key={f.id}><td>{f.name}</td><td>{f.created_at.slice(0,10)}</td><td><a href={`/api/bbs-control/private-files/${f.id}?kind=template`}>Descargar</a></td></tr>)}{!files.data?.length?<tr><td colSpan={3} className="bbs-empty">Cargue los documentos corporativos que desee conservar.</td></tr>:null}</tbody></table></div>}</section></BackOfficeShell>;}
