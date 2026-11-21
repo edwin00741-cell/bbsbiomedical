@@ -9,6 +9,16 @@
 .bbs-nav-link:hover { background:#67e8f91a; color:white; }
 .bbs-nav-link[aria-current="page"] { background:#67e8f91f; color:#a5f3fc; box-shadow:inset 3px 0 #22d3ee; }
 .bbs-nav-child { padding-left:39px; font-size:12px; }
+.bbs-nav-group > summary { cursor:pointer; list-style:none; }
+.bbs-nav-group > summary::-webkit-details-marker { display:none; }
+.bbs-nav-group > summary > span { flex:1; }
+.bbs-nav-group > summary[data-active] { color:#a5f3fc; background:#67e8f914; }
+.bbs-nav-chevron { margin-left:auto; transition:transform .15s ease; }
+.bbs-nav-group[open] > summary .bbs-nav-chevron { transform:rotate(180deg); }
+.bbs-nav-submenu { margin:0 0 8px 20px; border-left:1px solid #67e8f933; }
+.bbs-nav-submenu .bbs-nav-child { margin-left:5px; padding-left:15px; }
+.bbs-mobile-nav .bbs-nav-group > summary[data-active] { color:#0e7490; background:#ecfeff; }
+.bbs-mobile-nav .bbs-nav-submenu { border-color:#cbd5e1; }
 .bbs-main { max-width:1800px; margin:auto; }
 .bbs-control :is(h1,h2,h3) { font-weight:700; letter-spacing:-.025em; }
 .bbs-control h1 { font-size:32px; }
